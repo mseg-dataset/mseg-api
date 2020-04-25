@@ -1,0 +1,39 @@
+road
+parking
+drivable fallback
+sidewalk
+rail track
+non-drivable fallback
+person
+animal
+rider
+motorcycle
+bicycle
+autorickshaw
+car
+truck
+bus
+caravan
+trailer
+train
+vehicle fallback
+curb
+wall
+fence
+guard rail
+billboard
+traffic sign
+traffic light
+pole
+polegroup
+obs-str-bar-fallback
+building
+bridge
+tunnel
+vegetation
+sky
+fallback background
+ego vehicle
+rectification border
+out of roi
+license plate

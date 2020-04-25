@@ -1,0 +1,3 @@
+seqcologne_cologne_000115_000019_leftImg8bit_70.jpg
+seqmonchengladbach_monchengladbach_000000_023856_leftImg8bit_33.jpg
+seqtubingen_tubingen_000060_000019_leftImg8bit_57.jpg

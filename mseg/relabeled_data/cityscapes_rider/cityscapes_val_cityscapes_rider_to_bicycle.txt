@@ -1,0 +1,3 @@
+seqmunster_munster_000078_000019_leftImg8bit_96.jpg
+seqmunster_munster_000031_000019_leftImg8bit_45.jpg
+seqmunster_munster_000102_000019_leftImg8bit_71.jpg

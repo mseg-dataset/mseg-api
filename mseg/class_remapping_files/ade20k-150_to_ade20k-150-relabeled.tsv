@@ -1,0 +1,152 @@
+ade20k-150	ade20k-150-relabeled
+bag	bag
+case	case
+animal	animal_other
+microwave	microwave
+radiator	radiator
+oven	oven
+tank	storage_tank
+conveyer belt	conveyor_belt
+sink	sink
+refrigerator	refrigerator
+washer	washer_dryer
+fan	fan
+dishwasher	dishwasher
+toilet	toilet
+bathtub	bathtub
+shower	shower
+bridge	bridge
+pier	pier_wharf
+tent	tent
+house	building
+building	building
+skyscraper	building
+booth	building
+hovel	building
+tower	building
+grandstand	building
+ceiling	ceiling
+television receiver	television
+floor	floor
+stage	stage
+food	food_other
+chair	chair_other
+armchair	armchair
+swivel chair	swivel_chair
+stool	stool
+seat	seat
+sofa	couch
+ashcan	trash_can
+pot	potted_plant
+bed	bed
+coffee table	table
+table	table
+pool table	pool_table
+barrel	barrel
+desk	desk
+ottoman	ottoman
+wardrobe	wardrobe
+cradle	crib
+basket	basket
+chest of drawers	chest_of_drawers
+bookcase	bookshelf
+counter	counter_other
+countertop	bathroom_counter
+kitchen island	kitchen_island
+door	door
+screen door	door
+light	light_other
+lamp	lamp
+sconce	sconce
+chandelier	chandelier
+mirror	mirror
+shelf	shelf
+stairs	stairs
+stairway	stairs
+escalator	escalator
+cabinet	cabinet
+buffet	cabinet
+fireplace	fireplace
+stove	stove
+arcade machine	arcade_machine
+road	road
+sidewalk	sidewalk_pavement
+path	sidewalk_pavement
+runway	runway
+land	terrain
+earth	terrain
+field	terrain
+grass	terrain
+sand	terrain
+dirt track	terrain
+book	book
+box	box
+clock	clock
+vase	vase
+plaything	plaything_other
+painting	painting
+poster	poster
+bulletin board	bulletin_board
+bottle	bottle
+glass	wine_glass
+tray	tray
+hood	range_hood
+plate	plate
+person	person_non_rider
+streetlight	streetlight
+traffic light	traffic_light
+bench	bench
+trade name	billboard
+sky	sky
+pole	pole
+fence	fence
+railing	railing_banister
+bannister	railing_banister
+mountain	mountain_hill
+hill	mountain_hill
+rock	rock
+ball	sports_ball
+base	base
+sculpture	sculpture
+column	column
+fountain	fountain
+awning	awning
+apparel	apparel
+flag	flag
+blanket	blanket
+curtain	curtain_other
+pillow	pillow
+cushion	pillow
+towel	towel
+rug	rug_floormat
+flower	vegetation
+tree	vegetation
+palm	vegetation
+bicycle	bicycle
+car	car
+van	car
+minibike	motorcycle
+airplane	airplane
+bus	bus
+truck	truck
+boat	boat_ship
+ship	boat_ship
+river	river_lake
+lake	river_lake
+sea	sea
+water	water_other
+swimming pool	swimming_pool
+waterfall	waterfall
+wall	wall
+windowpane	window
+blind	window_blind
+computer	unlabeled
+signboard	unlabeled
+monitor	unlabeled
+crt screen	unlabeled
+screen	unlabeled
+canopy	unlabeled
+plant	unlabeled
+bar	unlabeled
+step	unlabeled
+unlabeled	unlabeled

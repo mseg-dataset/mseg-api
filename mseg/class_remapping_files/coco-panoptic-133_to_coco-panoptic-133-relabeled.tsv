@@ -1,0 +1,135 @@
+coco-panoptic-133	coco-panoptic-133-relabeled
+backpack	backpack
+umbrella	umbrella
+handbag	bag
+tie	tie
+suitcase	suitcase
+bird	bird
+cat	cat
+dog	dog
+horse	horse
+sheep	sheep
+cow	cow
+elephant	elephant
+bear	bear
+zebra	zebra
+giraffe	giraffe
+microwave	microwave
+oven	oven
+toaster	toaster
+sink	sink
+refrigerator	refrigerator
+toilet	toilet
+bridge	bridge
+tent	tent
+building-other-merged	building
+house	building
+roof	building
+ceiling-merged	ceiling
+laptop	laptop
+keyboard	keyboard
+mouse	mouse
+remote	remote
+cell phone	cell phone
+tv	television
+floor-wood	floor
+floor-other-merged	floor
+banana	banana
+apple	apple
+sandwich	sandwich
+orange	orange
+broccoli	broccoli
+carrot	carrot
+hot dog	hot_dog
+pizza	pizza
+donut	donut
+cake	cake
+fruit	fruit_other
+food-other-merged	food_other
+chair	chair_other
+couch	couch
+potted plant	potted_plant
+bed	bed
+table-merged	table
+dining table	table
+counter	counter_other
+door-stuff	door
+light	light_other
+mirror-stuff	mirror
+shelf	shelf
+stairs	stairs
+cabinet-merged	cabinet
+gravel	gravel
+platform	platform
+playingfield	playingfield
+railroad	railroad
+road	road
+snow	snow
+pavement-merged	sidewalk_pavement
+grass-merged	terrain
+sand	terrain
+dirt-merged	terrain
+book	book
+cardboard	box
+clock	clock
+vase	vase
+scissors	scissors
+teddy bear	teddy_bear
+hair drier	hair_dryer
+toothbrush	toothbrush
+bottle	bottle
+cup	cup
+wine glass	wine_glass
+knife	knife
+fork	fork
+spoon	spoon
+bowl	bowl
+person	person_non_rider
+paper-merged	paper
+stop sign	traffic_sign
+traffic light	traffic_light
+fire hydrant	fire_hydrant
+parking meter	parking_meter
+bench	bench
+sky-other-merged	sky
+fence-merged	fence
+mountain-merged	mountain_hill
+rock-merged	rock
+frisbee	frisbee
+skis	skis
+snowboard	snowboard
+sports ball	sports_ball
+kite	kite
+baseball bat	baseball_bat
+baseball glove	baseball_glove
+skateboard	skateboard
+surfboard	surfboard
+tennis racket	tennis_racket
+net	net
+banner	banner
+blanket	blanket
+curtain	curtain_other
+pillow	pillow
+towel	towel
+rug-merged	rug_floormat
+flower	vegetation
+tree-merged	vegetation
+bicycle	bicycle
+car	car
+motorcycle	motorcycle
+airplane	airplane
+bus	bus
+train	train
+truck	truck
+boat	boat_ship
+river	river_lake
+sea	sea
+water-other	water_other
+wall-brick	wall
+wall-stone	wall
+wall-tile	wall
+wall-wood	wall
+wall-other-merged	wall
+window-other	window
+window-blind	window_blind
+unlabeled	unlabeled

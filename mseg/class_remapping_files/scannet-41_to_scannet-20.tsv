@@ -1,0 +1,42 @@
+scannet-41	scannet-20
+unlabeled	unlabeled
+wall	wall
+floor	floor
+cabinet	cabinet
+bed	bed
+chair	chair
+sofa	sofa
+table	table
+door	door
+window	window
+bookshelf	bookshelf
+picture	picture
+counter	counter
+blinds	unlabeled
+desk	desk
+shelves	unlabeled
+curtain	curtain
+dresser	unlabeled
+pillow	unlabeled
+mirror	unlabeled
+floor mat	unlabeled
+clothes	unlabeled
+ceiling	unlabeled
+books	unlabeled
+refridgerator	refridgerator
+television	unlabeled
+paper	unlabeled
+towel	unlabeled
+shower curtain	shower curtain
+box	unlabeled
+whiteboard	unlabeled
+person	unlabeled
+night stand	unlabeled
+toilet	toilet
+sink	sink
+lamp	unlabeled
+bathtub	bathtub
+bag	unlabeled
+otherstructure	unlabeled
+otherfurniture	otherfurniture
+otherprop	unlabeled

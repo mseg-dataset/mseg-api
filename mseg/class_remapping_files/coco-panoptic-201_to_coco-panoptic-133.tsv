@@ -1,0 +1,135 @@
+coco-panoptic-201	coco-panoptic-133
+airplane	airplane
+apple	apple
+backpack	backpack
+banana	banana
+banner	banner
+baseball bat	baseball bat
+baseball glove	baseball glove
+bear	bear
+bed	bed
+bench	bench
+bicycle	bicycle
+bird	bird
+blanket	blanket
+boat	boat
+book	book
+bottle	bottle
+bowl	bowl
+bridge	bridge
+broccoli	broccoli
+building-other-merged	building-other-merged
+bus	bus
+cabinet-merged	cabinet-merged
+cake	cake
+car	car
+cardboard	cardboard
+carrot	carrot
+cat	cat
+ceiling-merged	ceiling-merged
+cell phone	cell phone
+chair	chair
+clock	clock
+couch	couch
+counter	counter
+cow	cow
+cup	cup
+curtain	curtain
+dining table	dining table
+dirt-merged	dirt-merged
+dog	dog
+donut	donut
+door-stuff	door-stuff
+elephant	elephant
+fence-merged	fence-merged
+fire hydrant	fire hydrant
+floor-other-merged	floor-other-merged
+floor-wood	floor-wood
+flower	flower
+food-other-merged	food-other-merged
+fork	fork
+frisbee	frisbee
+fruit	fruit
+giraffe	giraffe
+grass-merged	grass-merged
+gravel	gravel
+hair drier	hair drier
+handbag	handbag
+horse	horse
+hot dog	hot dog
+house	house
+keyboard	keyboard
+kite	kite
+knife	knife
+laptop	laptop
+light	light
+microwave	microwave
+mirror-stuff	mirror-stuff
+motorcycle	motorcycle
+mountain-merged	mountain-merged
+mouse	mouse
+net	net
+orange	orange
+oven	oven
+paper-merged	paper-merged
+parking meter	parking meter
+pavement-merged	pavement-merged
+person	person
+pillow	pillow
+pizza	pizza
+platform	platform
+playingfield	playingfield
+potted plant	potted plant
+railroad	railroad
+refrigerator	refrigerator
+remote	remote
+river	river
+road	road
+rock-merged	rock-merged
+roof	roof
+rug-merged	rug-merged
+sand	sand
+sandwich	sandwich
+scissors	scissors
+sea	sea
+sheep	sheep
+shelf	shelf
+sink	sink
+skateboard	skateboard
+skis	skis
+sky-other-merged	sky-other-merged
+snow	snow
+snowboard	snowboard
+spoon	spoon
+sports ball	sports ball
+stairs	stairs
+stop sign	stop sign
+suitcase	suitcase
+surfboard	surfboard
+table-merged	table-merged
+teddy bear	teddy bear
+tennis racket	tennis racket
+tent	tent
+tie	tie
+toaster	toaster
+toilet	toilet
+toothbrush	toothbrush
+towel	towel
+traffic light	traffic light
+train	train
+tree-merged	tree-merged
+truck	truck
+tv	tv
+umbrella	umbrella
+vase	vase
+wall-brick	wall-brick
+wall-other-merged	wall-other-merged
+wall-stone	wall-stone
+wall-tile	wall-tile
+wall-wood	wall-wood
+water-other	water-other
+window-blind	window-blind
+window-other	window-other
+wine glass	wine glass
+zebra	zebra
+unlabeled	unlabeled

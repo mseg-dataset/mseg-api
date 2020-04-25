@@ -1,0 +1,41 @@
+idd-40	idd-39
+road	road
+parking	parking
+drivable fallback	drivable fallback
+sidewalk	sidewalk
+rail track	rail track
+non-drivable fallback	non-drivable fallback
+person	person
+animal	animal
+rider	rider
+motorcycle	motorcycle
+bicycle	bicycle
+autorickshaw	autorickshaw
+car	car
+truck	truck
+bus	bus
+caravan	caravan
+trailer	trailer
+train	train
+vehicle fallback	vehicle fallback
+curb	curb
+wall	wall
+fence	fence
+guard rail	guard rail
+billboard	billboard
+traffic sign	traffic sign
+traffic light	traffic light
+pole	pole
+polegroup	polegroup
+obs-str-bar-fallback	obs-str-bar-fallback
+building	building
+bridge	bridge
+tunnel	tunnel
+vegetation	vegetation
+sky	sky
+fallback background	fallback background
+unlabeled	unlabeled
+ego vehicle	ego vehicle
+rectification border	rectification border
+out of roi	out of roi
+license plate	license plate

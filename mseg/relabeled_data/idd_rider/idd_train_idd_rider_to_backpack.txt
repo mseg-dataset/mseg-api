@@ -1,0 +1,7 @@
+seq32_597097_leftImg8bit_117.jpg
+seq32_214838_leftImg8bit_65.jpg
+seq173_316862_leftImg8bit_40.jpg
+seq173_318070_leftImg8bit_44.jpg
+seq173_318070_leftImg8bit_47.jpg
+seq173_318463_leftImg8bit_50.jpg
+seq173_697899_leftImg8bit_95.jpg

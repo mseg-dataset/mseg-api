@@ -1,0 +1,4 @@
+seqmunster_munster_000108_000019_leftImg8bit_101.jpg
+seqfrankfurt_frankfurt_000001_013710_leftImg8bit_108.jpg
+seqmunster_munster_000003_000019_leftImg8bit_97.jpg
+seqmunster_munster_000046_000019_leftImg8bit_84.jpg

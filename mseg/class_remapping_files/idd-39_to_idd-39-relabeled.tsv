@@ -1,0 +1,41 @@
+idd-39	idd-39-relabeled
+tunnel	tunnel
+bridge	bridge
+building	building
+rail track	railroad
+road	road
+parking	road
+drivable fallback	road
+sidewalk	sidewalk_pavement
+curb	sidewalk_pavement
+person	person_non_rider
+rider	motorcyclist
+traffic sign	traffic_sign
+traffic light	traffic_light
+billboard	billboard
+sky	sky
+pole	pole
+polegroup	pole
+fence	fence
+guard rail	guard_rail
+vegetation	vegetation
+bicycle	bicycle
+car	car
+caravan	car
+autorickshaw	autorickshaw
+motorcycle	motorcycle
+bus	bus
+train	train
+truck	truck
+trailer	trailer
+wall	wall
+animal	unlabeled
+non-drivable fallback	unlabeled
+vehicle fallback	unlabeled
+obs-str-bar-fallback	unlabeled
+fallback background	unlabeled
+ego vehicle	unlabeled
+rectification border	unlabeled
+out of roi	unlabeled
+license plate	unlabeled
+unlabeled	unlabeled

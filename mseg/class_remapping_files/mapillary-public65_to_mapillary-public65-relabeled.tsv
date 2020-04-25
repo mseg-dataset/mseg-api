@@ -1,0 +1,67 @@
+mapillary-public65	mapillary-public65-relabeled
+Bird	bird
+Ground Animal	dog
+Tunnel	tunnel
+Bridge	bridge
+Building	building
+Phone Booth	building
+Trash Can	trash_can
+Rail Track	railroad
+Pothole	road
+Parking	road
+Road	road
+Bike Lane	road
+Service Lane	road
+Crosswalk - Plain	road
+Lane Marking - General	road
+Lane Marking - Crosswalk	road
+Snow	snow
+Sidewalk	sidewalk_pavement
+Curb	sidewalk_pavement
+Curb Cut	sidewalk_pavement
+Pedestrian Area	sidewalk_pavement
+Terrain	terrain
+Sand	terrain
+Person	person_non_rider
+Other Rider	rider_other
+Bicyclist	bicyclist
+Motorcyclist	motorcyclist
+Street Light	streetlight
+Barrier	road_barrier
+Mailbox	mailbox
+CCTV Camera	cctv_camera
+Junction Box	junction_box
+Traffic Sign (Back)	traffic_sign
+Traffic Sign (Front)	traffic_sign
+Traffic Sign Frame	traffic_sign
+Traffic Light	traffic_light
+Fire Hydrant	fire_hydrant
+Bench	bench
+Bike Rack	bike_rack
+Billboard	billboard
+Sky	sky
+Utility Pole	pole
+Pole	pole
+Fence	fence
+Guard Rail	guard_rail
+Mountain	mountain_hill
+Banner	banner
+Vegetation	vegetation
+Bicycle	bicycle
+Car	car
+Caravan	car
+Motorcycle	motorcycle
+Bus	bus
+On Rails	train
+Truck	truck
+Trailer	trailer
+Boat	boat_ship
+Wheeled Slow	slow_wheeled_object
+Water	water_other
+Wall	wall
+Ego Vehicle	unlabeled
+Car Mount	unlabeled
+Manhole	unlabeled
+Catch Basin	unlabeled
+Other Vehicle	unlabeled
+unlabeled	unlabeled

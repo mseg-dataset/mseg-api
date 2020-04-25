@@ -1,0 +1,35 @@
+cityscapes-34	cityscapes-19
+unlabeled	unlabeled
+ego vehicle	unlabeled
+rectification border	unlabeled
+out of roi	unlabeled
+static	unlabeled
+dynamic	unlabeled
+ground	unlabeled
+road	road
+sidewalk	sidewalk
+parking	unlabeled
+rail track	unlabeled
+building	building
+wall	wall
+fence	fence
+guard rail	unlabeled
+bridge	unlabeled
+tunnel	unlabeled
+pole	pole
+polegroup	unlabeled
+traffic light	traffic light
+traffic sign	traffic sign
+vegetation	vegetation
+terrain	terrain
+sky	sky
+person	person
+rider	rider
+car	car
+truck	truck
+bus	bus
+caravan	unlabeled
+trailer	unlabeled
+train	train
+motorcycle	motorcycle
+bicycle	bicycle

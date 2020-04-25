@@ -1,0 +1,9 @@
+ADE_train_00013027_204.png
+ADE_train_00005583_116.png
+ADE_train_00013027_255.png
+ADE_train_00013625_159.png
+ADE_train_00013625_191.png
+ADE_train_00013625_223.png
+ADE_train_00016121_204.png
+ADE_train_00016121_255.png
+ADE_train_00019883_255.png
