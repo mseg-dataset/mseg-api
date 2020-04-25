@@ -9,7 +9,7 @@ from mseg.utils.names_utils import load_class_names
 
 # -------------------------------------------------------------
 # You must specify the parent directory of `mseg_dataset` below:
-MSEG_DST_DIR = "/Users/johnlamb/Documents/mseg-api"
+MSEG_DST_DIR = ""
 # -------------------------------------------------------------
 if MSEG_DST_DIR == '':
 	raise Exception(
