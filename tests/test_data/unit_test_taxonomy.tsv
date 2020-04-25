@@ -1,0 +1,16 @@
+mapillary_vistas_comm	coco	ade20k	scannet_37	universal	nyudepthv2_37	idd	voc2012	cityscapes	kitti	wilddash	camvid	viper
+{Vehicle Group, Other Vehicle}				vehicle								
+Bicycle	bicycle	bicycle		vehicle->bicycle		bicycle	bicycle	bicycle	bicycle	bicycle		bicycle
+Caravan				vehicle->caravan		caravan, trailer, train, vehicle fallback						
+Car	car	car		vehicle->car		car	car	car	car	car	car	car
+		van		vehicle->van		caravan, trailer, train, vehicle fallback						van
+Motorcycle	motorcycle	minibike		vehicle->motorcycle		motorcycle	motorbike	motorcycle	motorcycle	motorcycle		motorcycle
+	airplane	airplane		vehicle->airplane		caravan, trailer, train, vehicle fallback	aeroplane					plane
+Bus	bus	bus		vehicle->bus		bus	bus	bus	bus	bus		bus
+On Rails	train			vehicle->train		caravan, trailer, train, vehicle fallback	train	train	train	train		train
+Truck	truck	truck		vehicle->truck		truck		truck	truck	truck		truck
+Trailer				vehicle->trailer		caravan, trailer, train, vehicle fallback						trailer
+Boat	boat			vehicle->watercraft		caravan, trailer, train, vehicle fallback	boat					boat
+		boat		vehicle->watercraft->boat		caravan, trailer, train, vehicle fallback						
+		ship		vehicle->watercraft->ship		caravan, trailer, train, vehicle fallback						
+Wheeled Slow				vehicle->slow_wheeled_obj		caravan, trailer, train, vehicle fallback						
