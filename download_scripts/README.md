@@ -1,7 +1,7 @@
 
 ## MSeg Download Overview
 
-Downloading MSeg is nontrivial and we ask that you follow these instructions **exactly, in this order**. **Skipping steps will not be possible**. You will need ???? GB of free space on your hard drive. It may take several days before you are granted a license for ScanNet or Mapillary Vistas.
+Downloading MSeg is nontrivial and we ask that you follow these instructions **exactly, in this order**. **Skipping steps will not be possible**. You will need at least 200 GB of free space on your hard drive. It may take several days before you are granted a license for ScanNet or Mapillary Vistas.
 
 - If downloading and unzipping downloaded files in a single thread, and 100 workers (presumably on 100 cores) are provided for label map mask preparation, the MSeg setup may take up to 40 hours.
 
