@@ -1,10 +1,8 @@
 [![Build Status](https://travis-ci.com/mseg-dataset/mseg-api.svg?branch=master)](https://travis-ci.com/mseg-dataset/mseg-api)
 
-MSeg: A Composite Dataset for Multi-domain Semantic Segmentation (CVPR 2020, Official Repo)
-
 This is the code for the paper:
 
-**MSeg: A Composite Dataset for Multi-domain Semantic Segmentation** [[PDF]](http://vladlen.info/papers/MSeg.pdf)
+**MSeg: A Composite Dataset for Multi-domain Semantic Segmentation** (CVPR 2020, Official Repo) [[PDF]](http://vladlen.info/papers/MSeg.pdf)
 <br>
 [John Lambert*](https://johnwlambert.github.io/),
 [Zhuang Liu*](https://liuzhuang13.github.io/),
