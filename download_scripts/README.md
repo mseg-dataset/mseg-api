@@ -78,7 +78,7 @@ mkdir -p $MSEG_DST_DIR/mseg_dataset/WildDash
 Now, we'll for register for BDD.
 
 ### BDD100K
-The Berkeley Deep Drive dataset [[paper]](https://arxiv.org/abs/1805.04687) [[website]]() is available for public use. Register [here](https://bdd-data.berkeley.edu/login.html). You shuold be approved immediately and receive an email shortly. 
+The Berkeley Deep Drive dataset [[paper]](https://arxiv.org/abs/1805.04687) [[website]]() is available for public use. Register [here](https://bdd-data.berkeley.edu/login.html). You should be approved immediately and receive an email shortly. 
 
 This dataset is not available via `wget`, so we ask that you download it in a browser, and upload it (1.3 GB) to the desired location on your server.
 
