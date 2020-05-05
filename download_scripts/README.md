@@ -187,7 +187,7 @@ This will take around 45 minutes to execute on 100 cores.
 
 At this point, you have reached the final stage -- verification. We will loop through every path to ensure it exists. Run the following command:
 ```
-python ../tests/verify_all_dataset_paths_exist.py
+python -u ../tests/verify_all_dataset_paths_exist.py
 ```
 
 For the sake of your privacy, clear all stored credentials using:
