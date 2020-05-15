@@ -170,8 +170,8 @@ def write_out_updated_dataset(
 	dname: str, 
 	dataroot: str, 
 	update_records,
-	require_strict_boundaries: bool,
-	print_every: int=100):
+	require_strict_boundaries: bool
+	):
 	"""
 	By using remap.py, we already have converted label img from original taxonomy, to universal taxonomy.
 
@@ -181,7 +181,6 @@ def write_out_updated_dataset(
 		-	dname: string representing name of a dataset taxonomy
 		-	dataroot: string representing path to a file directory
 		-	update_records
-		-	print_every: print frequency in for-loop
 
 		Returns:
 		-	None
