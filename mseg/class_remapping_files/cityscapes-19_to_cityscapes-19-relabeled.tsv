@@ -3,7 +3,7 @@ building	building
 road	road
 sidewalk	sidewalk_pavement
 terrain	terrain
-person	person_non_rider
+person	person
 rider	bicyclist
 traffic sign	traffic_sign
 traffic light	traffic_light

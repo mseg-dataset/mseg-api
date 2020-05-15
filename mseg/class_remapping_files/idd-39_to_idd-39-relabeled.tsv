@@ -8,7 +8,7 @@ parking	road
 drivable fallback	road
 sidewalk	sidewalk_pavement
 curb	sidewalk_pavement
-person	person_non_rider
+person	person
 rider	motorcyclist
 traffic sign	traffic_sign
 traffic light	traffic_light
