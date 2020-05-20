@@ -85,11 +85,11 @@ class TaxonomyConverter:
 
 		# Map train_dataset_id -> universal_id
 		for d in self.train_datasets:
-			print(f'Mapping {d} -> universal')
+			print(f'\tMapping {d} -> universal')
 			self.id_to_uid_maps[d] = self._transform_d2u(d)
 
 		self.label_mapping_arr_dict = self._form_label_mapping_arrs()
-		print(f'Creating 1x1 conv for test datasets')
+		print(f'\n\tCreating 1x1 conv for test datasets...')
 		self.convs = {dname: self._get_convolution_test(dname) for dname in self.test_datasets}
 
 
@@ -211,7 +211,7 @@ class TaxonomyConverter:
 		assert dataset in self.test_datasets
 		uid2testid = self._transform_u2d(dataset)
 		in_channel = self.num_uclasses
-		out_channel = len(self.dataset_classnames(dataset))
+		out_channel = len(self.dataset_classnames[dataset])
 
 		conv = nn.Conv2d(in_channel, out_channel, kernel_size=1, bias=False)
 		conv.weight.data.fill_(0)
