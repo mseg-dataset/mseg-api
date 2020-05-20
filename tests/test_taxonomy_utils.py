@@ -23,33 +23,6 @@ from mseg_semantic.taxonomy.taxonomy_converter import (
 # 	TaxonomyConverter
 # )
 
-TRAIN_DATASETS = [
-	'mapillary-public65',
-	'mapillary-public65-relabeled',
-	'coco-panoptic-133',
-	'coco-panoptic-133-relabeled',
-	'ade20k-150',
-	'ade20k-150-relabeled',
-	'idd-39',
-	'idd-39-relabeled',
-	'cityscapes-34',
-	'cityscapes-34-relabeled',
-	'cityscapes-19',
-	'cityscapes-19-relabeled',
-	'bdd',
-	'bdd-relabeled',
-	'nyudepthv2-37',
-	'scannet-37',
-	'sunrgbd-37',
-	'sunrgbd-37-relabeled'
-]
-
-
-
-
-
-
-
 
 
 # def read_tsv(tsv_fpath):
@@ -139,42 +112,6 @@ TRAIN_DATASETS = [
 
 # 	level1pred_conv = tc.conv2_to_1(level2pred_conv)
 
-
-# def test_conv_weights_sumto1():
-# 	"""
-# 	If leaves sum to 1, then after bubble up sum, root should have probability 1.
-# 	"""
-# 	tc = TaxonomyConverter(is_unit_test=True)
-	
-# 	# test pred transform, sum up to 1
-# 	rand = torch.randn(2, len(tc.C[3]), 3, 3)
-
-# 	level3pred_conv = torch.nn.Softmax(dim=1)(rand)
-# 	level2pred_conv = tc.conv3_to_2(level3pred_conv)
-# 	level1pred_conv = tc.conv2_to_1(level2pred_conv)
-
-# 	assert np.allclose(np.ones((2,1,3,3), dtype=np.int64), level1pred_conv.numpy() )
-
-
-
-
-# def test_label_transform_unlabeled():
-# 	"""
-# 	Make sure 255 stays mapped to 255 at each level (to be ignored in cross-entropy loss).
-# 	"""
-# 	tc = TaxonomyConverter(is_unit_test=True)
-# 	label = torch.ones(4,4)*255
-# 	label = label.type(torch.LongTensor)
-# 	pred = tc.transform_label(label,'mapillary_vistas_comm')
-
-# 	gt_level1_label = 255 * np.ones((4,4), dtype=np.int64)
-# 	assert np.allclose(pred[1].numpy(), gt_level1_label)
-
-# 	gt_level2_label = 255 * np.ones((4,4), dtype=np.int64)
-# 	assert np.allclose(pred[2].numpy(), gt_level2_label)
-
-# 	gt_level3_label = 255 * np.ones((4,4), dtype=np.int64)
-# 	assert np.allclose(pred[3].numpy(), gt_level3_label)
 
 
 # def form_tiled_semantic_img(num_classes, output_sz):
@@ -346,13 +283,6 @@ TRAIN_DATASETS = [
 
 
 
-
-
-
-
-
-
-
 # # def test_all_classes_present_test_datasets():
 # # 	"""
 # # 	"""
@@ -398,60 +328,7 @@ TRAIN_DATASETS = [
 
 
 
-# def test_transform_predictions_test():
-# 	"""
-# 	TODO
-# 	"""
-# 	tc = TaxonomyConverter()
-# 	# input = ''
-# 	# dataset = ''
-# 	# conv = tc.get_convolution_test(dataset)
-# 	# output = tc.transform_predictions_test(input, dataset, conv)
 
-# 	# output_gt = ''
-
-
-# def test_conv_1x1():
-# 	"""
-# 	Implement simple matrix multiplication as 1x1 convolutions in PyTorch.
-
-# 	[2]   [1 0 1 0] [1]
-# 	[2] = [0 1 0 1] [1]
-# 	[4]   [1 1 1 1] [1]
-# 	                [1]
-# 	"""
-# 	conv = torch.nn.Conv2d(in_channels=4,  out_channels=3, kernel_size=1, padding=0, bias=False)
-# 	conv.weight.data.fill_(0)
-
-# 	for param in conv.parameters():
-# 		param.requires_grad = False
-
-# 	parent_child_map = [
-# 		(0,0), 
-# 		(0,2), 
-# 		(1,1), 
-# 		(1,3), 
-# 		(2,0), 
-# 		(2,1), 
-# 		(2,2), 
-# 		(2,3) 
-# 	]
-
-# 	for (parent, child) in parent_child_map:
-# 		conv.weight[parent][child] = 1
-
-# 	x = np.array([0,1,0,1]).reshape(1,4,1,1).astype(np.float32)
-# 	x = torch.from_numpy(x)
-# 	y = conv(x)
-# 	y_gt = np.array([0,2,2]).reshape(1,3,1,1).astype(np.float32)
-# 	y_gt = torch.from_numpy(y_gt)
-# 	assert torch.allclose(y, y_gt)
-
-# 	x = torch.ones(1,4,1,1).type(torch.FloatTensor)
-# 	y = conv(x)
-# 	y_gt = np.array([2,2,4]).reshape(1,3,1,1).astype(np.float32)
-# 	y_gt = torch.from_numpy(y_gt)
-# 	assert torch.allclose(y, y_gt)
 
 
 # test_all_classes_present_test_datasets()
@@ -520,13 +397,6 @@ TRAIN_DATASETS = [
 
 
 
-
-# def test_extend_tree():
-# 	"""
-# 	"""
-# 	extend_tree():
-
-
 # def test_transform_d2u():
 # 	"""
 # 	"""
@@ -552,13 +422,6 @@ TRAIN_DATASETS = [
 # 	"""
 # 	"""
 # 	output = transform_predictions_test(input, dataset, conv)
-
-
-
-# def test_bubble_sum():
-# 	"""
-# 	"""
-# 	output = bubble_sum(input, level)
 
 
 #test_taxonomy_converter()
