@@ -25,7 +25,7 @@ mailbox
 motorcycle
 motorcyclist
 mountain_hill
-person_non_rider
+person
 pole
 railroad
 rider_other

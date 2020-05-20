@@ -75,7 +75,7 @@ nightstand
 ottoman
 oven
 painting
-person_non_rider
+person
 pier_wharf
 pillow
 pizza

@@ -27,7 +27,7 @@ nightstand
 ottoman
 painting
 paper
-person_non_rider
+person
 pillow
 refrigerator
 rug_floormat

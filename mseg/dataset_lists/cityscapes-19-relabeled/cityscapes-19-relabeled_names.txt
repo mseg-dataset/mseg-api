@@ -6,7 +6,7 @@ car
 fence
 motorcycle
 motorcyclist
-person_non_rider
+person
 pole
 rider_other
 road
