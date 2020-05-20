@@ -156,45 +156,6 @@ TRAIN_DATASETS = [
 # 	assert np.allclose(np.ones((2,1,3,3), dtype=np.int64), level1pred_conv.numpy() )
 
 
-# def test_label_transform():
-# 	"""
-# 	85 is the motorcycle class, #6 in level 3, #4 in level 2, and #0 in level 1
-# 	in our simple test taxonomy.
-# 	"""
-# 	tc = TaxonomyConverter(is_unit_test=True)
-# 	label = torch.ones(4,4)*85
-# 	label = label.type(torch.LongTensor)
-# 	pred = tc.transform_label(label,'mapillary_vistas_comm')
-
-# 	gt_level1_label = np.array(
-# 		[
-# 			[0, 0, 0, 0],
-# 			[0, 0, 0, 0],
-# 			[0, 0, 0, 0],
-# 			[0, 0, 0, 0]
-# 		]
-# 	).astype(np.int64)
-# 	assert np.allclose(pred[1].numpy(), gt_level1_label)
-
-# 	gt_level2_label = np.array(
-# 		[
-# 			[4, 4, 4, 4],
-# 			[4, 4, 4, 4],
-# 			[4, 4, 4, 4],
-# 			[4, 4, 4, 4]
-# 		]
-# 	).astype(np.int64)
-# 	assert np.allclose(pred[2].numpy(), gt_level2_label)
-
-# 	gt_level3_label = np.array(
-# 		[
-# 			[6, 6, 6, 6],
-# 			[6, 6, 6, 6],
-# 			[6, 6, 6, 6],
-# 			[6, 6, 6, 6]
-# 		]
-# 	).astype(np.int64)
-# 	assert np.allclose(pred[3].numpy(), gt_level3_label)
 
 
 # def test_label_transform_unlabeled():
