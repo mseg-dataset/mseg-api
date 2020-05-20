@@ -7,7 +7,8 @@ import torch
 
 from mseg.utils.names_utils import (
 	load_class_names,
-	get_universal_class_names
+	get_universal_class_names,
+	get_classname_to_dataloaderid_map
 )
 from mseg.utils.tsv_utils import read_tsv_column_vals
 
@@ -16,6 +17,7 @@ from mseg.taxonomy.taxonomy_converter import (
 	parse_uentry,
 	parse_test_entry,
 	TaxonomyConverter,
+	populate_linear_mapping,
 	RELABELED_TRAIN_DATASETS,
 	UNRELABELED_TRAIN_DATASETS
 )
@@ -135,11 +137,116 @@ def test_label_transform():
 	assert np.allclose(u_label.numpy(), gt_u_label)
 
 
+
+def test_label_transform_unlabeled():
+	"""
+	Make sure 255 stays mapped to 255 at each level (to be ignored in cross-entropy loss).
+	"""
+	IGNORE_LABEL = 255
+	dname = 'mapillary-public65'
+	txt_classnames = load_class_names(dname)
+	name2id = get_classname_to_dataloaderid_map(dname, include_ignore_idx_cls = True)
+	train_idx = name2id['unlabeled']
+
+	tc = TaxonomyConverter()
+	# training dataset label
+	traind_label = torch.ones(4,4)*train_idx
+	traind_label = traind_label.type(torch.LongTensor)
+
+	# Get back the universal label
+	u_label = tc.transform_label(traind_label, dname)
+	u_idx = IGNORE_LABEL
+	gt_u_label = np.ones((4,4)).astype(np.int64) * u_idx
+	assert np.allclose(u_label.numpy(), gt_u_label)
+
+
+def test_transform_predictions_test():
+	"""
+		Consider predictions made within the universal taxonomy
+		over a tiny 2x3 image. We use a linear mapping to bring
+		these predictions into a test dataset's taxonomy 
+		(summing the probabilities where necessary).
+
+		For Camvid, universal probabilities for `person',`bicycle'
+		should both go into the 'Bicyclist' class.
+	"""
+	u_classnames = get_universal_class_names()
+	person_uidx = u_classnames.index('person')
+	bicycle_uidx = u_classnames.index('bicycle')
+	sky_uidx = u_classnames.index('sky')
+
+	tc = TaxonomyConverter()
+	input = np.zeros((194,2,3))
+	input[sky_uidx,0,:] = 1.0 # top row is sky
+	input[person_uidx,1,:] = 0.5 # bottom row is 50/50 person or bicyclist
+	input[bicycle_uidx,1,:] = 0.5 # bottom row is 50/50 person or bicyclist
+	input = torch.from_numpy(input)
+	input = input.unsqueeze(0).float() # CHW -> NCHW
+	assert input.shape == (1,194,2,3)
+
+	test_dname = 'camvid-11'
+	output = tc.transform_predictions_test(input, test_dname)
+	output = output.squeeze() # NCHW -> CHW
+	prediction = torch.argmax(output, dim=0).numpy()
+
+	camvid_classnames = load_class_names(test_dname)
+	# Camvid should have predictions across 11 classes.
+	prediction_gt = np.zeros((2,3))
+	prediction_gt[0,:] = camvid_classnames.index('Sky')
+	prediction_gt[1,:] = camvid_classnames.index('Bicyclist')
+	assert np.allclose(prediction, prediction_gt)
+
+
+def test_populate_linear_mapping():
+	"""
+	Implement simple matrix multiplication as 1x1 convolutions in PyTorch.
+
+	[2]   [1 0 1 0] [1]
+	[2] = [0 1 0 1] [1]
+	[4]   [1 1 1 1] [1]
+	                [1]
+	"""
+	populate_linear_mapping(in_channel=4, out_channel=3, inid2outid: List[int,int] )
+	
+	# (i,j)
+	inid2outid = [
+		(0,0),
+		(0,2),
+		(1,1),
+		(1,3),
+		(2,0),
+		(2,1),
+		(2,2),
+		(2,3) 
+	]
+
+	for (parent, child) in parent_child_map:
+		conv.weight[parent][child] = 1
+
+	x = np.array([0,1,0,1]).reshape(1,4,1,1).astype(np.float32)
+	x = torch.from_numpy(x)
+	y = conv(x)
+	y_gt = np.array([0,2,2]).reshape(1,3,1,1).astype(np.float32)
+	y_gt = torch.from_numpy(y_gt)
+	assert torch.allclose(y, y_gt)
+
+	x = torch.ones(1,4,1,1).type(torch.FloatTensor)
+	y = conv(x)
+	y_gt = np.array([2,2,4]).reshape(1,3,1,1).astype(np.float32)
+	y_gt = torch.from_numpy(y_gt)
+	assert torch.allclose(y, y_gt)
+
+
+
 if __name__ == '__main__':
-	#test_names_complete()
-	#test_parse_entry_blank()
-	#test_parse_entry_brackets1()
-	#test_parse_entry_space_sep()
-	#test_parse_uentry()
-	test_label_transform()
+	# test_names_complete()
+	# test_parse_entry_blank()
+	# test_parse_entry_brackets1()
+	# test_parse_entry_space_sep()
+	# test_parse_uentry()
+	# test_label_transform()
+	# test_label_transform_unlabeled()
+	# test_label_transform_unlabeled()
+	# test_transform_predictions_test()
+	test_populate_linear_mapping()
 

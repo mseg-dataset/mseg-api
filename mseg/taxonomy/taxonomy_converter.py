@@ -77,7 +77,8 @@ class TaxonomyConverter:
 		self.uname2uid = {}
 		self._build_universal_tax()
 		self.num_uclasses = len(self.uid2uname) - 1 # excluding ignored label（id, 255)）
-		assert self.num_uclasses == 194
+		# 255 is a privileged class index and must not be used elsewhere
+		assert (self.num_uclasses < 255)
 
 		self.dataset_classnames = {d: load_class_names(d) for d in (self.train_datasets + self.test_datasets)}
 
@@ -213,15 +214,8 @@ class TaxonomyConverter:
 		in_channel = self.num_uclasses
 		out_channel = len(self.dataset_classnames[dataset])
 
-		conv = nn.Conv2d(in_channel, out_channel, kernel_size=1, bias=False)
-		conv.weight.data.fill_(0)
-
-		for param in conv.parameters():
-			param.requires_grad = False
-
-		for u_id, test_id in uid2testid:
-			conv.weight[test_id][u_id] = 1
-
+		# Create 1x1 convolution filters.
+		conv = populate_linear_mapping(in_channel, out_channel, uid2testid)
 		assert isinstance(conv, nn.Module)
 		return conv
 
@@ -233,7 +227,7 @@ class TaxonomyConverter:
 			Args:
 			-	label: Pytorch tensor on the cpu with dtype Torch.LongTensor, 
 					representing a semantic image, according to PNG/dataloader format.
-			-	dataset
+			-	dataset: string representing dataset's name
 
 			Returns:
 			-	labels: vector label for each depth in the tree, compatible with softmax
@@ -246,13 +240,16 @@ class TaxonomyConverter:
 	def transform_predictions_test(self, input: torch.Tensor, dataset: str):
 		""" Function to be called outside.
 			Explicitly for inference on our test datasets.
+			Suppose universal taxonomy has N_u classes, and test taxonomy
+			has N_t classes.
 
 			Args:
-			-	input: after softmax probability, of universal
-			-	dataset:
+			-	input: Pytorch tensor of shape (N_u,C,H,W) 
+					before softmax, in universal taxonomy.
+			-	dataset: string representing dataset's name
 
 			Returns:
-			-	output: 
+			-	output: Pytorch tensor of shape (N_t,C,H,W) 
 		"""
 		input = self.softmax(input)
 		output = self.convs[dataset](input)
@@ -271,7 +268,7 @@ class TaxonomyConverter:
 
 			Args:
 			-	input: after softmax probability, of universal
-			-	dataset:
+			-	dataset: string representing dataset's name
 
 			Returns:
 			-	output: 
@@ -331,4 +328,38 @@ def parse_entry(entry: str) -> Tuple[List[str], str]:
 		classes = [entry]
 	
 	return classes
+
+
+def populate_linear_mapping(
+	in_channel: int,
+	out_channel: int,
+	inid2outid: List[int,int]
+	) -> nn.Module:
+	""" Use 1x1 convolution to create linear mapping P of each pixel's probabilities
+		to a new space.
+
+		The matrix weights Pij are binary 0/1 values and are fixed
+		before training or evaluation; the weights are determined
+		manually by inspecting label maps of the test datasets. Pij
+		is set to 1 if input class j contributes to
+		output class i, otherwise Pij = 0.
+
+		Args:
+		-	in_channel: number of input channels
+		-	out_channel: number of output channels
+		-	inid2outid: list of (j,i) tuples defining linear mapping
+
+		Returns:
+		-	conv: 1x1 convolutional kernels. padding is zero by default.
+	"""
+	conv = nn.Conv2d(in_channel, out_channel, kernel_size=1, bias=False)
+	conv.weight.data.fill_(0)
+
+	for param in conv.parameters():
+		param.requires_grad = False
+
+	for in_id, out_id in inid2outid:
+		conv.weight[out_id][in_id] = 1
+	return conv
+
 
