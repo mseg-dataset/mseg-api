@@ -9,7 +9,7 @@ import pdb
 import torch
 import torch.nn as nn
 from mseg.utils.names_utils import load_class_names
-from typing import List, Tuple
+from typing import List, Mapping, Tuple
 
 """
 We train in a common, unified label space.
@@ -31,7 +31,7 @@ class TaxonomyConverter:
 		self,
 		train_datasets: List[str],
 		test_datasets: List[str],
-		tsv_fpath: str = f'{ROOT}/class_remapping_files/MSeg_master.tsv'):
+		tsv_fpath: str = f'{_ROOT}/class_remapping_files/MSeg_master.tsv'):
 		"""
 		"""
 		self.train_datasets = train_datasets
@@ -148,7 +148,7 @@ class TaxonomyConverter:
 
 		for index, row in self.tsv_data.iterrows():
 			dname = parse_test_entry(row[dataset])
-			if dname == ''
+			if dname == '':
 				# blank, so ignore
 				continue
 			test_id = self.dataset_classnames[dataset].index(dname)

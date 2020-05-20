@@ -6,6 +6,11 @@ import pdb
 from mseg.utils.names_utils import load_class_names
 from mseg.utils.tsv_utils import read_tsv_column_vals
 
+from mseg.taxonomy.taxonomy_converter import (
+	parse_entry,
+	parse_uentry
+)
+
 _ROOT = Path(__file__).resolve().parent.parent
 
 def strip_group(entry):
@@ -78,5 +83,42 @@ def test_names_complete():
 		assert entries_equal(dname, tsv_fpath)
 
 
+def test_parse_entry_blank():
+	""" """
+	entry = ''
+	classes = parse_entry(entry)
+	assert classes == []
+
+def test_parse_entry_brackets1():
+	"""
+	"""
+	entry = '{house,building,  skyscraper,  booth,  hovel,  tower, grandstand}'
+	classes = parse_entry(entry)
+	gt_classes = [
+		'house',
+		'building',
+		'skyscraper',
+		'booth',
+		'hovel',
+		'tower',
+		'grandstand'
+	]
+	assert classes == gt_classes
+
+
+def test_parse_entry_space_sep():
+	"""
+	Note: ADE20K class "conveyer" is typo of "conveyor"
+	"""
+	entry = 'conveyer belt'
+	classes = parse_entry(entry)
+	assert classes == ['conveyer belt']
+
+
+
 if __name__ == '__main__':
-	test_names_complete()
+	#test_names_complete()
+	#test_parse_entry_blank()
+	#test_parse_entry_brackets1()
+	test_parse_entry_space_sep()
+

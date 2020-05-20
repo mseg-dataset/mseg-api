@@ -48,41 +48,9 @@ TRAIN_DATASETS = [
 
 
 
-def test_parse_entry_blank():
-	""" """
-	entry = ''
-	classes, type = parse_entry(entry)
-
-	assert classes == []
-	assert type == 'none'
 
 
-def test_parse_entry_brackets1():
-	"""
-	"""
-	entry = '{computer, unlabeled}'
-	classes, type = parse_entry(entry)
-	assert type == 'dump'
-	assert classes == ['computer', 'unlabeled']
 
-
-def test_parse_entry_brackets2():
-	"""
-	"""
-	entry = '{water, waterfall, lake, swimming pool}'
-	classes, type = parse_entry(entry)
-	assert type == 'dump'
-	assert classes == ['water', 'waterfall', 'lake', 'swimming pool']
-
-
-# def test_parse_entry_space_sep():
-# 	"""
-# 	Note: ADE20K class "conveyer" is typo of "conveyor"
-# 	"""
-# 	entry = 'conveyer belt'
-# 	classes, type = parse_entry(entry)
-# 	assert type == 'same'
-# 	assert classes == ['conveyer belt']
 
 # def read_tsv(tsv_fpath):
 # 	return pd.read_csv(tsv_fpath, sep='\t', keep_default_na=False)
@@ -361,15 +329,6 @@ def test_parse_entry_brackets2():
 # 		assert pred[level].shape == pred2[level].shape
 
 # 	assert set(pred.keys()) == set(pred2.keys())
-
-
-
-
-# # def test_taxonomy_depth():
-# # 	"""
-# # 	ASSERT THAT WE NEVER HAVE MORE THAN 2 ARROWS FOR ANY NODE
-# # 	"""
-# # 	pass
 
 
 
