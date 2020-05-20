@@ -3,12 +3,19 @@
 from pathlib import Path
 import pdb
 
-from mseg.utils.names_utils import load_class_names
+from mseg.utils.names_utils import (
+	load_class_names,
+	get_universal_class_names
+)
 from mseg.utils.tsv_utils import read_tsv_column_vals
 
 from mseg.taxonomy.taxonomy_converter import (
 	parse_entry,
-	parse_uentry
+	parse_uentry,
+	parse_test_entry,
+	TaxonomyConverter,
+	RELABELED_TRAIN_DATASETS,
+	UNRELABELED_TRAIN_DATASETS
 )
 
 _ROOT = Path(__file__).resolve().parent.parent
@@ -45,25 +52,7 @@ def test_names_complete():
 	"""
 	tsv_fpath = f'{_ROOT}/mseg/class_remapping_files/MSeg_master.tsv'
 
-	train_dnames = [
-		'ade20k-150',
-		'bdd',
-		'cityscapes-19',
-		'cityscapes-34',
-		'coco-panoptic-133',
-		'idd-39',
-		'mapillary-public65',
-		'sunrgbd-37',
-
-		'ade20k-150-relabeled',
-		'bdd-relabeled',
-		'cityscapes-19-relabeled',
-		'cityscapes-34-relabeled',
-		'coco-panoptic-133-relabeled',
-		'idd-39-relabeled',
-		'mapillary-public65-relabeled',
-		'sunrgbd-37-relabeled'
-	]
+	train_dnames = UNRELABELED_TRAIN_DATASETS + RELABELED_TRAIN_DATASETS
 	for dname in train_dnames:
 		print(f'On {dname}...')
 		assert entries_equal(dname, tsv_fpath)
@@ -115,10 +104,40 @@ def test_parse_entry_space_sep():
 	assert classes == ['conveyer belt']
 
 
+def test_parse_uentry():
+	""" """
+	uentry = 'animal_other'
+	fullname = parse_uentry(uentry)
+	assert fullname == 'animal_other'
+
+
+def test_label_transform():
+	"""
+	Bring label from training taxonomy (mapillary-public65)
+	to the universal taxonomy.
+	
+	21 is the motorcyclist class in mapillary-public65
+	"""
+	dname = 'mapillary-public65'
+	txt_classnames = load_class_names(dname)
+	train_idx = txt_classnames.index('Motorcyclist')
+	tc = TaxonomyConverter()
+	# training dataset label
+	traind_label = torch.ones(4,4)*class_idx
+	traind_label = label.type(torch.LongTensor)
+
+	# Get back the universal label
+	u_label = tc.transform_label(traind_label, dname)
+	u_idx = get_universal_class_names().index('motorcyclist')
+	gt_u_label = np.ones(4,4).astype(np.int64) * u_idx
+	assert np.allclose(u_label.numpy(), gt_u_label)
+
 
 if __name__ == '__main__':
 	#test_names_complete()
 	#test_parse_entry_blank()
 	#test_parse_entry_brackets1()
-	test_parse_entry_space_sep()
+	#test_parse_entry_space_sep()
+	#test_parse_uentry()
+	test_label_transform()
 
