@@ -21,7 +21,37 @@ evaluation taxonomy.
 TODO: use underscore to show private methods.
 """
 
-_ROOT = Path(__file__).resolve().parent
+UNRELABELED_TRAIN_DATASETS = [
+	'ade20k-150',
+	'bdd',
+	'cityscapes-19',
+	'cityscapes-34',
+	'coco-panoptic-133',
+	'idd-39',
+	'mapillary-public65',
+	'sunrgbd-37',
+]
+RELABELED_TRAIN_DATASETS = [
+	'ade20k-150-relabeled',
+	'bdd-relabeled',
+	'cityscapes-19-relabeled',
+	'cityscapes-34-relabeled',
+	'coco-panoptic-133-relabeled',
+	'idd-39-relabeled',
+	'mapillary-public65-relabeled',
+	'sunrgbd-37-relabeled'
+]
+DEFAULT_TRAIN_DATASETS = UNRELABELED_TRAIN_DATASETS + RELABELED_TRAIN_DATASETS
+TEST_DATASETS = [
+	'camvid-11',
+	'kitti-19',
+	'pascal-context-60',
+	'scannet-20',
+	'voc2012',
+	'wilddash-19'
+]
+
+_ROOT = Path(__file__).resolve().parent.parent
 
 class TaxonomyConverter:
 	"""
@@ -29,8 +59,8 @@ class TaxonomyConverter:
 	"""
 	def __init__(
 		self,
-		train_datasets: List[str],
-		test_datasets: List[str],
+		train_datasets: List[str] = DEFAULT_TRAIN_DATASETS,
+		test_datasets: List[str] = TEST_DATASETS,
 		tsv_fpath: str = f'{_ROOT}/class_remapping_files/MSeg_master.tsv'):
 		"""
 		"""
@@ -45,7 +75,7 @@ class TaxonomyConverter:
 		self.uid2uname = {}
 		# Inverse -- find spreadsheet TSV index from universal name.
 		self.uname2uid = {}
-		self.build_universal_tax()
+		self._build_universal_tax()
 		self.num_uclasses = len(self.uid2uname) - 1 # excluding ignored label（id, 255)）
 		assert self.num_uclasses == 194
 
@@ -56,14 +86,14 @@ class TaxonomyConverter:
 		# Map train_dataset_id -> universal_id
 		for d in self.train_datasets:
 			print(f'Mapping {d} -> universal')
-			self.id_to_uid_maps[d] = self.transform_d2u(d)
+			self.id_to_uid_maps[d] = self._transform_d2u(d)
 
-		self.label_mapping_arr_dict = self.form_label_mapping_arrs()
+		self.label_mapping_arr_dict = self._form_label_mapping_arrs()
 		print(f'Creating 1x1 conv for test datasets')
-		self.convs = {d: self.get_convolution_test(tax_name) for d in self.test_datasets}
+		self.convs = {dname: self._get_convolution_test(dname) for dname in self.test_datasets}
 
 
-	def build_universal_tax(self) -> None:
+	def _build_universal_tax(self) -> None:
 		''' 
 			Build a flat label space by adding each `universal` taxonomy entry from the TSV here.
 			We make a mapping from universal_name->universal_id, and vice versa.
@@ -84,7 +114,7 @@ class TaxonomyConverter:
 			self.uname2uid[u_name] = id
 
 
-	def transform_d2u(self, dataset: str) -> Mapping[int,int]:
+	def _transform_d2u(self, dataset: str) -> Mapping[int,int]:
 		''' Transform a training dataset to the universal taxonomy.
 
 			For one training dataset, map each of its class ids to one universal ids.
@@ -112,7 +142,7 @@ class TaxonomyConverter:
 		return id2uid_map
 
 
-	def form_label_mapping_arrs(self)->Mapping[str, np.array]:
+	def _form_label_mapping_arrs(self)->Mapping[str, np.array]:
 		""" Cache conversion maps so we will later be able to perform fast 
 			grayscale->grayscale mapping for training data transformation.
 			Each map is implemented as an integer array (given integer index, 
@@ -133,7 +163,7 @@ class TaxonomyConverter:
 		return label_mapping_arr_dict
 
 
-	def transform_u2d(self, dataset):
+	def _transform_u2d(self, dataset):
 		''' Explicitly for inference on our test datasets. Store correspondences
 			between universal_taxonomy and test_dataset_taxonomy.
 
@@ -159,7 +189,7 @@ class TaxonomyConverter:
 		return uid2testid
 
 
-	def get_convolution_test(self, dataset: str):
+	def _get_convolution_test(self, dataset: str) -> nn.Module:
 		""" Explicitly for inference on our test datasets.
 
 			We implement this remapping from mu classes to mt classes 
@@ -179,7 +209,7 @@ class TaxonomyConverter:
 				to test_dataset_taxonomy.
 		"""
 		assert dataset in self.test_datasets
-		uid2testid = self.transform_u2d(dataset)
+		uid2testid = self._transform_u2d(dataset)
 		in_channel = self.num_uclasses
 		out_channel = len(self.dataset_classnames(dataset))
 
@@ -192,6 +222,7 @@ class TaxonomyConverter:
 		for u_id, test_id in uid2testid:
 			conv.weight[test_id][u_id] = 1
 
+		assert isinstance(conv, nn.Module)
 		return conv
 
 
@@ -212,8 +243,9 @@ class TaxonomyConverter:
 		return label
 
 
-	def transform_predictions_test(self, input, dataset): # function to be called outside
-		""" Explicitly for inference on our test datasets.
+	def transform_predictions_test(self, input: torch.Tensor, dataset: str):
+		""" Function to be called outside.
+			Explicitly for inference on our test datasets.
 
 			Args:
 			-	input: after softmax probability, of universal
@@ -233,8 +265,9 @@ class TaxonomyConverter:
 		return output
 
 
-	def transform_predictions_universal(self, input, dataset): # function to be called outside
-		""" Explicitly for inference on our test datasets.
+	def transform_predictions_universal(self, input: torch.Tensor, dataset: str):
+		""" Function to be called outside.
+			Explicitly for inference on our test datasets.
 
 			Args:
 			-	input: after softmax probability, of universal
@@ -248,19 +281,32 @@ class TaxonomyConverter:
 
 
 def parse_uentry(uentry: str) -> Tuple[int, List[str], str]:
-	"""
+	""" Cannot be a blank string.
+
 		Args:
 		-	uentry: string, representing TSV entry from `Universal` taxonomy column
 
 		Returns:
-		-	level: integer, representing depth of node in tree
-		-	names: List of strings, representing names of nodes on path from specified node to root
 		-	full_name: exact duplicate of uentry string input
 	"""
 
 	full_name = uentry.strip()
 	assert(full_name != '')
 	return full_name
+
+
+def parse_test_entry(test_entry) -> Tuple[str,str]:
+	"""
+	Can be a blank string, e.g. ''. We ensure no additional whitespace present.
+
+		Args:
+		-	test_entry
+
+		Returns:
+		-	test_entry
+	"""
+	assert(test_entry.strip() == test_entry) # don't want entry to contain or be space/tab
+	return test_entry
 
 
 def parse_entry(entry: str) -> Tuple[List[str], str]:
