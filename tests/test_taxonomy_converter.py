@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 
+import numpy as np
 from pathlib import Path
 import pdb
+import torch
 
 from mseg.utils.names_utils import (
 	load_class_names,
@@ -123,13 +125,13 @@ def test_label_transform():
 	train_idx = txt_classnames.index('Motorcyclist')
 	tc = TaxonomyConverter()
 	# training dataset label
-	traind_label = torch.ones(4,4)*class_idx
-	traind_label = label.type(torch.LongTensor)
+	traind_label = torch.ones(4,4)*train_idx
+	traind_label = traind_label.type(torch.LongTensor)
 
 	# Get back the universal label
 	u_label = tc.transform_label(traind_label, dname)
 	u_idx = get_universal_class_names().index('motorcyclist')
-	gt_u_label = np.ones(4,4).astype(np.int64) * u_idx
+	gt_u_label = np.ones((4,4)).astype(np.int64) * u_idx
 	assert np.allclose(u_label.numpy(), gt_u_label)
 
 
