@@ -195,42 +195,42 @@ def verify_targeted_visual_examples():
 	scd = SanityCheckDataset(infos[dname].dataroot, dname)
 	scd.find_matches(cocop_examples)
 	
-	# dname = 'idd-39-relabeled'
-	# idd_examples = [
-	# 	('backpack', 'seq173_318463_leftImg8bit_50.jpg', 'train'),
-	# 	('bicyclist', 'seq158_867833_leftImg8bit_54.jpg', 'train'),
-	# 	('box', 'seq173_316862_leftImg8bit_34.jpg', 'train'),
-	# 	('motorcyclist', 'seq98_776293_leftImg8bit_110.jpg', 'train'),
-	# 	('person-non-rider', 'seq1_148425_leftImg8bit_110.jpg', 'train'),
-	# 	('rider-other', 'seq48_601929_leftImg8bit_79.jpg', 'val'),
-	# 	('bicyclist', 'seq181_016419_leftImg8bit_41.jpg', 'val'),
-	# 	('rider-other', 'seq148_000690_leftImg8bit_67.jpg', 'val')
-	# ]
-	# scd = SanityCheckDataset(infos[dname].dataroot, dname)
-	# scd.find_matches(idd_examples)
+	dname = 'idd-39-relabeled'
+	idd_examples = [
+		['backpack', 'seq173_318463_leftImg8bit_50.jpg', 'train', (912, 1191) ],
+		['bicyclist', 'seq158_867833_leftImg8bit_54.jpg', 'train', (510, 453) ],
+		['box', 'seq173_316862_leftImg8bit_34.jpg', 'train', (752, 761) ],
+		['motorcyclist', 'seq98_776293_leftImg8bit_110.jpg', 'train', (502, 1101) ],
+		['person-non-rider', 'seq1_148425_leftImg8bit_110.jpg', 'train', (458, 822) ],
+		#['rider-other', 'seq48_601929_leftImg8bit_79.jpg', 'val', () ],
+		['bicyclist', 'seq181_016419_leftImg8bit_41.jpg', 'val', (365, 889) ],
+		['rider-other', 'seq148_000690_leftImg8bit_67.jpg', 'val', (591, 1013) ],
+	]
+	scd = SanityCheckDataset(infos[dname].dataroot, dname)
+	scd.find_matches(idd_examples)
 
-	# dname = 'sunrgbd-37-relabeled'
-	# sunrgbd_examples = [
-	# 	('swivel chair', 	'img-000253_4.jpg', 'train'),
-	# 	('door', 			'img-004239_4.jpg', 'train'),
-	# 	('desk', 			'img-004930_11.jpg', 'train'),
-	# 	('bathroom counter','img-002347_11.jpg', 'train'),
-	# 	('bathroom counter','img-002164_11.jpg', 'test'),
-	# 	('sconce', 			'img-004159_34.jpg', 'train'),
-	# 	('chandelier', 		'img-001692_34.jpg', 'train')
-	# ]
-	# scd = SanityCheckDataset(infos[dname].dataroot, dname)
-	# scd.find_matches(sunrgbd_examples)
+	dname = 'sunrgbd-37-relabeled'
+	sunrgbd_examples = [
+		['swivel chair', 	'img-000253_4.jpg', 'train', ],
+		['door', 			'img-004239_4.jpg', 'train', ],
+		['desk', 			'img-004930_11.jpg', 'train', ],
+		['bathroom counter','img-002347_11.jpg', 'train', ],
+		['bathroom counter','img-002164_11.jpg', 'test', ],
+		['sconce', 			'img-004159_34.jpg', 'train', ],
+		['chandelier', 		'img-001692_34.jpg', 'train', ],
+	]
+	scd = SanityCheckDataset(infos[dname].dataroot, dname)
+	scd.find_matches(sunrgbd_examples)
 	
-	# dname = 'mapillary-public65-relabeled'
-	# mapillary_examples = [
-	# 	('sea', 'mapillary_EZJTbIpLNOfHnw3DvA1NEA_7936.jpg', 'val'),
-	# 	('fountain', 'mapillary_1fhI-qv6dVR-1Kc8Oafb3Q_7936.jpg', 'train'),
-	# 	('horse', 'mapillary_CH1TcYj0ki_kw3Yc3oOiZA_258.jpg', 'train'),
-	# 	('dog', 'mapillary_OkOJlU8l98KqPEE05dv1tA_256.jpg', 'val')
-	# ]
-	# scd = SanityCheckDataset(infos[dname].dataroot, dname)
-	# scd.find_matches(mapillary_examples)
+	dname = 'mapillary-public65-relabeled'
+	mapillary_examples = [
+		['sea', 'mapillary_EZJTbIpLNOfHnw3DvA1NEA_7936.jpg', 'val', (1921, 3000) ],
+		['fountain', 'mapillary_1fhI-qv6dVR-1Kc8Oafb3Q_7936.jpg', 'train', (1059, 2663) ],
+		['horse', 'mapillary_CH1TcYj0ki_kw3Yc3oOiZA_258.jpg', 'train', (1724, 180) ],
+		['dog', 'mapillary_OkOJlU8l98KqPEE05dv1tA_256.jpg', 'val', (1773, 886) ]
+	]
+	scd = SanityCheckDataset(infos[dname].dataroot, dname)
+	scd.find_matches(mapillary_examples)
 
 
 if __name__ == '__main__':
