@@ -296,6 +296,24 @@ def test_populate_linear_mapping3():
 	assert torch.allclose(y, y_gt)
 
 
+def test_constructor_types():
+	""" """
+	tc = TaxonomyConverter()
+	for dname, conv in tc.convs.items():
+		assert isinstance(conv, torch.nn.Module)
+
+def test_label_mapping_arrs():
+	""" """
+	tc = TaxonomyConverter()
+	train_idx = load_class_names('ade20k-150').index('minibike')
+	u_idx = get_universal_class_names().index('motorcycle')
+	assert tc.label_mapping_arr_dict['ade20k-150'][train_idx] == u_idx
+
+	train_idx = load_class_names('mapillary-public65').index('Bird')
+	u_idx = get_universal_class_names().index('bird')
+	assert tc.label_mapping_arr_dict['mapillary-public65'][train_idx] == u_idx
+
+
 if __name__ == '__main__':
 	# test_names_complete()
 	# test_parse_entry_blank()
@@ -306,7 +324,10 @@ if __name__ == '__main__':
 	# test_label_transform_unlabeled()
 	# test_label_transform_unlabeled()
 	# test_transform_predictions_test()
-	test_populate_linear_mapping1()
-	test_populate_linear_mapping2()
-	test_populate_linear_mapping3()
+	# test_populate_linear_mapping1()
+	# test_populate_linear_mapping2()
+	# test_populate_linear_mapping3()
+	# test_constructor_types()
+	test_label_mapping_arrs()
+
 
