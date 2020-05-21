@@ -26,7 +26,10 @@ _ROOT = Path(__file__).resolve().parent.parent
 
 
 def entries_equal(dname, tsv_fpath, is_train_dataset):
-	""" """
+	"""
+	Compare classnames in *_names.txt file against tsv column entries.
+	For training datasets, these must be *exactly* the same.
+	"""
 	tsv_classnames = read_tsv_column_vals(tsv_fpath, col_name=dname, convert_val_to_int=False)
 	nonempty_classnames = [name for name in tsv_classnames if name != '']
 	tsv_classnames = []
@@ -38,6 +41,8 @@ def entries_equal(dname, tsv_fpath, is_train_dataset):
 
 	if is_train_dataset:
 		assert len(txt_classnames) == len(tsv_classnames)
+		# ensure no duplicates among training dataset classnames
+		assert len(list(tsv_classnames)) == len(set(tsv_classnames))
 	return set(txt_classnames) == set(tsv_classnames)
 
 
