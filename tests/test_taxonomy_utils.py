@@ -54,63 +54,7 @@ from mseg_semantic.taxonomy.taxonomy_converter import (
 # 				print(f'\t{taxonomy_name.rjust(20)}: {row_value[taxonomy_name]}')
 
 
-# def test_taxonomy_converter():
-# 	"""
-# 	"""
-# 	tc = TaxonomyConverter(is_unit_test=True, train_datasets=['mapillary_vistas_comm'], test_datasets=['coco'])
-# 	assert tc.tsv_data.equals(read_tsv('test_data/unit_test_taxonomy.tsv'))
 
-# 	depth_0_gt_dict = {}
-# 	dict_is_equal(tc.name2id[0], depth_0_gt_dict)
-
-# 	# depth_1_gt_dict = {'vehicle': 0, }
-# 	# dict_is_equal(tc.name2id[1], depth_1_gt_dict)
-
-# 	depth_2_gt_dict = {
-# 		'vehicle->bicycle': 0, 'vehicle->caravan': 1, 'vehicle->car': 2, 'vehicle->van': 3, 
-# 		'vehicle->motorcycle': 4, 'vehicle->airplane': 5, 'vehicle->bus': 6, 'vehicle->train': 7, 
-# 		'vehicle->truck': 8, 'vehicle->trailer': 9, 'vehicle->watercraft': 10, 'vehicle->slow_wheeled_obj': 11
-# 	}
-# 	dict_is_equal(tc.name2id[2], depth_2_gt_dict)
-
-# 	depth_3_gt_dict = {
-# 		'vehicle->watercraft->boat': 0, 'vehicle->watercraft->ship': 1, 'vehicle->bicycle->bicycle_ext': 2, 
-# 		'vehicle->caravan->caravan_ext': 3, 'vehicle->car->car_ext': 4, 'vehicle->van->van_ext': 5, 
-# 		'vehicle->motorcycle->motorcycle_ext': 6, 'vehicle->airplane->airplane_ext': 7, 
-# 		'vehicle->bus->bus_ext': 8, 'vehicle->train->train_ext': 9, 'vehicle->truck->truck_ext': 10, 
-# 		'vehicle->trailer->trailer_ext': 11, 'vehicle->slow_wheeled_obj->slow_wheeled_obj_ext': 12
-# 	}
-# 	dict_is_equal(tc.name2id[3], depth_3_gt_dict)
-
-# 	# gt_id_to_id_map = {
-# 	# 	1: {80: 0, 81: 0, 82: 0, 83: 0, 84: 0, 85: 0, 86: 0, 87: 0, 88: 0, 89: 0, 90: 0, 91: 0, 255: 255}, 
-# 	# 	2: {80: 0, 81: 10, 82: 6, 83: 2, 84: 1, 85: 4, 86: 7, 87: 255, 88: 9, 89: 8, 90: 255, 91: 11, 255: 255}, 
-# 	# 	3: {80: 2, 81: 255, 82: 8, 83: 4, 84: 3, 85: 6, 86: 9, 87: 255, 88: 11, 89: 10, 90: 255, 91: 12, 255: 255}
-# 	# }
-# 	# assert dict_is_equal(tc.id_to_id_maps['mapillary_vistas_comm'][1], gt_id_to_id_map[1])
-# 	# assert dict_is_equal(tc.id_to_id_maps['mapillary_vistas_comm'][2], gt_id_to_id_map[2])
-# 	# assert dict_is_equal(tc.id_to_id_maps['mapillary_vistas_comm'][3], gt_id_to_id_map[3])
-
-
-# def test_conv_weights_all_ones():
-# 	"""
-# 	"""
-# 	tc = TaxonomyConverter(is_unit_test=True)
-	
-# 	# test pred transform, sum up to 1
-# 	#rand = torch.randn(2, len(self.C[3]), 3, 3)
-
-# 	rand = torch.ones(1,len(tc.C[3]), 2, 2)
-
-
-# 	level3pred_conv = torch.ones(1,len(tc.C[3]), 2, 2)
-# 	level2pred_conv = tc.conv3_to_2(level3pred_conv)
-
-# 	assert np.allclose( level2pred_conv[0,:,0,0].numpy(), 
-# 						np.array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 2., 1.])
-# 	)
-
-# 	level1pred_conv = tc.conv2_to_1(level2pred_conv)
 
 
 
