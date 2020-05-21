@@ -61,8 +61,18 @@ class TaxonomyConverter:
 		self,
 		train_datasets: List[str] = DEFAULT_TRAIN_DATASETS,
 		test_datasets: List[str] = TEST_DATASETS,
-		tsv_fpath: str = f'{_ROOT}/class_remapping_files/MSeg_master.tsv'):
+		tsv_fpath: str = f'{_ROOT}/class_remapping_files/MSeg_master.tsv'
+		) -> None:
 		"""
+			Args:
+			-	train_datasets: list of training datasets
+			-	test_datasets: list of test datasets
+			-	tsv_fpath: absolute path to a tsv file showing the mapping between
+					training datasets to universal taxonomy, and universal taxonomy
+					to testing datasets.
+
+			Returns:
+			-	None
 		"""
 		self.train_datasets = train_datasets
 		self.test_datasets = test_datasets
@@ -347,7 +357,7 @@ def populate_linear_mapping(
 		Args:
 		-	in_channel: number of input channels
 		-	out_channel: number of output channels
-		-	inid2outid: list of (j,i) tuples defining linear mapping
+		-	inid2outid: list of (j,i) tuples defining linear mapping P
 
 		Returns:
 		-	conv: 1x1 convolutional kernels. padding is zero by default.
@@ -358,8 +368,8 @@ def populate_linear_mapping(
 	for param in conv.parameters():
 		param.requires_grad = False
 
-	for in_id, out_id in inid2outid:
-		conv.weight[out_id][in_id] = 1
+	for (j,i) in inid2outid:
+		conv.weight[i][j] = 1
 	return conv
 
 
