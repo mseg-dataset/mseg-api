@@ -333,7 +333,7 @@ def parse_entry(entry: str) -> Tuple[List[str], str]:
 def populate_linear_mapping(
 	in_channel: int,
 	out_channel: int,
-	inid2outid: List[int,int]
+	inid2outid: List[Tuple[int,int]]
 	) -> nn.Module:
 	""" Use 1x1 convolution to create linear mapping P of each pixel's probabilities
 		to a new space.
