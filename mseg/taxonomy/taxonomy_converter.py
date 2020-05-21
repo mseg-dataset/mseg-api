@@ -17,8 +17,6 @@ We train in a common, unified label space.
 Inference is also performed in that common, unified label space,
 and predictions are transformed using a linear mapping to any desired
 evaluation taxonomy.
-
-TODO: use underscore to show private methods.
 """
 
 UNRELABELED_TRAIN_DATASETS = [
@@ -56,6 +54,7 @@ _ROOT = Path(__file__).resolve().parent.parent
 class TaxonomyConverter:
 	"""
 	We use 1x1 convolution for our linear mapping from universal->test_taxonomy.
+	Private methods marked with leading underscore.
 	"""
 	def __init__(
 		self,
@@ -64,6 +63,11 @@ class TaxonomyConverter:
 		tsv_fpath: str = f'{_ROOT}/class_remapping_files/MSeg_master.tsv'
 		) -> None:
 		"""
+			Note about pandas `read_csv` parameter `keep_default_na`:
+			Whether or not to include the default NaN values when parsing the data
+			If keep_default_na is False, and na_values are not specified, no strings
+			will be parsed as NaN.
+
 			Args:
 			-	train_datasets: list of training datasets
 			-	test_datasets: list of test datasets
