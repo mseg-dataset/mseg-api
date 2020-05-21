@@ -2,7 +2,7 @@
 
 import imageio
 import matplotlib.pyplot as plt
-
+from pathlib import Path
 
 
 # given as [y,x]
@@ -36,21 +36,50 @@ import matplotlib.pyplot as plt
 # 	[ '/Users/johnlamb/Downloads/bdd100k/seg/images/train/3516379e-43f6a6ba.jpg', (410, 654) ]
 # ]
 
+# fpaths = [
+# 	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_coco-panoptic-133-relabeled/coco-panoptic-133-relabeled_motorcyclist_000000459634_6904408.png', (299,99) ],
+# 	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_coco-panoptic-133-relabeled/coco-panoptic-133-relabeled_kitchen island_000000438774_5403260.png', (199, 341) ],
+# 	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_coco-panoptic-133-relabeled/coco-panoptic-133-relabeled_bathroom counter_000000376310_2631210.png', (418, 558) ],
+# 	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_coco-panoptic-133-relabeled/coco-panoptic-133-relabeled_bicyclist_000000067208_4211027.png', (83, 404) ],
+# 	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_coco-panoptic-133-relabeled/coco-panoptic-133-relabeled_seat_000000016509_9079654.png', (26, 120) ],
+# 	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_coco-panoptic-133-relabeled/coco-panoptic-133-relabeled_wheelchair_000000091349_3093585.png', (245, 396) ],
+# ]
+
+# fpaths = [
+# 	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_idd-39-relabeled/idd-39-relabeled_rider-other_seq148_000690_leftImg8bit_67.jpg', (591, 1013) ],
+# 	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_idd-39-relabeled/idd-39-relabeled_bicyclist_seq181_016419_leftImg8bit_41.jpg', (365, 889) ],
+# 	# ['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_idd-39-relabeled/idd-39-relabeled_rider-other_seq48_601929_leftImg8bit_79.jpg', ],
+# 	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_idd-39-relabeled/idd-39-relabeled_person-non-rider_seq1_148425_leftImg8bit_110.jpg', (458, 822) ],
+# 	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_idd-39-relabeled/idd-39-relabeled_motorcyclist_seq98_776293_leftImg8bit_110.jpg', (502, 1101) ],
+# 	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_idd-39-relabeled/idd-39-relabeled_box_seq173_316862_leftImg8bit_34.jpg', (752, 761) ], 
+# 	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_idd-39-relabeled/idd-39-relabeled_bicyclist_seq158_867833_leftImg8bit_54.jpg', (510, 453) ], 
+# 	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_idd-39-relabeled/idd-39-relabeled_backpack_seq173_318463_leftImg8bit_50.jpg', (912, 1191) ],
+# ]
+
+# fpaths = [
+# 	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_mapillary-public65-relabeled/mapillary-public65-relabeled_dog_mapillary_OkOJlU8l98KqPEE05dv1tA_256.jpg', (1773, 886) ],
+# 	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_mapillary-public65-relabeled/mapillary-public65-relabeled_sea_mapillary_EZJTbIpLNOfHnw3DvA1NEA_7936.jpg', (1921, 3000) ],
+# 	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_mapillary-public65-relabeled/mapillary-public65-relabeled_horse_mapillary_CH1TcYj0ki_kw3Yc3oOiZA_258.jpg', (1724, 180) ],
+# 	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_mapillary-public65-relabeled/mapillary-public65-relabeled_fountain_mapillary_1fhI-qv6dVR-1Kc8Oafb3Q_7936.jpg', (1059, 2663) ]
+# ]
+
 fpaths = [
-	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_coco-panoptic-133-relabeled/coco-panoptic-133-relabeled_motorcyclist_000000459634_6904408.png', (299,99) ],
-	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_coco-panoptic-133-relabeled/coco-panoptic-133-relabeled_kitchen island_000000438774_5403260.png', (199, 341) ],
-	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_coco-panoptic-133-relabeled/coco-panoptic-133-relabeled_bathroom counter_000000376310_2631210.png', (418, 558) ],
-	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_coco-panoptic-133-relabeled/coco-panoptic-133-relabeled_bicyclist_000000067208_4211027.png', (83, 404) ],
-	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_coco-panoptic-133-relabeled/coco-panoptic-133-relabeled_seat_000000016509_9079654.png', (26, 120) ],
-	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_coco-panoptic-133-relabeled/coco-panoptic-133-relabeled_wheelchair_000000091349_3093585.png', (245, 396) ],
+	'/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_sunrgbd-37-relabeled/sunrgbd-37-relabeled_bathroom counter_img-002164_11.jpg',
+	'/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_sunrgbd-37-relabeled/sunrgbd-37-relabeled_sconce_img-004159_34.jpg',
+	'/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_sunrgbd-37-relabeled/sunrgbd-37-relabeled_door_img-004239_4.jpg',
+	'/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_sunrgbd-37-relabeled/sunrgbd-37-relabeled_desk_img-004930_11.jpg',
+	'/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_sunrgbd-37-relabeled/sunrgbd-37-relabeled_chandelier_img-001692_34.jpg',
+	'/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_sunrgbd-37-relabeled/sunrgbd-37-relabeled_bathroom counter_img-002347_11.jpg',
+	'/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_sunrgbd-37-relabeled/sunrgbd-37-relabeled_swivel chair_img-000253_4.jpg',
 ]
 
-for (fpath,coords) in fpaths:
-#for fpath in fpaths:
+#for (fpath,coords) in fpaths:
+for fpath in fpaths:
 	img = imageio.imread(fpath)
 	plt.imshow(img)
-	y,x = coords
-	plt.scatter(x,y,20,color='r',marker='+')
+	plt.title(Path(fpath).name)
+	# y,x = coords
+	# plt.scatter(x,y,20,color='r',marker='+')
 	plt.show()
 
 
