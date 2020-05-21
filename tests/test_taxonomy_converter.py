@@ -315,19 +315,19 @@ def test_label_mapping_arrs():
 
 
 if __name__ == '__main__':
-	# test_names_complete()
-	# test_parse_entry_blank()
-	# test_parse_entry_brackets1()
-	# test_parse_entry_space_sep()
-	# test_parse_uentry()
-	# test_label_transform()
-	# test_label_transform_unlabeled()
-	# test_label_transform_unlabeled()
-	# test_transform_predictions_test()
-	# test_populate_linear_mapping1()
-	# test_populate_linear_mapping2()
-	# test_populate_linear_mapping3()
-	# test_constructor_types()
+	test_names_complete()
+	test_parse_entry_blank()
+	test_parse_entry_brackets1()
+	test_parse_entry_space_sep()
+	test_parse_uentry()
+	test_label_transform()
+	test_label_transform_unlabeled()
+	test_label_transform_unlabeled()
+	test_transform_predictions_test()
+	test_populate_linear_mapping1()
+	test_populate_linear_mapping2()
+	test_populate_linear_mapping3()
+	test_constructor_types()
 	test_label_mapping_arrs()
 
 
