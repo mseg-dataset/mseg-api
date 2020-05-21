@@ -18,7 +18,7 @@ from mseg.utils.colormap import colormap
 from mseg.utils.mask_utils import (
 	COLORMAP_OFFSET,
 	convert_instance_img_to_mask_img,
-	find_location_inside_mask,
+	search_jittered_location_in_mask,
 	find_max_cardinality_mask,
 	form_label_mapping_array,
 	form_contained_classes_color_guide,
@@ -1015,7 +1015,7 @@ def test_polygon_to_mask2():
 	assert np.allclose(mask, gt_mask)
 
 
-def test_find_location_inside_mask():
+def test_search_jittered_location_in_mask():
 	"""
 	Jitter location for nonconvex object
 	"""
@@ -1025,7 +1025,7 @@ def test_find_location_inside_mask():
 	y = 475
 	x = 564
 	np.random.seed(1)
-	x,y = find_location_inside_mask(x, y, conncomp=mask)
+	x,y = search_jittered_location_in_mask(x, y, conncomp=mask)
 
 	assert mask[y,x] == 1
 
@@ -1098,7 +1098,7 @@ if __name__ == '__main__':
 	# test_map_semantic_img_uint16()
 	# test_map_semantic_img_uint16_stress_test()
 	# test_form_contained_classes_color_guide_smokescreen()
-	#test_find_location_inside_mask()
+	#test_search_jittered_location_in_mask()
 	test_get_most_populous_class1()
 	test_get_most_populous_class2()
 

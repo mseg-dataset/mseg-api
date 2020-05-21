@@ -50,7 +50,11 @@ def find_max_cardinality_mask(mask_list: List[np.ndarray]):
 	return np.argmax(np.array(mask_cardinalities))
 
 
-def find_location_inside_mask(mean_x: float, mean_y: float, conncomp: np.ndarray):
+def search_jittered_location_in_mask(
+	mean_x: float,
+	mean_y: float,
+	conncomp: np.ndarray
+	) -> Tuple[int,int]:
 	"""
 	For visualizing classnames in an image.
 
@@ -115,7 +119,7 @@ def save_classnames_in_image_sufficientpx(
 
 			# jitter location if nonconvex object mean not within its mask
 			if conncomp[y,x] != 1:
-				x,y = find_location_inside_mask(x,y,conncomp)
+				x,y = search_jittered_location_in_mask(x,y,conncomp)
 
 			# print(f'Class idx: {class_idx}: (x,y)=({x},{y})')
 			rgb_img = add_text_cv2(
@@ -196,13 +200,10 @@ def form_mask_triple_embedded_classnames(
 	rgb_with_mask = convert_instance_img_to_mask_img(label_img, rgb_img.copy())
 
 	# or can do max cardinality conn comp of each class
-	rgb2 = save_classnames_in_image_sufficientpx(rgb_with_mask, label_img, id_to_class_name_map, font_color=(255,255,255))
+	rgb2 = save_classnames_in_image_sufficientpx(rgb_with_mask, label_img, id_to_class_name_map)
 	mask_img = convert_instance_img_to_mask_img(label_img, img_rgb=None)
 	rgb3 = save_classnames_in_image_sufficientpx(mask_img, label_img, id_to_class_name_map)
 	return form_hstacked_imgs([rgb_img, rgb2, rgb3], save_fpath, save_to_disk)
-
-
-
 
 
 def map_semantic_img_fast_pytorch(
