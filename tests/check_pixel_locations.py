@@ -64,22 +64,22 @@ from pathlib import Path
 # ]
 
 fpaths = [
-	'/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_sunrgbd-37-relabeled/sunrgbd-37-relabeled_bathroom counter_img-002164_11.jpg',
-	'/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_sunrgbd-37-relabeled/sunrgbd-37-relabeled_sconce_img-004159_34.jpg',
-	'/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_sunrgbd-37-relabeled/sunrgbd-37-relabeled_door_img-004239_4.jpg',
-	'/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_sunrgbd-37-relabeled/sunrgbd-37-relabeled_desk_img-004930_11.jpg',
-	'/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_sunrgbd-37-relabeled/sunrgbd-37-relabeled_chandelier_img-001692_34.jpg',
-	'/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_sunrgbd-37-relabeled/sunrgbd-37-relabeled_bathroom counter_img-002347_11.jpg',
-	'/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_sunrgbd-37-relabeled/sunrgbd-37-relabeled_swivel chair_img-000253_4.jpg',
+	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_sunrgbd-37-relabeled/sunrgbd-37-relabeled_bathroom counter_img-002164_11.jpg', (350, 483) ],
+	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_sunrgbd-37-relabeled/sunrgbd-37-relabeled_sconce_img-004159_34.jpg', (204, 284) ],
+	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_sunrgbd-37-relabeled/sunrgbd-37-relabeled_door_img-004239_4.jpg', (190,30) ],
+	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_sunrgbd-37-relabeled/sunrgbd-37-relabeled_desk_img-004930_11.jpg', (429, 143) ],
+	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_sunrgbd-37-relabeled/sunrgbd-37-relabeled_chandelier_img-001692_34.jpg', (3,459) ],
+	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_sunrgbd-37-relabeled/sunrgbd-37-relabeled_bathroom counter_img-002347_11.jpg', (254,34) ],
+	['/Users/johnlamb/Downloads/rewrote_ade20k_check_validity/target_visual_check_sunrgbd-37-relabeled/sunrgbd-37-relabeled_swivel chair_img-000253_4.jpg', (303, 463) ],
 ]
 
-#for (fpath,coords) in fpaths:
-for fpath in fpaths:
+for (fpath,coords) in fpaths:
+	# for fpath in fpaths:
 	img = imageio.imread(fpath)
 	plt.imshow(img)
 	plt.title(Path(fpath).name)
-	# y,x = coords
-	# plt.scatter(x,y,20,color='r',marker='+')
+	y,x = coords
+	plt.scatter(x,y,20,color='r',marker='+')
 	plt.show()
 
 
