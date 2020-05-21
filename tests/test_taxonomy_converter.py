@@ -24,26 +24,20 @@ from mseg.taxonomy.taxonomy_converter import (
 
 _ROOT = Path(__file__).resolve().parent.parent
 
-def strip_group(entry):
-	if entry.startswith('{'):
-		# take [1:-1] to discard `{`  `}` chars
-		classes = entry[1:-1].split(',')
-		classes = [c.strip() for c in classes]
-		return classes
-	else:
-		return [entry]
 
-
-def entries_equal(dname, tsv_fpath):
+def entries_equal(dname, tsv_fpath, is_train_dataset):
 	""" """
 	tsv_classnames = read_tsv_column_vals(tsv_fpath, col_name=dname, convert_val_to_int=False)
 	nonempty_classnames = [name for name in tsv_classnames if name != '']
 	tsv_classnames = []
 	for entry in nonempty_classnames:
-		tsv_classnames.extend(strip_group(entry))
+		tsv_classnames.extend(parse_entry(entry))
 	txt_classnames = load_class_names(dname)
 	if set(txt_classnames) != set(tsv_classnames):
 		pdb.set_trace()
+
+	if is_train_dataset:
+		assert len(txt_classnames) == len(tsv_classnames)
 	return set(txt_classnames) == set(tsv_classnames)
 
 
@@ -59,7 +53,7 @@ def test_names_complete():
 	train_dnames = UNRELABELED_TRAIN_DATASETS + RELABELED_TRAIN_DATASETS
 	for dname in train_dnames:
 		print(f'On {dname}...')
-		assert entries_equal(dname, tsv_fpath)
+		assert entries_equal(dname, tsv_fpath, is_train_dataset=True)
 		print(f'{dname} passed.')
 		print()
 
@@ -73,7 +67,7 @@ def test_names_complete():
 	]
 	for dname in test_dnames:
 		print(f'On {dname}')
-		assert entries_equal(dname, tsv_fpath)
+		assert entries_equal(dname, tsv_fpath, is_train_dataset=False)
 
 
 def test_parse_entry_blank():
