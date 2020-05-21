@@ -1,4 +1,11 @@
-# Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
+#!/usr/bin/python3
+
+"""
+Modified from:
+https://github.com/facebookresearch/detectron2/blob/22e04d1432363be727797a081e3e9d48981f5189/detectron2/utils/visualizer.py
+Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
+"""
+
 import colorsys
 import logging
 import math
@@ -17,9 +24,7 @@ from mseg.utils.fb_colormap import random_color, fixed_color
 from mseg.utils.mask_utils import get_mask_from_polygon, get_most_populous_class
 
 
-"""
-https://github.com/facebookresearch/detectron2/blob/22e04d1432363be727797a081e3e9d48981f5189/detectron2/utils/visualizer.py
-"""
+
 
 logger = logging.getLogger(__name__)
 
