@@ -313,51 +313,6 @@ from mseg_semantic.taxonomy.taxonomy_converter import (
 # 		assert id < len(tc.name2id[level])
 
 
-# def test_get_convolution_test():
-# 	""" 
-# 	TODO
-# 	"""
-# 	tc = TaxonomyConverter()
-# 	dataset = 'voc2012'
-# 	conv = tc.get_convolution_test(dataset)
-# 	pdb.set_trace()
-# 	assert isinstance(conv, torch.nn.Module)
-
-
-# # test_get_convolution_test()
-
-
-
-
-
-
-# test_all_classes_present_test_datasets()
-
-
-# def test_bubble_sum():
-# 	"""
-# 	"""
-# 	tc = TaxonomyConverter(is_unit_test=True)
-	
-# 	# test pred transform, sum up to 1
-# 	#rand = torch.randn(2, len(self.C[3]), 3, 3)
-
-# 	rand = torch.ones(1,len(tc.C[3]), 2, 2)
-
-# 	#level3pred_conv = torch.nn.Softmax(dim=1)(rand)
-# 	level3pred_conv = torch.ones(1,len(tc.C[3]), 2, 2)
-# 	# level2pred = bubble_sum(rand, level=2)
-# 	# level1pred = bubble_sum(level2pred, level=1)
-# 	level2pred_conv = tc.conv3_to_2(level3pred_conv)
-
-# 	assert np.allclose( level2pred_conv[0,:,0,0].cpu(), 
-# 						np.array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 2., 1.])
-# 	)
-
-# 	level1pred_conv = tc.conv2_to_1(level2pred_conv)
-
-
-
 
 # def test_bubble_sum():
 # 	"""
