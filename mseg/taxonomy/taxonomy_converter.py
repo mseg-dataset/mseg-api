@@ -90,14 +90,27 @@ class TaxonomyConverter:
 		# Inverse -- find spreadsheet TSV index from universal name.
 		self.uname2uid = {}
 		self._build_universal_tax()
-		self.num_uclasses = len(self.uid2uname) - 1 # excluding ignored label（id, 255)）
+		self.num_uclasses = len(self.uid2uname) - 1 # excluding ignored label（id=255)
 		# 255 is a privileged class index and must not be used elsewhere
 		assert (self.num_uclasses < 255)
 
 		self.dataset_classnames = {d: load_class_names(d) for d in (self.train_datasets + self.test_datasets)}
 
 		self.id_to_uid_maps = {}
+		self.convs = {}
+		self.label_mapping_arr_dict = {}
+		self._init_mappings()
 
+
+	def _init_mappings(self) -> None:
+		""" Populate the train->universal, and universal->test mappings.
+
+			Args:
+			-	None
+
+			Returns:
+			-	None
+		"""
 		# Map train_dataset_id -> universal_id
 		for d in self.train_datasets:
 			print(f'\tMapping {d} -> universal')
