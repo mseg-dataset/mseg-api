@@ -197,31 +197,29 @@ def test_transform_predictions_test():
 	assert np.allclose(prediction, prediction_gt)
 
 
-def test_populate_linear_mapping():
+def test_populate_linear_mapping1():
 	"""
 	Implement simple matrix multiplication as 1x1 convolutions in PyTorch.
 
-	[2]   [1 0 1 0] [1]
+	[0]   [1 0 1 0] [0]
 	[2] = [0 1 0 1] [1]
-	[4]   [1 1 1 1] [1]
+	[2]   [1 1 1 1] [0]
 	                [1]
 	"""
-	populate_linear_mapping(in_channel=4, out_channel=3, inid2outid: List[int,int] )
-	
-	# (i,j)
+	# (j,i) tuples
 	inid2outid = [
 		(0,0),
-		(0,2),
-		(1,1),
-		(1,3),
 		(2,0),
-		(2,1),
+		(1,1),
+		(3,1),
+		(0,2),
+		(1,2),
 		(2,2),
-		(2,3) 
+		(3,2) 
 	]
-
-	for (parent, child) in parent_child_map:
-		conv.weight[parent][child] = 1
+	in_channel = 4
+	out_channel = 3
+	conv = populate_linear_mapping(in_channel, out_channel, inid2outid)
 
 	x = np.array([0,1,0,1]).reshape(1,4,1,1).astype(np.float32)
 	x = torch.from_numpy(x)
@@ -230,12 +228,72 @@ def test_populate_linear_mapping():
 	y_gt = torch.from_numpy(y_gt)
 	assert torch.allclose(y, y_gt)
 
+
+def test_populate_linear_mapping2():
+	"""
+	Implement simple matrix multiplication as 1x1 convolutions in PyTorch.
+
+	[2]   [1 0 1 0] [1]
+	[2] = [0 1 0 1] [1]
+	[4]   [1 1 1 1] [1]
+	                [1]
+	"""
+	# (j,i) tuples
+	inid2outid = [
+		(0,0),
+		(2,0),
+		(1,1),
+		(3,1),
+		(0,2),
+		(1,2),
+		(2,2),
+		(3,2) 
+	]
+	in_channel = 4
+	out_channel = 3
+	conv = populate_linear_mapping(in_channel, out_channel, inid2outid)
+
 	x = torch.ones(1,4,1,1).type(torch.FloatTensor)
 	y = conv(x)
 	y_gt = np.array([2,2,4]).reshape(1,3,1,1).astype(np.float32)
 	y_gt = torch.from_numpy(y_gt)
 	assert torch.allclose(y, y_gt)
 
+
+def test_populate_linear_mapping3():
+	"""
+	Implement simple matrix multiplication as 1x1 convolutions in PyTorch.
+
+	Consider the following example with universal predictions at a single px: 
+		armchair, swivel chair -> sum up to chair
+		motorcycle -> motorcycle
+		bicyclist, motorcyclist -> sum up to rider
+
+	     chair [0.3]   [1 1 0 0 0] [0.0] armchair
+	motorcycle [0.1] = [0 0 1 0 0] [0.3] swivel_chair
+	     rider [0.6]   [0 0 0 1 1] [0.1] motorcycle
+	                               [0.1] bicyclist
+	                               [0.5] motorcyclist
+	"""
+	# (j,i) tuples
+	inid2outid = [
+		(0,0), # armchair -> chair
+		(1,0), # swivel_chair -> chair
+		(2,1), # motorcycle -> motorcycle
+		(3,2), # bicyclist -> rider
+		(4,2)  # motorcyclist -> rider
+	]
+	in_channel = 5
+	out_channel = 3
+	conv = populate_linear_mapping(in_channel, out_channel, inid2outid)
+
+	x = np.array([0.0,0.3,0.1,0.1,0.5])
+	x = torch.from_numpy(x)
+	x = x.reshape(1,5,1,1).type(torch.FloatTensor)
+	y = conv(x)
+	y_gt = np.array([0.3, 0.1, 0.6]).reshape(1,3,1,1).astype(np.float32)
+	y_gt = torch.from_numpy(y_gt)
+	assert torch.allclose(y, y_gt)
 
 
 if __name__ == '__main__':
@@ -248,5 +306,7 @@ if __name__ == '__main__':
 	# test_label_transform_unlabeled()
 	# test_label_transform_unlabeled()
 	# test_transform_predictions_test()
-	test_populate_linear_mapping()
+	test_populate_linear_mapping1()
+	test_populate_linear_mapping2()
+	test_populate_linear_mapping3()
 
