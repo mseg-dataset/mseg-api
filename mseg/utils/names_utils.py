@@ -4,6 +4,9 @@ import numpy as np
 from pathlib import Path
 from typing import List, Mapping
 
+from mseg.utils.tsv_utils import read_tsv_column_vals
+
+
 ROOT = Path(__file__).resolve().parent.parent
 
 
@@ -27,6 +30,19 @@ def load_class_names(dataset_name: str) -> List[str]:
 		-	list of strings, representing class names
 	"""
 	return read_str_list(f'{ROOT}/dataset_lists/{dataset_name}/{dataset_name}_names.txt')
+
+
+def get_universal_class_names() -> List[str]:
+    """
+        Args:
+        -   None
+
+        Returns:
+        -   u_names: universal class names
+    """
+    tsv_fpath = f'{ROOT}/class_remapping_files/MSeg_master.tsv'
+    u_names = read_tsv_column_vals(tsv_fpath, col_name='universal', convert_val_to_int=False)
+    return u_names[:-1] # exclude unlabeled (last class)
 
 
 def load_dataset_colors_arr(dataset_name: str) -> np.ndarray:
