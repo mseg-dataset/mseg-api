@@ -102,7 +102,7 @@ class SanityCheckDataset:
 				parent, fname_stem, _ = get_unique_mask_identifiers(self.dname, annot_fname, data_split)
 				for (rgb_fpath, label_fpath) in pairs:
 					if Path(rgb_fpath).stem == fname_stem and Path(label_fpath).parts[-2] == parent:
-
+						y,x = coords
 						rgb_img = imageio.imread(rgb_fpath)
 						label_img = imageio.imread(label_fpath)
 						pdb.set_trace()
