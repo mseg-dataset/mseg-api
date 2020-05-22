@@ -452,17 +452,18 @@ idd_update_records = [
 ]
 
 
+# Note: we refer to the `test` split as `val`, since `val` not easily defined/found.
 sunrgbd_update_records = [
 	# sunrgbd_chair
 							# dataset  # split  # orig u name  	# new u name    	# path to txt file
-	DatasetClassUpdateRecord('sunrgbd', 'test', 'chair_other', 	'armchair', 	'sunrgbd_chair/sunrgbd_test_sunrgbd_chair_to_armchair.txt'),
-	DatasetClassUpdateRecord('sunrgbd', 'test', 'chair_other', 	'bench', 		'sunrgbd_chair/sunrgbd_test_sunrgbd_chair_to_bench.txt'),
-	DatasetClassUpdateRecord('sunrgbd', 'test', 'chair_other', 	'chair_other', 	'sunrgbd_chair/sunrgbd_test_sunrgbd_chair_to_chairother.txt'),
-	DatasetClassUpdateRecord('sunrgbd', 'test', 'chair_other', 	'seat', 		'sunrgbd_chair/sunrgbd_test_sunrgbd_chair_to_seat.txt'),
-	DatasetClassUpdateRecord('sunrgbd', 'test', 'chair_other', 	'couch', 		'sunrgbd_chair/sunrgbd_test_sunrgbd_chair_to_sofa.txt'),
-	DatasetClassUpdateRecord('sunrgbd', 'test', 'chair_other', 	'stool', 		'sunrgbd_chair/sunrgbd_test_sunrgbd_chair_to_stool.txt'),
-	DatasetClassUpdateRecord('sunrgbd', 'test', 'chair_other', 	'swivel_chair',	'sunrgbd_chair/sunrgbd_test_sunrgbd_chair_to_swivelchair.txt'),
-	DatasetClassUpdateRecord('sunrgbd', 'test', 'chair_other', 	'unlabeled', 	'sunrgbd_chair/sunrgbd_test_sunrgbd_chair_to_unlabel.txt'),
+	DatasetClassUpdateRecord('sunrgbd', 'val', 'chair_other', 	'armchair', 	'sunrgbd_chair/sunrgbd_test_sunrgbd_chair_to_armchair.txt'),
+	DatasetClassUpdateRecord('sunrgbd', 'val', 'chair_other', 	'bench', 		'sunrgbd_chair/sunrgbd_test_sunrgbd_chair_to_bench.txt'),
+	DatasetClassUpdateRecord('sunrgbd', 'val', 'chair_other', 	'chair_other', 	'sunrgbd_chair/sunrgbd_test_sunrgbd_chair_to_chairother.txt'),
+	DatasetClassUpdateRecord('sunrgbd', 'val', 'chair_other', 	'seat', 		'sunrgbd_chair/sunrgbd_test_sunrgbd_chair_to_seat.txt'),
+	DatasetClassUpdateRecord('sunrgbd', 'val', 'chair_other', 	'couch', 		'sunrgbd_chair/sunrgbd_test_sunrgbd_chair_to_sofa.txt'),
+	DatasetClassUpdateRecord('sunrgbd', 'val', 'chair_other', 	'stool', 		'sunrgbd_chair/sunrgbd_test_sunrgbd_chair_to_stool.txt'),
+	DatasetClassUpdateRecord('sunrgbd', 'val', 'chair_other', 	'swivel_chair',	'sunrgbd_chair/sunrgbd_test_sunrgbd_chair_to_swivelchair.txt'),
+	DatasetClassUpdateRecord('sunrgbd', 'val', 'chair_other', 	'unlabeled', 	'sunrgbd_chair/sunrgbd_test_sunrgbd_chair_to_unlabel.txt'),
 	
 	DatasetClassUpdateRecord('sunrgbd', 'train','chair_other', 	'armchair', 	'sunrgbd_chair/sunrgbd_train_sunrgbd_chair_to_armchair.txt'),
 	DatasetClassUpdateRecord('sunrgbd', 'train','chair_other', 	'bench', 		'sunrgbd_chair/sunrgbd_train_sunrgbd_chair_to_bench.txt'),
@@ -479,9 +480,9 @@ sunrgbd_update_records = [
 	DatasetClassUpdateRecord('sunrgbd', 'train','chair_other', 	'wall', 		'sunrgbd_chair/sunrgbd_train_sunrgbd_chair_to_wall.txt'),
 
 	# sunrgbd_counter
-	DatasetClassUpdateRecord('sunrgbd', 'test', 'counter_other', 'bathroom_counter','sunrgbd_counter/sunrgbd_test_sunrgbd_counter_to_bathroomcounter.txt'),
-	DatasetClassUpdateRecord('sunrgbd', 'test', 'counter_other', 'counter_other',	'sunrgbd_counter/sunrgbd_test_sunrgbd_counter_to_counter-other.txt'),
-	DatasetClassUpdateRecord('sunrgbd', 'test', 'counter_other', 'unlabeled',		'sunrgbd_counter/sunrgbd_test_sunrgbd_counter_to_unlabel.txt'),
+	DatasetClassUpdateRecord('sunrgbd', 'val', 'counter_other', 'bathroom_counter','sunrgbd_counter/sunrgbd_test_sunrgbd_counter_to_bathroomcounter.txt'),
+	DatasetClassUpdateRecord('sunrgbd', 'val', 'counter_other', 'counter_other',	'sunrgbd_counter/sunrgbd_test_sunrgbd_counter_to_counter-other.txt'),
+	DatasetClassUpdateRecord('sunrgbd', 'val', 'counter_other', 'unlabeled',		'sunrgbd_counter/sunrgbd_test_sunrgbd_counter_to_unlabel.txt'),
 
 	DatasetClassUpdateRecord('sunrgbd', 'train','counter_other', 'bathroom_counter','sunrgbd_counter/sunrgbd_train_sunrgbd_counter_to_bathroom-counter.txt'),
 	DatasetClassUpdateRecord('sunrgbd', 'train','counter_other', 'cabinet',			'sunrgbd_counter/sunrgbd_train_sunrgbd_counter_to_cabinetmerged.txt'),
@@ -491,9 +492,9 @@ sunrgbd_update_records = [
 	DatasetClassUpdateRecord('sunrgbd', 'train','counter_other', 'unlabeled',		'sunrgbd_counter/sunrgbd_train_sunrgbd_counter_to_None_of_these.txt'),
 
 	# sunrgbd_lamp (TODO: map it to "lamp" inside of the universal tax.)
-	DatasetClassUpdateRecord('sunrgbd', 'test', 	'light_other', 'lamp',			'sunrgbd_lamp/sunrgbd_test_sunrgbd_lamp_to_lamp.txt'),
-	DatasetClassUpdateRecord('sunrgbd', 'test', 	'light_other', 'sconce',		'sunrgbd_lamp/sunrgbd_test_sunrgbd_lamp_to_sconce.txt'),
-	DatasetClassUpdateRecord('sunrgbd', 'test', 	'light_other', 'unlabeled',		'sunrgbd_lamp/sunrgbd_test_sunrgbd_lamp_to_unlabel.txt'),
+	DatasetClassUpdateRecord('sunrgbd', 'val', 	'light_other', 'lamp',			'sunrgbd_lamp/sunrgbd_test_sunrgbd_lamp_to_lamp.txt'),
+	DatasetClassUpdateRecord('sunrgbd', 'val', 	'light_other', 'sconce',		'sunrgbd_lamp/sunrgbd_test_sunrgbd_lamp_to_sconce.txt'),
+	DatasetClassUpdateRecord('sunrgbd', 'val', 	'light_other', 'unlabeled',		'sunrgbd_lamp/sunrgbd_test_sunrgbd_lamp_to_unlabel.txt'),
 
 	DatasetClassUpdateRecord('sunrgbd', 'train','light_other', 'chandelier',	'sunrgbd_lamp/sunrgbd_train_sunrgbd_lamp_to_chandelier.txt'),
 	DatasetClassUpdateRecord('sunrgbd', 'train','light_other', 'lamp',			'sunrgbd_lamp/sunrgbd_train_sunrgbd_lamp_to_lamp.txt'),
