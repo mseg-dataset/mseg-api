@@ -9,7 +9,10 @@ from mseg.utils.mask_utils_detectron2 import Visualizer
 
 def test_visualizer1():
 	"""
-	label map with four quadrants
+	label map with four quadrants.
+	|  Sky   | Road  |
+	----------------
+	| Person | Horse |
 	"""
 	H = 640
 	W = 480
@@ -22,19 +25,20 @@ def test_visualizer1():
 
 	id_to_class_name_map = { 0: 'sky', 1: 'road', 2: 'person', 3: 'horse'}
 
-	pdb.set_trace()
 	vis_obj = Visualizer(img_rgb, None)
 	output_img = vis_obj.overlay_instances(
 		label_map,
 		id_to_class_name_map
 	)
 	plt.imshow(output_img)
-	plt.show()
+	#plt.show()
+	plt.close('all')
 
 
 def test_visualizer2():
 	"""
-	label map with four quadrants
+	Create label map with two embedded circles. Each circle
+	represents class 1 (the "person" class).
 	"""
 	H = 640
 	W = 480
@@ -52,22 +56,24 @@ def test_visualizer2():
 
 	id_to_class_name_map = { 0: 'road', 1: 'person' }
 
-	plt.imshow(label_map)
-	plt.show()
+	# plt.imshow(label_map)
+	# plt.show()
 
-	pdb.set_trace()
 	vis_obj = Visualizer(img_rgb, None)
 	output_img = vis_obj.overlay_instances(
 		label_map,
 		id_to_class_name_map
 	)
 	plt.imshow(output_img)
-	plt.show()
+	# plt.show()
+	plt.close('all')
 
-
+"""
+TODO: add more tests, e.g. with concentric circles
+"""
 
 
 if __name__ == '__main__':
-	#test_visualizer1()
-	test_visualizer2()
+	test_visualizer1()
+	#test_visualizer2()
 
