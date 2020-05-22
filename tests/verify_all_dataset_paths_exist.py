@@ -190,7 +190,8 @@ def verify_targeted_visual_examples():
 	dname = 'coco-panoptic-133-relabeled'
 	cocop_examples = [
 		# title, fname, split
-		['wheelchair', '000000091349_3093585.png', 'train', (245, 396) ],
+		# below is `wheelchair`
+		['slow_wheeled_object', '000000091349_3093585.png', 'train', (245, 396) ],
 		['seat', '000000016509_9079654.png', 'train',  (26, 120) ],
 		['bathroom_counter', '000000376310_2631210.png', 'val', (418, 558) ],
 		['bicyclist', '000000067208_4211027.png', 'train', (83, 404) ],
