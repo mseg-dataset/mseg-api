@@ -108,7 +108,7 @@ class SanityCheckDataset:
 
 	def find_matches(self, examples):
 		""" """
-		print(f'Finding matches for {self.dname}')
+		print(f'Finding matches for {self.dname}...')
 		save_dir = f'temp_files/target_visual_check_{self.dname}'
 		for split in ['train', 'val']:
 			split_txt_fpath = f'{_ROOT}/mseg/dataset_lists/{self.dname}/list/{split}.txt'

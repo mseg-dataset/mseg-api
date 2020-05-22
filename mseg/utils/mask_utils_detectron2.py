@@ -15,7 +15,6 @@ import cv2
 import matplotlib as mpl
 import matplotlib.colors as mplc
 import matplotlib.figure as mplfigure
-# import pycocotools.mask as mask_util
 import pdb
 import torch
 from matplotlib.backends.backend_agg import FigureCanvasAgg
@@ -735,43 +734,6 @@ class Visualizer:
         modified_color = colorsys.hls_to_rgb(polygon_color[0], modified_lightness, polygon_color[2])
         return modified_color
 
-    def _convert_boxes(self, boxes):
-        """
-        Convert different format of boxes to an NxB array, where B = 4 or 5 is the box dimension.
-        """
-        if isinstance(boxes, Boxes) or isinstance(boxes, RotatedBoxes):
-            return boxes.tensor.numpy()
-        else:
-            return np.asarray(boxes)
-
-    def _convert_masks(self, masks_or_polygons):
-        """
-        Convert different format of masks or polygons to a tuple of masks and polygons.
-
-        Returns:
-            list[GenericMask]:
-        """
-
-        m = masks_or_polygons
-        if isinstance(m, PolygonMasks):
-            m = m.polygons
-        if isinstance(m, BitMasks):
-            m = m.tensor.numpy()
-        if isinstance(m, torch.Tensor):
-            m = m.numpy()
-        ret = []
-        for x in m:
-            if isinstance(x, GenericMask):
-                ret.append(x)
-            else:
-                ret.append(GenericMask(x, self.output.height, self.output.width))
-        return ret
-
-    def _convert_keypoints(self, keypoints):
-        if isinstance(keypoints, Keypoints):
-            keypoints = keypoints.tensor
-        keypoints = np.asarray(keypoints)
-        return keypoints
 
     def get_output(self):
         """
