@@ -16,9 +16,8 @@ Presented at [CVPR 2020](http://cvpr2018.thecvf.com/)
 
 This repo is the first of 4 repos that introduce our work. It provides utilities to download the MSeg dataset (which is nontrivial), and prepare the data on disk in a unified taxonomy.
 
-In a few weeks, we will add the `TaxonomyConverter` class to this repo that supports on-the-fly mapping to a unified taxonomy during training.
 
-Three additional repos will be introduced in April and May 2020:
+Three additional repos will be introduced in May and June 2020:
 - ` mseg_semantic`: provides HRNet-W48 Training (sufficient to train a winning entry on the [WildDash](https://wilddash.cc/benchmark/summary_tbl?hc=semantic_rob) benchmark)
 - `mseg_panoptic`: provides Panoptic-FPN and Mask-RCNN training, based on Detectron2
 - `mseg_mturk`: provides utilities to perform large-scale Mechanical Turk re-labeling
@@ -54,3 +53,15 @@ booktitle = {Computer Vision and Pattern Recognition (CVPR)},
 year = {2020}
 }
 ```
+
+## Repo Structure
+In a few weeks, we will add the `TaxonomyConverter` class to this repo that 
+- `download_scripts`: code and instructions to download the entire MSeg dataset
+- `mseg`: Python module, including
+    - `dataset_apis`
+    - `dataset_lists`: ordered classnames for each dataset, and corresponding relative rgb/label file paths
+    - `label_preparation`: code for remapping to `semseg` format, and for relabeling masks in place
+    - `relabeled_data`: MSeg data, annotated by Mechanical Turk workers, and verified by co-authors
+    - `taxonomy`: on-the-fly mapping to a unified taxonomy during training, and linear mapping to evaluation taxonomies
+    - `utils`: library functions for mask and image manipulation, filesystem, tsv/csv reading, and multiprocessing
+- `tests`: unit tests on all code
