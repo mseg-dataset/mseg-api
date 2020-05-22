@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import imageio
+import math
 from pathlib import Path
 import pdb
 
@@ -17,9 +18,10 @@ from mseg.utils.mask_utils import (
 	form_mask_triple_embedded_classnames,
 	save_classnames_in_image_maxcardinality
 )
+from mseg.utils.mask_utils_detectron2 import Visualizer
 from mseg.utils.txt_utils import generate_all_img_label_pair_fpaths
 from mseg.label_preparation.mseg_write_relabeled_segments import get_unique_mask_identifiers
-from mseg.utils.txt_utils import generate_all_img_label_pair_fpaths
+
 
 _ROOT = Path(__file__).resolve().parent.parent
 
@@ -63,20 +65,35 @@ def visual_sanitychecks():
 		for split,split_list in zip(splits,split_lists):
 			pairs = generate_all_img_label_pair_fpaths(d_info.dataroot, split_list)
 			
-			for i, (rgb_fpath, label_fpath) in enumerate(pairs[::1000]):
-				print(f'On {i*1000}/{len(pairs)} of {dname}')
+			# Save 5 examples from each dataset split
+			step_sz = math.floor(len(pairs) // 5)
+			for i, (rgb_fpath, label_fpath) in enumerate(pairs[::step_sz]):
+				print(f'On {i} of {dname}')
 
 				rgb_img = cv2_imread_rgb(rgb_fpath)
 				label_img = imageio.imread(label_fpath)
 
 				fname_stem = Path(rgb_fpath).stem
 				save_fpath = f'{save_dir}/{dname}_{fname_stem}.jpg'
+				blend_save_fpath = f'{save_dir}/{dname}_{fname_stem}_blended.jpg'
 
 				if rgb_img.ndim == 2:
 					# this image was grayscale
 					rgb_img = grayscale_to_color(rgb_img)
 			
-				form_mask_triple_embedded_classnames(rgb_img, label_img, id_to_classname_map, save_fpath, save_to_disk=True)
+				form_mask_triple_embedded_classnames(
+					rgb_img,
+					label_img,
+					id_to_classname_map,
+					save_fpath,
+					save_to_disk=True
+				)
+				frame_visualizer = Visualizer(rgb_img, metadata=None)
+				output_img = frame_visualizer.overlay_instances(
+					label_map=label_img,
+					id_to_class_name_map=id_to_classname_map
+				)
+				imageio.imwrite(output_img, blend_save_fpath)
 
 
 class SanityCheckDataset:
@@ -88,7 +105,6 @@ class SanityCheckDataset:
 		self.dname = dname
 		self.id_to_classname_map = get_dataloader_id_to_classname_map(dname)
 		self.get_classname_to_id_map = get_classname_to_dataloaderid_map(dataset_name=dname)
-
 
 	def find_matches(self, examples):
 		""" """
@@ -106,8 +122,6 @@ class SanityCheckDataset:
 						rgb_img = imageio.imread(rgb_fpath)
 						label_img = imageio.imread(label_fpath)
 						assert label_img[y,x] == self.get_classname_to_id_map[title]
-						# if label_img[y,x] != self.get_classname_to_id_map[title]:
-						# 	pdb.set_trace()
 
 
 def verify_targeted_visual_examples():
