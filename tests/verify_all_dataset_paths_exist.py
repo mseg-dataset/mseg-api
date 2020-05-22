@@ -106,7 +106,9 @@ class SanityCheckDataset:
 						rgb_img = imageio.imread(rgb_fpath)
 						label_img = imageio.imread(label_fpath)
 						# pdb.set_trace()
-						assert label_img[y,x] == self.get_classname_to_id_map[title]
+						# assert label_img[y,x] == self.get_classname_to_id_map[title]
+						if label_img[y,x] != self.get_classname_to_id_map[title]:
+							pdb.set_trace()
 						# save_fpath = f'{save_dir}/{self.dname}_{title}_{annot_fname}'
 						# save_classnames_in_image_maxcardinality(
 						# 	rgb_img, 
