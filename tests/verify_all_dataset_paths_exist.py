@@ -162,7 +162,7 @@ def verify_targeted_visual_examples():
 
 	dname = 'ade20k-150-relabeled'
 	ade20k_examples = [
-		['zebra', 'ADE_train_00016125_113.png', 'train', (506,315) ],
+		['zebra', 'ADE_train_00016125_113.png', 'train', (504,200) ],
 		['nightstand', 'ADE_train_00004036_119.png', 'train', (195, 37) ],
 		['wine_glass', 'ADE_val_00001949_134.png', 'val', (300,478) ],
 		['bicyclist', 'ADE_train_00017384_120.png', 'train', (398, 55) ],
@@ -192,7 +192,7 @@ def verify_targeted_visual_examples():
 		# title, fname, split
 		# below is `wheelchair`
 		['slow_wheeled_object', '000000091349_3093585.png', 'train', (245, 396) ],
-		['seat', '000000016509_9079654.png', 'train',  (26, 120) ],
+		['seat', '000000016509_9079654.png', 'train',  (46, 133) ],
 		['bathroom_counter', '000000376310_2631210.png', 'val', (418, 558) ],
 		['bicyclist', '000000067208_4211027.png', 'train', (83, 404) ],
 		['motorcyclist', '000000459634_6904408.png', 'val',  (299,99) ],
