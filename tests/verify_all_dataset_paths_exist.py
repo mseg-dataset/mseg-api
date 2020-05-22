@@ -247,7 +247,7 @@ def verify_targeted_visual_examples():
 
 if __name__ == '__main__':
 	verify_targeted_visual_examples()
-	#visual_sanitychecks()
-	#verify_all_dataset_paths_exist()
+	visual_sanitychecks()
+	verify_all_dataset_paths_exist()
 	
 
