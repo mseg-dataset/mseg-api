@@ -24,7 +24,7 @@ from mseg.utils.dir_utils import create_leading_fpath_dirs
 
 NUM_PX_PER_ROW = 50
 NUM_PX_PER_COL = 400
-COLORMAP_OFFSET = 28
+COLORMAP_OFFSET = 40
 MIN_DISCERNABLE_RES_FOR_TEXT = 200
 LIGHT_BLUE = np.array([153,221,255])
 LIME_GREEN = np.array([57,255,20])
