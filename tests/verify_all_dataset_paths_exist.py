@@ -105,9 +105,9 @@ class SanityCheckDataset:
 						y,x = coords
 						rgb_img = imageio.imread(rgb_fpath)
 						label_img = imageio.imread(label_fpath)
-						# assert label_img[y,x] == self.get_classname_to_id_map[title]
-						if label_img[y,x] != self.get_classname_to_id_map[title]:
-							pdb.set_trace()
+						assert label_img[y,x] == self.get_classname_to_id_map[title]
+						# if label_img[y,x] != self.get_classname_to_id_map[title]:
+						# 	pdb.set_trace()
 
 
 def verify_targeted_visual_examples():
