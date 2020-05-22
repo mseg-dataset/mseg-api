@@ -176,8 +176,10 @@ def verify_targeted_visual_examples():
 		['motorcyclist', 'a91b7555-00000590_12.jpg', 'val', (470, 888) ],
 		['bicyclist', '3516379e-43f6a6ba_12.jpg', 'train', (410, 654) ],
 		['motorcyclist', '972ab49a-6a6eeaf5_11.jpg', 'train', (396, 284) ],
-		['person_nonrider', '8413f861-580b500d_12.jpg', 'train', (416,926) ],
-		['person_nonrider', 'a706da19-14468d02_11.jpg', 'val', (300,1248) ],
+		# below is `person_nonrider`
+		['person', '8413f861-580b500d_12.jpg', 'train', (416,926) ],
+		# below is `person_nonrider`
+		['person', 'a706da19-14468d02_11.jpg', 'val', (300,1248) ],
 		['bicyclist', '1ff92f74-697a077e_11.jpg', 'train',  (270, 946) ],
 	]
 	scd = SanityCheckDataset(infos[dname].dataroot, dname)
@@ -202,7 +204,8 @@ def verify_targeted_visual_examples():
 		['bicyclist', 'seq158_867833_leftImg8bit_54.jpg', 'train', (510, 453) ],
 		['box', 'seq173_316862_leftImg8bit_34.jpg', 'train', (752, 761) ],
 		['motorcyclist', 'seq98_776293_leftImg8bit_110.jpg', 'train', (502, 1101) ],
-		['person-non-rider', 'seq1_148425_leftImg8bit_110.jpg', 'train', (458, 822) ],
+		# below is `person_nonrider`
+		['person', 'seq1_148425_leftImg8bit_110.jpg', 'train', (458, 822) ],
 		#['rider-other', 'seq48_601929_leftImg8bit_79.jpg', 'val', () ],
 		['bicyclist', 'seq181_016419_leftImg8bit_41.jpg', 'val', (365, 889) ],
 		['rider-other', 'seq148_000690_leftImg8bit_67.jpg', 'val', (591, 1013) ],
@@ -212,11 +215,11 @@ def verify_targeted_visual_examples():
 
 	dname = 'sunrgbd-37-relabeled'
 	sunrgbd_examples = [
-		['swivel chair', 	'img-000253_4.jpg', 'train', (303, 463) ],
+		['swivel_chair', 	'img-000253_4.jpg', 'train', (303, 463) ],
 		['door', 			'img-004239_4.jpg', 'train', (190,30) ],
 		['desk', 			'img-004930_11.jpg', 'train', (429, 143) ],
-		['bathroom counter','img-002347_11.jpg', 'train', (254,34) ],
-		['bathroom counter','img-002164_11.jpg', 'test', (350, 483) ],
+		['bathroom_counter','img-002347_11.jpg', 'train', (254,34) ],
+		['bathroom_counter','img-002164_11.jpg', 'test', (350, 483) ],
 		['sconce', 			'img-004159_34.jpg', 'train', (204, 284) ],
 		['chandelier', 		'img-001692_34.jpg', 'train', (3,459) ],
 	]
