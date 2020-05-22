@@ -1,10 +1,8 @@
-# mseg-api-staging
-
-MSeg: A Composite Dataset for Multi-domain Semantic Segmentation (CVPR 2020, Official Repo)
+[![Build Status](https://travis-ci.com/mseg-dataset/mseg-api.svg?branch=master)](https://travis-ci.com/mseg-dataset/mseg-api)
 
 This is the code for the paper:
 
-**MSeg: A Composite Dataset for Multi-domain Semantic Segmentation** [[PDF]](http://vladlen.info/papers/MSeg.pdf)
+**MSeg: A Composite Dataset for Multi-domain Semantic Segmentation** (CVPR 2020, Official Repo) [[PDF]](http://vladlen.info/papers/MSeg.pdf)
 <br>
 [John Lambert*](https://johnwlambert.github.io/),
 [Zhuang Liu*](https://liuzhuang13.github.io/),
@@ -21,7 +19,7 @@ This repo is the first of 4 repos that introduce our work. It provides utilities
 In a few weeks, we will add the `TaxonomyConverter` class to this repo that supports on-the-fly mapping to a unified taxonomy during training.
 
 Three additional repos will be introduced in April and May 2020:
-- ` mseg_semantic`: provides HRNet-W48 Training (sufficient to train a winning entry on the WildDash benchmark)
+- ` mseg_semantic`: provides HRNet-W48 Training (sufficient to train a winning entry on the [WildDash](https://wilddash.cc/benchmark/summary_tbl?hc=semantic_rob) benchmark)
 - `mseg_panoptic`: provides Panoptic-FPN and Mask-RCNN training, based on Detectron2
 - `mseg_mturk`: provides utilities to perform large-scale Mechanical Turk re-labeling
 

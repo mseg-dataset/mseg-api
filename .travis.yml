@@ -1,15 +1,16 @@
 language: python
 dist: xenial
 python:
-    - "3.7"
+    - "3.7.3"
 
 install:
-    - pip install tox-travis==0.12 tox==3.12.1 pre-commit==1.17.0
+    - pip install -r requirements.txt
 
 script:
-    - tox
-    - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then pre-commit run --show-diff-on-failure --origin $TRAVIS_COMMIT --source $TRAVIS_BRANCH; fi'
-
+    - sed -i '12s/.*/MSEG_DST_DIR="\/dummy\/path"/' mseg/utils/dataset_config.py
+    - pip install -e .
+    - pytest tests/
+    
 notifications:
     email:
         recipients:
