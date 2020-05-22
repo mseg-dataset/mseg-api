@@ -36,6 +36,10 @@ from mseg.label_preparation.dataset_update_records import (
 	mapillary_update_records
 )
 from mseg.utils.dataset_config import infos
+from mseg.label_preparation.mseg_write_relabeled_segments import (
+	get_unique_mask_identifiers,
+	form_fname_to_updatelist_dict
+)
 
 """
 Simple utilities to write a remapped version of the dataset in a universal
@@ -50,117 +54,6 @@ OR MAP TO UNLABELED FIRST FOR ALL OF RIDER...
 """
 
 _ROOT = Path(__file__).resolve().parent.parent
-
-
-def get_unique_mask_identifiers(
-	dname: str,
-	annot_fname: str,
-	data_split: str) -> Tuple[str,str,int]:
-	"""
-	Will be used to obtain the unique:
-		-	filesystem parent (i.e. sequence ID),
-		-	image ID
-		-	segment ID
-	to overwrite this mask/segment later, by matching with label image file path.
-
-	Unfortunately, image IDs can be repeated across sequences/splits, so we need 3 unique
-	identifiers per mask. The sequence ID should always be the 2nd to last item in the 
-	file path so that given an absolute path, we can immediately find it (`fname_parent`)
-
-		Args:
-		-	dname: dataset_name
-		-	annot_fname:
-		-	data_split: string representing data subset, e.g. 'train' or 'val'
-
-		Returns:
-		-	fname_parent: label file path parent
-		-	fname_stem: rgb file name stem
-		-	segment_id: integer unique segment identifier
-	"""
-	annot_fname = Path(annot_fname).stem
-	fname_parent = None
-	if dname in ['ade20k-150', 'ade20k-150-relabeled', 'coco-panoptic-133', 'coco-panoptic-133-relabeled']:
-		# e.g '000000024880_7237508.png' -> ('000000024880', 7237508)
-		fname_stem = '_'.join(annot_fname.split('_')[:-1])
-		segmentid = annot_fname.split('_')[-1]
-		if 'ade20k' in dname:
-			fname_parent = 'training' if data_split == 'train' else 'validation'
-		elif 'coco' in dname:
-			fname_parent = f'{data_split}2017'
-
-	elif dname in ['bdd', 'bdd-relabeled']:
-		# e.g. 0f4e8f1e-6ba53d52_11.jpg
-		fname_stem = annot_fname.split('_')[0]
-		segmentid = annot_fname.split('_')[-1]
-		fname_parent = data_split
-
-	elif dname in ['cityscapes-19', 'cityscapes-19-relabeled']:
-		# e.g seqfrankfurt_frankfurt_000000_013942_leftImg8bit_28.jpg
-		fname_stem = '_'.join(annot_fname.split('_')[1:-1])
-		segmentid = annot_fname.split('_')[-1]
-		fname_parent = annot_fname.split('_')[0][3:]
-
-	elif dname in ['idd-39', 'idd-39-relabeled']:
-		# seq173_316862_leftImg8bit_34.jpg
-		fname_stem = '_'.join(annot_fname.split('_')[1:-1])
-		segmentid = annot_fname.split('_')[-1]
-		seq_prefix = annot_fname.split('_')[0]
-		fname_parent = seq_prefix[3:] # after 'seq'
-
-	elif dname in ['sunrgbd-37', 'sunrgbd-37-relabeled']:
-		fname_stem = annot_fname.split('_')[0]
-		segmentid = annot_fname.split('_')[-1]
-		fname_parent = data_split
-
-	elif dname in ['mapillary-public65', 'mapillary-public65-relabeled']:
-		# e.g. mapillary_czkO_9In4u30opBy5H1uLg_259.jpg
-		fname_stem = '_'.join(annot_fname.split('_')[1:-1])
-		segmentid = annot_fname.split('_')[-1]
-		fname_parent = 'labels'
-	else:
-		print('Unknown dataset')
-		quit()
-
-	return fname_parent, fname_stem, int(segmentid)
-
-
-
-def form_fname_to_updatelist_dict(
-	dname: str,
-	update_records: List[DatasetClassUpdateRecord],
-	split: str
-	) -> Mapping[str,List[LabelImageUpdateRecord]]:
-	"""
-		Form a large dictionary mapping (parent,filename)->(update objects).
-		Later we can check to see if this image is in our big dictionary of filename->updates
-		so we can know if we need to overwrite the mask.
-
-		Args:
-		-	update_records
-
-		Returns:
-		-	parent_fname_to_updatelist_dict
-	"""
-	parent_fname_to_updatelist_dict = defaultdict(dict)
-	for rec in update_records:
-		for annot_fname in rec.img_list:
-
-			if rec.split != split:
-				continue
-			# ADE20K has underscores in the stem, so last underscore separates fname and segment ID
-			parent, fname_stem, segmentid = get_unique_mask_identifiers(dname, annot_fname, rec.split)
-			img_rec = LabelImageUpdateRecord(rec.dataset_name, fname_stem, segmentid, rec.split, rec.orig_class, rec.relabeled_class)
-			
-			# Check for duplicated annotations.
-			same_img_recs = parent_fname_to_updatelist_dict[parent].get(fname_stem, [])
-			is_dup = any([ int(segmentid) == same_img_rec.segmentid for same_img_rec in same_img_recs])
-			if is_dup:
-				print('Found Duplicate!')
-				pdb.set_trace()
-
-			parent_fname_to_updatelist_dict[parent].setdefault(fname_stem, []).append(img_rec)
-
-	return parent_fname_to_updatelist_dict
 
 
 def verify_all_relabeled_dataset_segments(
@@ -227,10 +120,12 @@ def verify_all_relabeled_dataset_segments(
 				)
 
 
-def verify_mask_worker(pairs: List[Tuple[str,str]], 
-								start_idx: int, 
-								end_idx: int, 
-								kwargs: Mapping[str, Any] ) -> None:
+def verify_mask_worker(
+	pairs: List[Tuple[str,str]], 
+	start_idx: int, 
+	end_idx: int, 
+	kwargs: Mapping[str, Any]
+	) -> None:
 	"""	Given a list of (rgb image, label image) pairs to remap, call relabel_pair()
 		on each one of them.
 
@@ -470,7 +365,13 @@ def main(args):
 		# 'idd-39',
 	]:
 		task = get_relabeling_task(dname)
-		print(f'Completing task:\n{task}')
+		print(f'Completing task:')
+		print(f'\t{task.orig_dname}')
+		print(f'\t{task.remapped_dname}')
+		print(f'\t{task.mapping_tsv_fpath}')
+		print(f'\t{task.orig_dataroot}')
+		print(f'\t{task.remapped_dataroot}')
+
 		# Overwrite the universal labels using mask/segment updates.
 		verify_all_relabeled_dataset_segments(
 			args.num_processes,
