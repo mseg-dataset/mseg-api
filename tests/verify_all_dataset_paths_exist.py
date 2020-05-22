@@ -105,19 +105,9 @@ class SanityCheckDataset:
 						y,x = coords
 						rgb_img = imageio.imread(rgb_fpath)
 						label_img = imageio.imread(label_fpath)
-						# pdb.set_trace()
 						# assert label_img[y,x] == self.get_classname_to_id_map[title]
 						if label_img[y,x] != self.get_classname_to_id_map[title]:
 							pdb.set_trace()
-						# save_fpath = f'{save_dir}/{self.dname}_{title}_{annot_fname}'
-						# save_classnames_in_image_maxcardinality(
-						# 	rgb_img, 
-						# 	label_img, 
-						# 	self.id_to_classname_map, 
-						# 	font_color = (255,255,255),# (0,0,0),
-						# 	save_to_disk=True,
-						# 	save_fpath=save_fpath)
-
 
 
 def verify_targeted_visual_examples():
@@ -225,6 +215,7 @@ def verify_targeted_visual_examples():
 		['bathroom_counter','img-002164_11.jpg', 'test', (350, 483) ],
 		['sconce', 			'img-004159_34.jpg', 'train', (204, 284) ],
 		['chandelier', 		'img-001692_34.jpg', 'train', (3,459) ],
+		['armchair',		'img-003192_4.jpg', 'test', (300,467) ],
 	]
 	scd = SanityCheckDataset(infos[dname].dataroot, dname)
 	scd.find_matches(sunrgbd_examples)
