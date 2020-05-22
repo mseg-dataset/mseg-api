@@ -1,7 +1,7 @@
 
 ## MSeg Download Overview
 
-Downloading MSeg is nontrivial and we ask that you follow these instructions **exactly, in this order**. **Skipping steps will not be possible**. You will need ???? GB of free space on your hard drive. It may take several days before you are granted a license for ScanNet or Mapillary Vistas.
+Downloading MSeg is nontrivial and we ask that you follow these instructions **exactly, in this order**. **Skipping steps will not be possible**. You will need at least 200 GB of free space on your hard drive. It may take several days before you are granted a license for ScanNet or Mapillary Vistas.
 
 - If downloading and unzipping downloaded files in a single thread, and 100 workers (presumably on 100 cores) are provided for label map mask preparation, the MSeg setup may take up to 40 hours.
 
@@ -78,7 +78,7 @@ mkdir -p $MSEG_DST_DIR/mseg_dataset/WildDash
 Now, we'll for register for BDD.
 
 ### BDD100K
-The Berkeley Deep Drive dataset [[paper]](https://arxiv.org/abs/1805.04687) [[website]]() is available for public use. Register [here](https://bdd-data.berkeley.edu/login.html). You shuold be approved immediately and receive an email shortly. 
+The Berkeley Deep Drive dataset [[paper]](https://arxiv.org/abs/1805.04687) [[website]]() is available for public use. Register [here](https://bdd-data.berkeley.edu/login.html). You should be approved immediately and receive an email shortly. 
 
 This dataset is not available via `wget`, so we ask that you download it in a browser, and upload it (1.3 GB) to the desired location on your server.
 
@@ -187,7 +187,7 @@ This will take around 45 minutes to execute on 100 cores.
 
 At this point, you have reached the final stage -- verification. We will loop through every path to ensure it exists. Run the following command:
 ```
-python ../tests/verify_all_dataset_paths_exist.py
+python -u ../tests/verify_all_dataset_paths_exist.py
 ```
 
 For the sake of your privacy, clear all stored credentials using:
