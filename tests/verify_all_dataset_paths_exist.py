@@ -105,7 +105,7 @@ class SanityCheckDataset:
 						y,x = coords
 						rgb_img = imageio.imread(rgb_fpath)
 						label_img = imageio.imread(label_fpath)
-						pdb.set_trace()
+						# pdb.set_trace()
 						assert label_img[y,x] == self.get_classname_to_id_map[title]
 						# save_fpath = f'{save_dir}/{self.dname}_{title}_{annot_fname}'
 						# save_classnames_in_image_maxcardinality(
@@ -147,7 +147,7 @@ def verify_targeted_visual_examples():
 			(542,531)
 		],
 		[
-			'person_nonrider',
+			'person', # this is `person_nonrider`
 			'seqfrankfurt_frankfurt_000001_038844_leftImg8bit_82.jpg',
 			'val',
 			(341,649)
