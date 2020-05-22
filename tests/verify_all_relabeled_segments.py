@@ -470,7 +470,7 @@ def main(args):
 		# 'idd-39',
 	]:
 		task = get_relabeling_task(dname)
-
+		print(f'Completing task:\n{task}')
 		# Overwrite the universal labels using mask/segment updates.
 		verify_all_relabeled_dataset_segments(
 			args.num_processes,
