@@ -93,7 +93,7 @@ def visual_sanitychecks():
 					label_map=label_img,
 					id_to_class_name_map=id_to_classname_map
 				)
-				imageio.imwrite(output_img, blend_save_fpath)
+				imageio.imwrite(blend_save_fpath, output_img)
 
 
 class SanityCheckDataset:
