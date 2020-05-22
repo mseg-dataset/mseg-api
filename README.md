@@ -55,7 +55,6 @@ year = {2020}
 ```
 
 ## Repo Structure
-In a few weeks, we will add the `TaxonomyConverter` class to this repo that 
 - `download_scripts`: code and instructions to download the entire MSeg dataset
 - `mseg`: Python module, including
     - `dataset_apis`
