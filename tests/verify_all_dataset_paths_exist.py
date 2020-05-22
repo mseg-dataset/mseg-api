@@ -211,7 +211,7 @@ def verify_targeted_visual_examples():
 		['person', 'seq1_148425_leftImg8bit_110.jpg', 'train', (458, 822) ],
 		#['rider-other', 'seq48_601929_leftImg8bit_79.jpg', 'val', () ],
 		['bicyclist', 'seq181_016419_leftImg8bit_41.jpg', 'val', (365, 889) ],
-		['rider-other', 'seq148_000690_leftImg8bit_67.jpg', 'val', (591, 1013) ],
+		['rider_other', 'seq148_000690_leftImg8bit_67.jpg', 'val', (591, 1013) ],
 	]
 	scd = SanityCheckDataset(infos[dname].dataroot, dname)
 	scd.find_matches(idd_examples)
