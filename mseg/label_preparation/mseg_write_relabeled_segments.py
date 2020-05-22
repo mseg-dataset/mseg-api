@@ -109,9 +109,11 @@ def get_unique_mask_identifiers(
 		fname_parent = seq_prefix[3:] # after 'seq'
 
 	elif dname in ['sunrgbd-37', 'sunrgbd-37-relabeled']:
+		# we refer to the `test` split (on disk) as `val` split,
+		# since `val` undefined.
 		fname_stem = annot_fname.split('_')[0]
 		segmentid = annot_fname.split('_')[-1]
-		fname_parent = data_split
+		fname_parent = 'train' if data_split == 'train' else 'test'
 
 	elif dname in ['mapillary-public65', 'mapillary-public65-relabeled']:
 		# e.g. mapillary_czkO_9In4u30opBy5H1uLg_259.jpg
