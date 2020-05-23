@@ -91,13 +91,21 @@ def test_save_classnames_in_image():
 	rgb_img = rgb_img.astype(np.uint8)
 	label_img = label_img.astype(np.uint8)
 
-	# plt.imshow(rgb_img)
-	# plt.show()
+	plt.imshow(rgb_img)
+	#plt.show()
+	plt.close('all')
 
+	# jittering will be random, make it deterministic
+	np.random.seed(2)
 	id_to_class_name_map = { i:f'Class {i}' for i in range(5) }
 	rgb_img_w_text = save_classnames_in_image_sufficientpx(rgb_img, label_img, id_to_class_name_map, font_color=(255,255,255))
-
-	assert np.sum(rgb_img_w_text) == 19916826
+	
+	plt.imshow(rgb_img_w_text)
+	#plt.show()
+	plt.close('all')
+	
+	print(np.sum(rgb_img_w_text))
+	assert np.sum(rgb_img_w_text) == 19959786
 
 
 def map_semantic_img_slow(
