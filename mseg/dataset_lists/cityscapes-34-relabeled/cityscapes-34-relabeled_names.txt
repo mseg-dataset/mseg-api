@@ -8,7 +8,7 @@ fence
 guard_rail
 motorcycle
 motorcyclist
-person_non_rider
+person
 pole
 railroad
 rider_other

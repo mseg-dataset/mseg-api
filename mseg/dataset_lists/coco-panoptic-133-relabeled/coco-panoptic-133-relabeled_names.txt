@@ -84,7 +84,7 @@ ottoman
 oven
 paper
 parking_meter
-person_non_rider
+person
 pier_wharf
 pillow
 pizza

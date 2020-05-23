@@ -13,7 +13,6 @@ from typing import Any, List, Mapping, Tuple
 from mseg.utils.multiprocessing_utils import send_list_to_workers
 from mseg.utils.txt_utils import generate_all_img_label_pair_fpaths
 from mseg.utils.names_utils import get_classname_to_dataloaderid_map
-from mseg.utils.mask_utils import swap_px_inside_mask
 
 from mseg.dataset_apis.Ade20kMaskLevelDataset import Ade20kMaskDataset
 from mseg.dataset_apis.BDDImageLevelDataset import BDDImageLevelDataset
@@ -37,6 +36,10 @@ from mseg.label_preparation.dataset_update_records import (
 	mapillary_update_records
 )
 from mseg.utils.dataset_config import infos
+from mseg.label_preparation.mseg_write_relabeled_segments import (
+	get_unique_mask_identifiers,
+	form_fname_to_updatelist_dict
+)
 
 """
 Simple utilities to write a remapped version of the dataset in a universal
@@ -53,120 +56,7 @@ OR MAP TO UNLABELED FIRST FOR ALL OF RIDER...
 _ROOT = Path(__file__).resolve().parent.parent
 
 
-def get_unique_mask_identifiers(
-	dname: str,
-	annot_fname: str,
-	data_split: str) -> Tuple[str,str,int]:
-	"""
-	Will be used to obtain the unique:
-		-	filesystem parent (i.e. sequence ID),
-		-	image ID
-		-	segment ID
-	to overwrite this mask/segment later, by matching with label image file path.
-
-	Unfortunately, image IDs can be repeated across sequences/splits, so we need 3 unique
-	identifiers per mask. The sequence ID should always be the 2nd to last item in the 
-	file path so that given an absolute path, we can immediately find it (`fname_parent`)
-
-		Args:
-		-	dname: dataset_name
-		-	annot_fname:
-		-	data_split: string representing data subset, e.g. 'train' or 'val'
-
-		Returns:
-		-	fname_parent: label file path parent
-		-	fname_stem: rgb file name stem
-		-	segment_id: integer unique segment identifier
-	"""
-	annot_fname = Path(annot_fname).stem
-	fname_parent = None
-	if dname in ['ade20k-150', 'ade20k-150-relabeled', 'coco-panoptic-133', 'coco-panoptic-133-relabeled']:
-		# e.g '000000024880_7237508.png' -> ('000000024880', 7237508)
-		fname_stem = '_'.join(annot_fname.split('_')[:-1])
-		segmentid = annot_fname.split('_')[-1]
-		if 'ade20k' in dname:
-			fname_parent = 'training' if data_split == 'train' else 'validation'
-		elif 'coco' in dname:
-			fname_parent = f'{data_split}2017'
-
-	elif dname in ['bdd', 'bdd-relabeled']:
-		# e.g. 0f4e8f1e-6ba53d52_11.jpg
-		fname_stem = annot_fname.split('_')[0]
-		segmentid = annot_fname.split('_')[-1]
-		fname_parent = data_split
-
-	elif dname in ['cityscapes-19', 'cityscapes-19-relabeled']:
-		# e.g seqfrankfurt_frankfurt_000000_013942_leftImg8bit_28.jpg
-		fname_stem = '_'.join(annot_fname.split('_')[1:-1])
-		segmentid = annot_fname.split('_')[-1]
-		fname_parent = annot_fname.split('_')[0][3:]
-
-	elif dname in ['idd-39', 'idd-39-relabeled']:
-		# seq173_316862_leftImg8bit_34.jpg
-		fname_stem = '_'.join(annot_fname.split('_')[1:-1])
-		segmentid = annot_fname.split('_')[-1]
-		seq_prefix = annot_fname.split('_')[0]
-		fname_parent = seq_prefix[3:] # after 'seq'
-
-	elif dname in ['sunrgbd-37', 'sunrgbd-37-relabeled']:
-		# we refer to the `test` split (on disk) as `val` split,
-		# since `val` undefined.
-		fname_stem = annot_fname.split('_')[0]
-		segmentid = annot_fname.split('_')[-1]
-		fname_parent = 'train' if data_split == 'train' else 'test'
-
-	elif dname in ['mapillary-public65', 'mapillary-public65-relabeled']:
-		# e.g. mapillary_czkO_9In4u30opBy5H1uLg_259.jpg
-		fname_stem = '_'.join(annot_fname.split('_')[1:-1])
-		segmentid = annot_fname.split('_')[-1]
-		fname_parent = 'labels'
-	else:
-		print('Unknown dataset')
-		quit()
-
-	return fname_parent, fname_stem, int(segmentid)
-
-
-
-def form_fname_to_updatelist_dict(
-	dname: str,
-	update_records: List[DatasetClassUpdateRecord],
-	split: str
-	) -> Mapping[str,List[LabelImageUpdateRecord]]:
-	"""
-		Form a large dictionary mapping (parent,filename)->(update objects).
-		Later we can check to see if this image is in our big dictionary of filename->updates
-		so we can know if we need to overwrite the mask.
-
-		Args:
-		-	update_records
-
-		Returns:
-		-	parent_fname_to_updatelist_dict
-	"""
-	parent_fname_to_updatelist_dict = defaultdict(dict)
-	for rec in update_records:
-		for annot_fname in rec.img_list:
-
-			if rec.split != split:
-				continue
-			# ADE20K has underscores in the stem, so last underscore separates fname and segment ID
-			parent, fname_stem, segmentid = get_unique_mask_identifiers(dname, annot_fname, rec.split)
-			img_rec = LabelImageUpdateRecord(rec.dataset_name, fname_stem, segmentid, rec.split, rec.orig_class, rec.relabeled_class)
-			
-			# Check for duplicated annotations.
-			same_img_recs = parent_fname_to_updatelist_dict[parent].get(fname_stem, [])
-			is_dup = any([ int(segmentid) == same_img_rec.segmentid for same_img_rec in same_img_recs])
-			if is_dup:
-				print('Found Duplicate!')
-				pdb.set_trace()
-
-			parent_fname_to_updatelist_dict[parent].setdefault(fname_stem, []).append(img_rec)
-
-	return parent_fname_to_updatelist_dict
-
-
-def write_out_updated_dataset(
+def verify_all_relabeled_dataset_segments(
 	num_processes: int,
 	mld: Any,
 	dname: str, 
@@ -200,7 +90,7 @@ def write_out_updated_dataset(
 	for split in ['train', 'val']:
 		# Create for each split separately, since SUNRGBD has same file names for different images in train vs. val
 		parent_fname_to_updatelist_dict = form_fname_to_updatelist_dict(dname, update_records, split)
-		split_txt_fpath = f'{_ROOT}/dataset_lists/{dname}/list/{split}.txt'
+		split_txt_fpath = f'{_ROOT}/mseg/dataset_lists/{dname}/list/{split}.txt'
 
 		# load up the data root and all absolute paths from the txt file
 		img_label_pairs = generate_all_img_label_pair_fpaths(data_root=dataroot, split_txt_fpath=split_txt_fpath)
@@ -209,7 +99,7 @@ def write_out_updated_dataset(
 			send_list_to_workers(
 				num_processes=num_processes, 
 				list_to_split=img_label_pairs, 
-				worker_func_ptr=overwrite_mask_worker,
+				worker_func_ptr=verify_mask_worker,
 				parent_fname_to_updatelist_dict=parent_fname_to_updatelist_dict,
 				mld=mld,
 				classname_to_id_map=classname_to_id_map,
@@ -219,7 +109,7 @@ def write_out_updated_dataset(
 		elif num_processes == 1:
 			# useful for debugging in a single thread
 			for (img_fpath, label_img_fpath) in img_label_pairs:
-				overwrite_label_img_masks(
+				verify_label_img_masks(
 					img_fpath, 
 					label_img_fpath, 
 					parent_fname_to_updatelist_dict, 
@@ -230,10 +120,12 @@ def write_out_updated_dataset(
 				)
 
 
-def overwrite_mask_worker(pairs: List[Tuple[str,str]], 
-								start_idx: int, 
-								end_idx: int, 
-								kwargs: Mapping[str, Any] ) -> None:
+def verify_mask_worker(
+	pairs: List[Tuple[str,str]], 
+	start_idx: int, 
+	end_idx: int, 
+	kwargs: Mapping[str, Any]
+	) -> None:
 	"""	Given a list of (rgb image, label image) pairs to remap, call relabel_pair()
 		on each one of them.
 
@@ -260,7 +152,7 @@ def overwrite_mask_worker(pairs: List[Tuple[str,str]],
 			print(f'Completed {pct_completed:.2f}%')
 		pair = pairs[idx]
 		img_fpath, label_img_fpath = pair
-		overwrite_label_img_masks(
+		verify_label_img_masks(
 			img_fpath, 
 			label_img_fpath, 
 			parent_fname_to_updatelist_dict,
@@ -271,7 +163,7 @@ def overwrite_mask_worker(pairs: List[Tuple[str,str]],
 		)
 
 
-def overwrite_label_img_masks(
+def verify_label_img_masks(
 	img_fpath: str, 
 	label_img_fpath: str, 
 	parent_fname_to_updatelist_dict,
@@ -280,8 +172,9 @@ def overwrite_label_img_masks(
 	require_strict_boundaries: bool,
 	split: str) -> None:
 	"""
-	Swap the pixel values inside a label map's mask to a new value. This
-	effectively changes the mask's category on disk.
+	Ensure pixel values inside a label map's mask were previously swapped
+	to a new value. Mask's category on disk should have previously been
+	changed.
 
 	Get fname stem from rgb image file path
 	Get sequence ID/parent from label image path file system parent.
@@ -321,12 +214,22 @@ def overwrite_label_img_masks(
 		# update the label image each time
 		orig_class_idx = classname_to_id_map[rec.orig_class]
 		new_class_idx = classname_to_id_map[rec.relabeled_class]
-		label_img = swap_px_inside_mask(label_img, segment_mask, orig_class_idx, new_class_idx, require_strict_boundaries)
 
-		# save it to disk, at new data root, using same abs path as before
-	overwrite = True # False # 
-	if overwrite:
-		imageio.imwrite(label_img_fpath, label_img)
+		assert_mask_identical(label_img, segment_mask, new_class_idx)
+
+
+def assert_mask_identical(
+	label_img: np.ndarray,
+	segment_mask: np.ndarray,
+	new_class_idx: int
+	):
+	"""
+	should be perfect agreement between label image and instance image, then 
+	we will enforce strict boundary agreement between the two.
+	"""
+	y,x = np.where(segment_mask == 1)
+	identical = np.allclose(np.unique(label_img[y,x]), np.array([new_class_idx], dtype=np.uint8))
+	assert identical
 
 
 #####---------------------------------------------------------------
@@ -352,7 +255,7 @@ def get_relabeling_task(dname: str) -> DatasetRewritingTask:
 		return DatasetRewritingTask(
 			orig_dname = 'ade20k-150',
 			remapped_dname = 'ade20k-150-relabeled',
-			mapping_tsv_fpath = f'{_ROOT}/class_remapping_files/ade20k-150_to_ade20k-150-relabeled.tsv',
+			mapping_tsv_fpath = f'{_ROOT}/mseg/class_remapping_files/ade20k-150_to_ade20k-150-relabeled.tsv',
 			orig_dataroot = infos['ade20k-150'].dataroot,
 			remapped_dataroot = infos['ade20k-150-relabeled'].dataroot,
 			dataset_api = Ade20kMaskDataset(
@@ -366,7 +269,7 @@ def get_relabeling_task(dname: str) -> DatasetRewritingTask:
 		return DatasetRewritingTask(
 			orig_dname = 'bdd',
 			remapped_dname = 'bdd-relabeled',
-			mapping_tsv_fpath = f'{_ROOT}/class_remapping_files/bdd_to_bdd-relabeled.tsv',
+			mapping_tsv_fpath = f'{_ROOT}/mseg/class_remapping_files/bdd_to_bdd-relabeled.tsv',
 			orig_dataroot = infos['bdd'].dataroot,
 			remapped_dataroot = infos['bdd-relabeled'].dataroot,
 			dataset_api = BDDImageLevelDataset(infos['bdd'].dataroot),
@@ -377,7 +280,7 @@ def get_relabeling_task(dname: str) -> DatasetRewritingTask:
 		return DatasetRewritingTask(
 			orig_dname = 'cityscapes-19',
 			remapped_dname = 'cityscapes-19-relabeled',
-			mapping_tsv_fpath = f'{_ROOT}/class_remapping_files/cityscapes-19_to_cityscapes-19-relabeled.tsv',
+			mapping_tsv_fpath = f'{_ROOT}/mseg/class_remapping_files/cityscapes-19_to_cityscapes-19-relabeled.tsv',
 			orig_dataroot = infos['cityscapes-19'].dataroot,
 			remapped_dataroot = infos['cityscapes-19-relabeled'].dataroot,
 			dataset_api = JsonMaskDataset(dataroot=infos['cityscapes-34'].dataroot),
@@ -388,7 +291,7 @@ def get_relabeling_task(dname: str) -> DatasetRewritingTask:
 		return DatasetRewritingTask(
 			orig_dname = 'cityscapes-34',
 			remapped_dname = 'cityscapes-34-relabeled',
-			mapping_tsv_fpath = f'{_ROOT}/class_remapping_files/cityscapes-34_to_cityscapes-34-relabeled.tsv',
+			mapping_tsv_fpath = f'{_ROOT}/mseg/class_remapping_files/cityscapes-34_to_cityscapes-34-relabeled.tsv',
 			orig_dataroot = infos['cityscapes-34'].dataroot,
 			remapped_dataroot = infos['cityscapes-34-relabeled'].dataroot,
 			dataset_api = JsonMaskDataset(dataroot=infos['cityscapes-34'].dataroot),
@@ -399,7 +302,7 @@ def get_relabeling_task(dname: str) -> DatasetRewritingTask:
 		return DatasetRewritingTask(
 				orig_dname = 'coco-panoptic-133',
 				remapped_dname = 'coco-panoptic-133-relabeled',
-				mapping_tsv_fpath = f'{_ROOT}/class_remapping_files/coco-panoptic-133_to_coco-panoptic-133-relabeled.tsv',
+				mapping_tsv_fpath = f'{_ROOT}/mseg/class_remapping_files/coco-panoptic-133_to_coco-panoptic-133-relabeled.tsv',
 				orig_dataroot = infos['coco-panoptic-133'].dataroot,
 				remapped_dataroot = infos['coco-panoptic-133-relabeled'].dataroot,
 				dataset_api = COCOPanopticJsonMaskDataset(
@@ -412,7 +315,7 @@ def get_relabeling_task(dname: str) -> DatasetRewritingTask:
 		return DatasetRewritingTask(
 			orig_dname = 'idd-39',
 			remapped_dname = 'idd-39-relabeled',
-			mapping_tsv_fpath = f'{_ROOT}/class_remapping_files/idd-39_to_idd-39-relabeled.tsv',
+			mapping_tsv_fpath = f'{_ROOT}/mseg/class_remapping_files/idd-39_to_idd-39-relabeled.tsv',
 			orig_dataroot = infos['idd-39'].dataroot,
 			remapped_dataroot = infos['idd-39-relabeled'].dataroot,
 			dataset_api = JsonMaskDataset(infos['idd-39-relabeled'].dataroot),
@@ -423,7 +326,7 @@ def get_relabeling_task(dname: str) -> DatasetRewritingTask:
 		return DatasetRewritingTask(
 			orig_dname = 'mapillary-public65',
 			remapped_dname = 'mapillary-public65-relabeled',
-			mapping_tsv_fpath = f'{_ROOT}/class_remapping_files/mapillary-public65_to_mapillary-public65-relabeled.tsv',
+			mapping_tsv_fpath = f'{_ROOT}/mseg/class_remapping_files/mapillary-public65_to_mapillary-public65-relabeled.tsv',
 			orig_dataroot = infos['mapillary-public65'].dataroot,
 			remapped_dataroot = infos['mapillary-public65-relabeled'].dataroot,
 			dataset_api = MapillaryMaskDataset(dataroot=infos['mapillary-public66'].dataroot),
@@ -434,7 +337,7 @@ def get_relabeling_task(dname: str) -> DatasetRewritingTask:
 		return DatasetRewritingTask(
 			orig_dname = 'sunrgbd-37',
 			remapped_dname = 'sunrgbd-37-relabeled',
-			mapping_tsv_fpath = f'{_ROOT}/class_remapping_files/sunrgbd-37_to_sunrgbd-37-relabeled.tsv',
+			mapping_tsv_fpath = f'{_ROOT}/mseg/class_remapping_files/sunrgbd-37_to_sunrgbd-37-relabeled.tsv',
 			orig_dataroot = infos['sunrgbd-37'].dataroot,
 			remapped_dataroot = infos['sunrgbd-37-relabeled'].dataroot,
 			dataset_api = SunrgbdImageLevelDataset(infos['sunrgbd-37'].dataroot),
@@ -451,26 +354,33 @@ def main(args):
 	"""
 	We use the MSeg dataroot explicitly, as specified in mseg/utils/dataset_config.py
 	"""
-	task = get_relabeling_task(args.dataset_to_relabel)
+	for dname in [
+		'ade20k-150',
+		'bdd',
+		'coco-panoptic-133',
+		'mapillary-public65',
+		'sunrgbd-37'
+		# Can't do this for the following two since masks overlap
+		# 'cityscapes-19',
+		# 'idd-39',
+	]:
+		task = get_relabeling_task(dname)
+		print(f'Completing task:')
+		print(f'\t{task.orig_dname}')
+		print(f'\t{task.remapped_dname}')
+		print(f'\t{task.mapping_tsv_fpath}')
+		print(f'\t{task.orig_dataroot}')
+		print(f'\t{task.remapped_dataroot}')
 
-	# Rewrite original dataset into universal label space.
-	remap_dataset(
-		task.orig_dname,
-		task.remapped_dname,
-		task.mapping_tsv_fpath,
-		old_dataroot=task.orig_dataroot,
-		remapped_dataroot=task.remapped_dataroot,
-		num_processes=args.num_processes
-	)
-	# Overwrite the universal labels using mask/segment updates.
-	write_out_updated_dataset(
-		args.num_processes,
-		task.dataset_api,
-		task.remapped_dname,
-		task.remapped_dataroot,
-		task.update_records, 
-		task.require_strict_boundaries
-	)
+		# Overwrite the universal labels using mask/segment updates.
+		verify_all_relabeled_dataset_segments(
+			args.num_processes,
+			task.dataset_api,
+			task.remapped_dname,
+			task.remapped_dataroot,
+			task.update_records, 
+			task.require_strict_boundaries
+		)
 
 
 if __name__ == '__main__':
@@ -478,9 +388,6 @@ if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--num_processes", type=int, required=True, 
 		help="number of processes to use (multiprocessing)")
-	parser.add_argument("--dataset_to_relabel", type=str, required=True, 
-		help="name of dataset to apply re-labeling to")
-
 	args = parser.parse_args()
 	main(args)
 

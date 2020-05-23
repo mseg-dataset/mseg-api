@@ -50,6 +50,42 @@ def find_max_cardinality_mask(mask_list: List[np.ndarray]):
 	return np.argmax(np.array(mask_cardinalities))
 
 
+def search_jittered_location_in_mask(
+	mean_x: float,
+	mean_y: float,
+	conncomp: np.ndarray
+	) -> Tuple[int,int]:
+	"""
+	For visualizing classnames in an image.
+
+	When we wish to place text over a mask, for nonconvex regions, we cannot
+	use mask pixel mean location (may not fall within mask), so we will 
+	jitter the location until we find a valid location within mask.
+	"""
+	H,W = conncomp.shape
+	num_attempts = 100
+	for i in range(num_attempts):
+		# grow the jitter up to half width of image at end
+		SCALE = ((i+1)/num_attempts) * (W/2)
+		dx, dy = np.random.randn(2) * SCALE
+		#print(f'On iter {i}, mul noise w/ {SCALE} to get dx,dy={dx},{dy}')
+		x = int(mean_x + dx)
+		y = int(mean_y + dy)
+
+		# Enforce validity
+		x = max(0,x)
+		x = min(W-1,x)
+		y = max(0,y)
+		y = min(H-1,y)
+
+		if conncomp[y,x] != 1:
+			continue
+		else:
+			return x,y
+
+	return mean_x, mean_y
+
+
 def save_classnames_in_image_sufficientpx(
 	rgb_img, 
 	label_img, 
@@ -80,6 +116,11 @@ def save_classnames_in_image_sufficientpx(
 			x -= 55 # move the text so approx. centered over mask.
 			x = max(0,x)
 			x = min(W-1,x)
+
+			# jitter location if nonconvex object mean not within its mask
+			if conncomp[y,x] != 1:
+				x,y = search_jittered_location_in_mask(x,y,conncomp)
+
 			# print(f'Class idx: {class_idx}: (x,y)=({x},{y})')
 			rgb_img = add_text_cv2(
 				rgb_img, 
@@ -163,9 +204,6 @@ def form_mask_triple_embedded_classnames(
 	mask_img = convert_instance_img_to_mask_img(label_img, img_rgb=None)
 	rgb3 = save_classnames_in_image_sufficientpx(mask_img, label_img, id_to_class_name_map)
 	return form_hstacked_imgs([rgb_img, rgb2, rgb3], save_fpath, save_to_disk)
-
-
-
 
 
 def map_semantic_img_fast_pytorch(
@@ -945,6 +983,16 @@ def get_present_classes_in_img(
 	present_class_idxs = np.unique(label_img)
 	present_classnames = [id_to_classname_map[idx] for idx in present_class_idxs]
 	return present_classnames
+
+
+def get_most_populous_class(segment_mask: np.array, label_map: np.ndarray):
+	"""
+	"""
+	class_indices = label_map[segment_mask.nonzero()]
+	class_mode_idx = get_np_mode(class_indices)
+	return class_mode_idx
+
+
 
 
 

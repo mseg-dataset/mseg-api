@@ -22,7 +22,7 @@ Curb Cut	sidewalk_pavement
 Pedestrian Area	sidewalk_pavement
 Terrain	terrain
 Sand	terrain
-Person	person_non_rider
+Person	person
 Other Rider	rider_other
 Bicyclist	bicyclist
 Motorcyclist	motorcyclist

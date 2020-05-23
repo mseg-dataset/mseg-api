@@ -18,6 +18,7 @@ from mseg.utils.colormap import colormap
 from mseg.utils.mask_utils import (
 	COLORMAP_OFFSET,
 	convert_instance_img_to_mask_img,
+	search_jittered_location_in_mask,
 	find_max_cardinality_mask,
 	form_label_mapping_array,
 	form_contained_classes_color_guide,
@@ -25,6 +26,7 @@ from mseg.utils.mask_utils import (
 	form_mask_triple,
 	get_instance_mask_class_votes,
 	get_mask_from_polygon,
+	get_most_populous_class,
 	get_np_mode,
 	map_semantic_img_fast, 
 	map_semantic_img_fast_pytorch,
@@ -89,13 +91,21 @@ def test_save_classnames_in_image():
 	rgb_img = rgb_img.astype(np.uint8)
 	label_img = label_img.astype(np.uint8)
 
-	# plt.imshow(rgb_img)
-	# plt.show()
+	plt.imshow(rgb_img)
+	#plt.show()
+	plt.close('all')
 
+	# jittering will be random, make it deterministic
+	np.random.seed(2)
 	id_to_class_name_map = { i:f'Class {i}' for i in range(5) }
 	rgb_img_w_text = save_classnames_in_image_sufficientpx(rgb_img, label_img, id_to_class_name_map, font_color=(255,255,255))
-
-	assert np.sum(rgb_img_w_text) == 19916826
+	
+	plt.imshow(rgb_img_w_text)
+	#plt.show()
+	plt.close('all')
+	
+	print(np.sum(rgb_img_w_text))
+	assert np.sum(rgb_img_w_text) == 19959786
 
 
 def map_semantic_img_slow(
@@ -1013,6 +1023,62 @@ def test_polygon_to_mask2():
 	assert np.allclose(mask, gt_mask)
 
 
+def test_search_jittered_location_in_mask():
+	"""
+	Jitter location for nonconvex object
+	"""
+	mask_fpath = f'{TEST_DATA_ROOT}/nonconvex_table_mask.png'
+	mask = imageio.imread(mask_fpath)
+
+	y = 475
+	x = 564
+	np.random.seed(1)
+	x,y = search_jittered_location_in_mask(x, y, conncomp=mask)
+
+	assert mask[y,x] == 1
+
+	# plt.imshow(mask)
+	# plt.scatter(x,y,10,color='r', marker='.')
+	# plt.show()
+
+
+def test_get_most_populous_class1():
+	"""
+	"""
+	segment_mask = np.array(
+		[
+			[1,0,0],
+			[1,0,0],
+			[0,0,0]
+		])
+	label_map = np.array(
+		[
+			[9,8,8],
+			[9,8,8],
+			[8,8,8]
+		])
+	assert get_most_populous_class(segment_mask, label_map) == 9
+
+
+def test_get_most_populous_class2():
+	"""
+	"""
+	segment_mask = np.array(
+		[
+			[1,0,0],
+			[1,1,0],
+			[0,1,0]
+		])
+	label_map = np.array(
+		[
+			[9,8,8],
+			[7,7,8],
+			[8,7,8]
+		])
+	assert get_most_populous_class(segment_mask, label_map) == 7
+
+
+
 if __name__ == '__main__':
 
 	
@@ -1031,7 +1097,7 @@ if __name__ == '__main__':
 	# test_polygon_to_mask1()
 	# test_polygon_to_mask2()
 
-	test_save_pred_vs_label_7tuple_100_strided_preds()
+	#test_save_pred_vs_label_7tuple_100_strided_preds()
 	# test_save_pred_vs_label_7tuple_short_side_60_img()
 	# test_save_pred_vs_label_7tuple_shifted()
 	# test_save_pred_vs_label_7tuple_uniform_random_preds()
@@ -1040,8 +1106,9 @@ if __name__ == '__main__':
 	# test_map_semantic_img_uint16()
 	# test_map_semantic_img_uint16_stress_test()
 	# test_form_contained_classes_color_guide_smokescreen()
-
-
+	#test_search_jittered_location_in_mask()
+	test_get_most_populous_class1()
+	test_get_most_populous_class2()
 
 
 
