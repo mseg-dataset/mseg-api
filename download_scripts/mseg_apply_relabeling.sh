@@ -31,6 +31,11 @@ echo "Apply re-labeling to cityscapes-19-relabeled"
 python -u $REPO_ROOT/mseg/label_preparation/mseg_write_relabeled_segments.py \
 	--num_processes $NUM_CORES_TO_USE --dataset_to_relabel cityscapes-19
 
+echo "Apply re-labeling to cityscapes-34-relabeled"
+
+python -u $REPO_ROOT/mseg/label_preparation/mseg_write_relabeled_segments.py \
+	--num_processes $NUM_CORES_TO_USE --dataset_to_relabel cityscapes-34
+
 echo "Apply re-labeling to coco-panoptic-133"
 
 python -u $REPO_ROOT/mseg/label_preparation/mseg_write_relabeled_segments.py \
