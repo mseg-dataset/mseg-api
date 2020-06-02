@@ -95,7 +95,7 @@ def get_unique_mask_identifiers(
 		segmentid = annot_fname.split('_')[-1]
 		fname_parent = data_split
 
-	elif dname in ['cityscapes-19', 'cityscapes-19-relabeled']:
+	elif dname in ['cityscapes-19', 'cityscapes-19-relabeled', 'cityscapes-34', 'cityscapes-34-relabeled']:
 		# e.g seqfrankfurt_frankfurt_000000_013942_leftImg8bit_28.jpg
 		fname_stem = '_'.join(annot_fname.split('_')[1:-1])
 		segmentid = annot_fname.split('_')[-1]

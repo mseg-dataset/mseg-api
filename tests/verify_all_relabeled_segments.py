@@ -354,7 +354,7 @@ def main(args):
 	"""
 	We use the MSeg dataroot explicitly, as specified in mseg/utils/dataset_config.py
 	"""
-	for dname in [
+	dnames_to_verify = [
 		'ade20k-150',
 		'bdd',
 		'coco-panoptic-133',
@@ -363,7 +363,8 @@ def main(args):
 		# Can't do this for the following two since masks overlap
 		# 'cityscapes-19',
 		# 'idd-39',
-	]:
+	]
+	for dname in dnames_to_verify:
 		task = get_relabeling_task(dname)
 		print(f'Completing task:')
 		print(f'\t{task.orig_dname}')
@@ -381,6 +382,7 @@ def main(args):
 			task.update_records, 
 			task.require_strict_boundaries
 		)
+	print('Verifed relabeling for: ', dnames_to_verify)
 
 
 if __name__ == '__main__':

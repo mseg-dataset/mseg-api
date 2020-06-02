@@ -92,7 +92,7 @@ class TaxonomyConverter:
 		self._build_universal_tax()
 		self.num_uclasses = len(self.uid2uname) - 1 # excluding ignored label（id=255)
 		# 255 is a privileged class index and must not be used elsewhere
-		assert (self.num_uclasses < 255)
+		assert (self.num_uclasses < 256)
 
 		self.dataset_classnames = {d: load_class_names(d) for d in (self.train_datasets + self.test_datasets)}
 
