@@ -31,7 +31,7 @@ This repo is the first of 4 repos that introduce our work. It provides utilities
 
 <p align="left">
   <img src="https://user-images.githubusercontent.com/62491525/83895811-35682b00-a721-11ea-9641-38e3b2c1ad0e.gif" height="250">
-  <img src="https://user-images.githubusercontent.com/62491525/83895963-6e080480-a721-11ea-98b6-49835d9e733a.gif" height="250">
+  <img src="https://user-images.githubusercontent.com/62491525/83896026-8710b580-a721-11ea-86d2-a0fff9c6e26e.gif" height="250">
 </p>
 
 Three additional repos are also provided:
@@ -78,5 +78,5 @@ year = {2020}
     - `utils`: library functions for mask and image manipulation, filesystem, tsv/csv reading, and multiprocessing
 - `tests`: unit tests on all code
 
-## License
+## Data License
 <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
