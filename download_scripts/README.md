@@ -54,11 +54,11 @@ Next, run the following commands:
 ```
 # (execute inside the `download_scripts` directory)
 mkdir -p $MSEG_DST_DIR/mseg_dataset
-./mseg_download_noreg_datasets.sh $MSEG_DST_DIR
+./mseg_download_noreg_datasets.sh $MSEG_DST_DIR 2>&1 | tee mseg_download_noreg.log
 ```
 Now, we'll remap these registration-less datasets on disk to `semseg` label spaces:
 ```
-./mseg_remap_noreg_datasets.sh $MSEG_DST_DIR $NUM_CORES_TO_USE
+./mseg_remap_noreg_datasets.sh $MSEG_DST_DIR $NUM_CORES_TO_USE 2>&1 | tee mseg_remap_noreg.log
 ```
 
 ## Initialize Folder Structure
@@ -90,7 +90,7 @@ scp bdd100k_seg.zip username@yourserver:/path/to/destination/mseg_dataset/BDD
 ```
 Now, on desired server, execute inside the `mseg_dataset` directory:
 ```
-./mseg_extract_bdd.sh $MSEG_DST_DIR/mseg_dataset/BDD
+./mseg_extract_bdd.sh $MSEG_DST_DIR/mseg_dataset/BDD 2>&1 | tee bdd_extraction.log
 ```
 
 ### Cityscapes
@@ -100,20 +100,20 @@ Follow https://www.cityscapes-dataset.com/login/ to register. You will receive a
 If your server VPN is not too prohibitive, you can likely download the data directly over `wget`. Rename `set_credentials.sh.template` to `set_credentials.sh`, and copy your username and password into the fields CITYSCAPES_USERNAME and CITYSCAPES_PASSWORD into `set_credentials.sh`. The script will then automatically download the Cityscapes raw images (11GB) and Cityscapes labels (241MB).
 ```
 source ./set_credentials.sh
-./download_cityscapes.sh $MSEG_DST_DIR/mseg_dataset/Cityscapes
+./download_cityscapes.sh $MSEG_DST_DIR/mseg_dataset/Cityscapes 2>&1 | tee download_cityscapes.log
 ```
 Otherwise upload the files in the correct place on your machine, per file system structure above. Now, extract the files as:
 ```
-./mseg_extract_cityscapes.sh $MSEG_DST_DIR/mseg_dataset/Cityscapes
-./mseg_remap_cityscapes.sh $MSEG_DST_DIR/mseg_dataset/Cityscapes $NUM_CORES_TO_USE
+./mseg_extract_cityscapes.sh $MSEG_DST_DIR/mseg_dataset/Cityscapes 2>&1 | tee extract_cityscapes.log
+./mseg_remap_cityscapes.sh $MSEG_DST_DIR/mseg_dataset/Cityscapes $NUM_CORES_TO_USE 2>&1 | tee remap_cityscapes.log
 ```
 
 ### Indian Driving Dataset (IDD)
 The Indian Driving Dataset [[paper]](https://arxiv.org/abs/1811.10200) [[website]](https://idd.insaan.iiit.ac.in/) is available for public use. Register [here](https://idd.insaan.iiit.ac.in/accounts/login/?next=/dataset/download/), and your request will likely be approved immediately. Once logged in, you will find a link for "IDD - Segmentation (IDD 20k Part I) (18.5 GB)". Agree to the terms, and start the download in Chrome. In the Chrome Downloads page, pause the download (this will appear as "idd-segmentation.tar.gz"). Copy the download URL to download_mseg.sh.
 
 ```
-./mseg_download_idd.sh $MSEG_DST_DIR/mseg_dataset/IDD
-./mseg_remap_idd.sh $MSEG_DST_DIR/mseg_dataset/IDD $NUM_CORES_TO_USE
+./mseg_download_idd.sh $MSEG_DST_DIR/mseg_dataset/IDD 2>&1 | tee download_idd.log
+./mseg_remap_idd.sh $MSEG_DST_DIR/mseg_dataset/IDD $NUM_CORES_TO_USE 2>&1 | tee remap_idd.log
 ```
 
 ### KITTI Dataset
@@ -122,8 +122,8 @@ The KITTI dataset suite [[paper]](http://www.cvlibs.net/publications/Geiger2013I
 Unfortunately, you cannot simply wget `http://www.cvlibs.net/download.php?file=data_semantics.zip`, you will have to wait for an email from cvlibs.net. Copy the Amazon AWS URL into `download_kitti.sh` and run:
 
 ```
-./mseg_download_kitti.sh $MSEG_DST_DIR/mseg_dataset/KITTI
-./mseg_remap_kitti.sh $MSEG_DST_DIR/mseg_dataset/KITTI $NUM_CORES_TO_USE
+./mseg_download_kitti.sh $MSEG_DST_DIR/mseg_dataset/KITTI 2>&1 | tee download_kitti.log
+./mseg_remap_kitti.sh $MSEG_DST_DIR/mseg_dataset/KITTI $NUM_CORES_TO_USE 2>&1 | tee remap_kitti.log
 ```
 
 ### Mapillary Vistas
@@ -132,9 +132,9 @@ The Mapillary Vistas dataset [[paper]](https://research.mapillary.com/img/public
 Copy this AWS URL to the variable `MAPILLARY_ZIP_URL="url-goes-here"` in `mseg_download_mapillary.sh`, and run:
 ```
 # execute inside the mseg-api/download_scripts directory
-./mseg_download_mapillary.sh $MSEG_DST_DIR/mseg_dataset/MapillaryVistasPublic
-./mseg_extract_mapillary.sh $MSEG_DST_DIR/mseg_dataset/MapillaryVistasPublic
-./mseg_remap_mapillary.sh $MSEG_DST_DIR/mseg_dataset/MapillaryVistasPublic $NUM_CORES_TO_USE
+./mseg_download_mapillary.sh $MSEG_DST_DIR/mseg_dataset/MapillaryVistasPublic 2>&1 | tee download_mapillary.log
+./mseg_extract_mapillary.sh $MSEG_DST_DIR/mseg_dataset/MapillaryVistasPublic 2>&1 | tee extract_mapillary.log
+./mseg_remap_mapillary.sh $MSEG_DST_DIR/mseg_dataset/MapillaryVistasPublic $NUM_CORES_TO_USE 2>&1 | tee remap_mapillary.log
 ```
 Expect re-mapping to require around 2 hours with 100 workers.
 
@@ -145,13 +145,13 @@ fill out a [PDF agreement](http://dovahkiin.stanford.edu/scannet-public/ScanNet_
 Instead of downloading all 2.5M frames of ScanNet (1.2 GB), which are quite redundant (contiguous video sequences), we use the official 25k-frame subset (subsampled every 100 frames), which is just 5.6 GB.
 
 ```
-./mseg_download_scannet.sh $MSEG_DST_DIR/mseg_dataset/ScanNet
+./mseg_download_scannet.sh $MSEG_DST_DIR/mseg_dataset/ScanNet 2>&1 | tee download_scannet.log
 ```
 
 Since we use ScanNet only as an evaluation dataset, we remap the dataset to the 20-class evaluation subset [defined here](http://kaldir.vc.in.tum.de/scannet_benchmark/labelids.txt), in accordance with the [benchmark definition](http://kaldir.vc.in.tum.de/scannet_benchmark/documentation):
 
 ```
-./mseg_remap_scannet.sh $MSEG_DST_DIR/mseg_dataset/ScanNet $NUM_CORES_TO_USE
+./mseg_remap_scannet.sh $MSEG_DST_DIR/mseg_dataset/ScanNet $NUM_CORES_TO_USE 2>&1 | tee remap_scannet.log
 ```
 
 ### WildDash
@@ -160,7 +160,7 @@ The WildDash dataset [[paper]](https://eccv2018.org/openaccess/content_ECCV_2018
 If your server VPN is not too prohibitive, you can likely download WildDash directly using our script. Rename `set_credentials.sh.template` to `set_credentials.sh` if you haven't yet, copy your username and password into the fields `WILDDASH_USERNAME` and `WILDDASH_PASSWORD` in `set_credentials.sh`. The script will then automatically download the WildDash raw images (??GB) and WildDash val set labels (??MB).
 ```
 source ./set_credentials.sh
-./mseg_download_wilddash.sh $MSEG_DST_DIR/mseg_dataset/WildDash
+./mseg_download_wilddash.sh $MSEG_DST_DIR/mseg_dataset/WildDash 2>&1 | tee download_wilddash.log
 ```
 
 Otherwise, download  to your local machine via browser "wd_both_01.zip" and "wd_val_01.zip". Then upload these to your server as:
@@ -171,15 +171,15 @@ scp wd_val_01.zip username@yourserver:/path/to/destination/mseg_dataset/WildDash
 ```
 Now, extract the downloaded files and remap the labels:
 ```
-./mseg_extract_wilddash.sh $MSEG_DST_DIR/mseg_dataset/WildDash
-./mseg_remap_wilddash.sh $MSEG_DST_DIR/mseg_dataset/WildDash $NUM_CORES_TO_USE
+./mseg_extract_wilddash.sh $MSEG_DST_DIR/mseg_dataset/WildDash 2>&1 | tee extract_wilddash.log
+./mseg_remap_wilddash.sh $MSEG_DST_DIR/mseg_dataset/WildDash $NUM_CORES_TO_USE 2>&1 | tee remap_wilddash.log
 ```
 
 ### Apply Re-Labeling
 We've re-labeled many masks from each of the training datasets. Run:
 
 ```
-./mseg_apply_relabeling.sh $NUM_CORES_TO_USE
+./mseg_apply_relabeling.sh $NUM_CORES_TO_USE 2>&1 | tee apply_relabeling.log
 ```
 This will take around 45 minutes to execute on 100 cores.
 
