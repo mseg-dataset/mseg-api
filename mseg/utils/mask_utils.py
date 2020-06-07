@@ -964,7 +964,10 @@ def get_mask_from_polygon(polygon, img_h, img_w):
 
 	# include outline
 	# a drawer to draw into the image
-	ImageDraw.Draw(mask_img).polygon(polygon, outline=1, fill=1) 
+	if len(set([y for (x,y) in polygon])) == 1:
+		ImageDraw.Draw(mask_img).line(polygon, fill=1)
+	else:
+		ImageDraw.Draw(mask_img).polygon(polygon, outline=1, fill=1) 
 	mask = np.array(mask_img)
 	return mask
 
@@ -991,8 +994,3 @@ def get_most_populous_class(segment_mask: np.array, label_map: np.ndarray):
 	class_indices = label_map[segment_mask.nonzero()]
 	class_mode_idx = get_np_mode(class_indices)
 	return class_mode_idx
-
-
-
-
-
