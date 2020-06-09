@@ -435,8 +435,8 @@ def highlight_binary_mask(
 	if img_rgb is None:
 		img_rgb = np.ones((img_h, img_w, 3), dtype=np.uint8) * 255
 
-	assert label_mask.dtype in [np.uint8, np.uint16, np.int32, np.uint32, np.int64], 'Label map is not composed of integers.'
-	assert img_rgb.dtype in [np.uint8, np.uint16]
+	assert np.issubdtype(label_mask.dtype, np.integer), 'Label map is not composed of integers.'
+	assert np.issubdtype(img_rgb.dtype, np.integer)
 	our_colormap = colormap(rgb=True)
 
 	# np.unique will always sort the values
@@ -768,8 +768,8 @@ def convert_instance_img_to_mask_img(
 	if img_rgb is None:
 		img_rgb = np.ones((img_h, img_w, 3), dtype=np.uint8) * 255
 
-	assert instance_img.dtype in [np.uint8, np.uint16, np.int32, np.uint32, np.int64], 'Label map is not composed of integers.'
-	assert img_rgb.dtype in [np.uint8, np.uint16]
+	assert np.issubdtype(instance_img.dtype, np.integer), 'Label map is not composed of integers.'
+	assert np.issubdtype(img_rgb.dtype, np.integer)
 	our_colormap = colormap(rgb=True)
 	num_unique_colors = our_colormap.shape[0]
 	# np.unique will always sort the values
@@ -926,7 +926,7 @@ def get_np_mode(x: np.ndarray) -> int:
 		Returns:
 		-	mode of array values (integer)
 	"""
-	assert x.dtype in [np.uint8, np.int16, np.int32, np.int64]
+	assert np.issubdtype(x.dtype, np.integer)
 	counts = np.bincount(x)
 	return np.argmax(counts)
 
