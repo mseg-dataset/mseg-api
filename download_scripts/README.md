@@ -100,7 +100,7 @@ Follow https://www.cityscapes-dataset.com/login/ to register. You will receive a
 If your server VPN is not too prohibitive, you can likely download the data directly over `wget`. Rename `set_credentials.sh.template` to `set_credentials.sh`, and copy your username and password into the fields CITYSCAPES_USERNAME and CITYSCAPES_PASSWORD into `set_credentials.sh`. The script will then automatically download the Cityscapes raw images (11GB) and Cityscapes labels (241MB).
 ```
 source ./set_credentials.sh
-./download_cityscapes.sh $MSEG_DST_DIR/mseg_dataset/Cityscapes 2>&1 | tee download_cityscapes.log
+./mseg_download_cityscapes.sh $MSEG_DST_DIR/mseg_dataset/Cityscapes 2>&1 | tee download_cityscapes.log
 ```
 Otherwise upload the files in the correct place on your machine, per file system structure above. Now, extract the files as:
 ```
