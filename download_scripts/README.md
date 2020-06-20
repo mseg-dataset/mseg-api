@@ -41,7 +41,12 @@ Beforehand, open `mseg/utils/dataset_config.py` and replace
 ```
 MSEG_DST_DIR=""
 ```
-with your value of `MSEG_DST_DIR` (the parent directory of `mseg_dataset`).
+with your value of `MSEG_DST_DIR` (the parent directory of `mseg_dataset`). Now, inside the `mseg-api` directory, install the `mseg` module via:
+
+```
+pip install -e .
+```
+Make sure that you can run `python -c "import mseg; print('hello world')"` in python, and you are good to go!
 
 ### Download Datasets that do not require registration
 
