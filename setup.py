@@ -65,9 +65,12 @@ setup(
         "imageio",
         "matplotlib",
         "numpy",
+        "pandas",
         "Pillow", # rather than "pillow"
         "opencv-python>=4.1.0.25",
+        "recordclass",
         "scipy",
-        "torch"
+        "torch",
+        "tqdm"
     ]+add_install_requirement,
 )
