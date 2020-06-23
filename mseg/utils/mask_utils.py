@@ -93,7 +93,8 @@ def save_classnames_in_image_sufficientpx(
 	font_color = (0,0,0),
 	save_to_disk: bool = False,
 	save_fpath: str = '',
-	min_conncomp_px: int = 4000):
+	min_conncomp_px: int = 4000,
+	font_scale: int = 1):
 	"""
 		Args:
 		-	rgb_img
@@ -127,7 +128,7 @@ def save_classnames_in_image_sufficientpx(
 				text, 
 				coords_to_plot_at=(x,y), 
 				font_color=font_color, 
-				font_scale = 1, 
+				font_scale=font_scale, 
 				thickness=2)
 
 	if save_to_disk:
