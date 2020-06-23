@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import copy
+import cv2
 import imageio
 import matplotlib.path
 import matplotlib.pyplot as plt
@@ -8,7 +9,7 @@ import numpy as np
 import os
 from pathlib import Path
 import pdb
-from PIL import Image
+from PIL import Image, ImageDraw
 import time
 import torch
 from typing import Mapping
@@ -28,6 +29,7 @@ from mseg.utils.mask_utils import (
 	get_mask_from_polygon,
 	get_most_populous_class,
 	get_np_mode,
+	get_polygons_from_binary_img,
 	map_semantic_img_fast, 
 	map_semantic_img_fast_pytorch,
 	swap_px_inside_mask,
@@ -1079,6 +1081,413 @@ def test_get_most_populous_class2():
 
 
 
+def test_get_polygons_from_binary_img1():
+	"""
+	"""
+
+	"""
+	label map with four quadrants.
+	|  Sky   | Road  |
+	----------------
+	| Person | Horse |
+	"""
+	H = 6
+	W = 10
+	img_rgb = np.ones((H,W,3), dtype=np.uint8)
+	label_map = np.zeros((H,W), dtype=np.uint8)
+	label_map[:H//2, :W//2] = 0
+	label_map[:H//2,  W//2:] = 1
+	label_map[ H//2:,:W//2] = 2
+	label_map[ H//2:, W//2:] = 3
+
+	id_to_class_name_map = { 0: 'sky', 1: 'road', 2: 'person', 3: 'horse'}
+
+	class_idx = 0
+	binary_img = class_idx == label_map
+	polygons, has_holes = get_polygons_from_binary_img(binary_img)
+	assert len(polygons) == 1
+	assert has_holes == 0
+	gt_poly = np.array(
+		[
+			[0, 0],
+			[0, 1],
+			[0, 2],
+			[1, 2],
+			[2, 2],
+			[3, 2],
+			[4, 2],
+			[4, 1],
+			[4, 0],
+			[3, 0],
+			[2, 0],
+			[1, 0]
+		], dtype=np.int32)
+	assert np.allclose(polygons[0], gt_poly)
+
+	class_idx = 1
+	binary_img = class_idx == label_map
+	polygons, has_holes = get_polygons_from_binary_img(binary_img)
+	assert len(polygons) == 1
+	assert has_holes == 0
+	gt_poly = np.array(
+		[
+			[5, 0],
+			[5, 1],
+			[5, 2],
+			[6, 2],
+			[7, 2],
+			[8, 2],
+			[9, 2],
+			[9, 1],
+			[9, 0],
+			[8, 0],
+			[7, 0],
+			[6, 0]
+		], dtype=np.int32)
+	assert np.allclose(polygons[0], gt_poly)
+
+	class_idx = 2
+	binary_img = class_idx == label_map
+	polygons, has_holes = get_polygons_from_binary_img(binary_img)
+	assert len(polygons) == 1
+	assert has_holes == 0
+	gt_poly = np.array(
+		[
+			[0, 3],
+			[0, 4],
+			[0, 5],
+			[1, 5],
+			[2, 5],
+			[3, 5],
+			[4, 5],
+			[4, 4],
+			[4, 3],
+			[3, 3],
+			[2, 3],
+			[1, 3]
+		], dtype=np.int32)
+	assert np.allclose(polygons[0], gt_poly)
+
+	class_idx = 3
+	binary_img = class_idx == label_map
+	polygons, has_holes = get_polygons_from_binary_img(binary_img)
+	assert len(polygons) == 1
+	assert has_holes == 0
+	gt_poly = np.array(
+		[
+			[5, 3],
+			[5, 4],
+			[5, 5],
+			[6, 5],
+			[7, 5],
+			[8, 5],
+			[9, 5],
+			[9, 4],
+			[9, 3],
+			[8, 3],
+			[7, 3],
+			[6, 3]
+		], dtype=np.int32)
+	assert np.allclose(polygons[0], gt_poly)
+	# --- FOR VISUALIZATION ---
+	# plt.imshow(label_map)
+	# for polygon in polygons:
+	# 	plt.scatter(polygon[:,0], polygon[:,1], 10, color='r')
+	# plt.show()
+
+def test_get_polygons_from_binary_img2():
+	"""
+	Create label map with two embedded circles. Each circle
+	represents class 1 (the "person" class).
+	"""
+	H = 15
+	W = 30
+	img_rgb = np.ones((H,W,3), dtype=np.uint8)
+	label_map = np.zeros((H,W), dtype=np.uint8)
+	label_map[7,7]=1
+	label_map[7,22]=1
+	# only 2 pixels will have value 1
+	mask_diff = np.ones_like(label_map).astype(np.uint8) - label_map
+
+	# Calculates the distance to the closest zero pixel for each pixel of the source image.
+	distance_mask = cv2.distanceTransform(mask_diff, distanceType=cv2.DIST_L2, maskSize=cv2.DIST_MASK_PRECISE)
+	distance_mask = distance_mask.astype(np.float32)
+	label_map = (distance_mask <= 5).astype(np.uint8)
+
+	id_to_class_name_map = { 0: 'road', 1: 'person' }
+
+	binary_img = label_map == 1
+	polygons, has_holes = get_polygons_from_binary_img(binary_img)
+	assert len(polygons) == 2
+	assert has_holes == 0
+	# right side circle
+	gt_poly1 = np.array(
+		[
+			[ 7,  2],
+			[ 6,  3],
+			[ 5,  3],
+			[ 4,  3],
+			[ 3,  4],
+			[ 3,  5],
+			[ 3,  6],
+			[ 2,  7],
+			[ 3,  8],
+			[ 3,  9],
+			[ 3, 10],
+			[ 4, 11],
+			[ 5, 11],
+			[ 6, 11],
+			[ 7, 12],
+			[ 8, 11],
+			[ 9, 11],
+			[10, 11],
+			[11, 10],
+			[11,  9],
+			[11,  8],
+			[12,  7],
+			[11,  6],
+			[11,  5],
+			[11,  4],
+			[10,  3],
+			[ 9,  3],
+			[ 8,  3]
+		], dtype=np.int32)
+
+	# left side circle
+	gt_poly2 = np.array(
+		[
+			[22,  2],
+			[21,  3],
+			[20,  3],
+			[19,  3],
+			[18,  4],
+			[18,  5],
+			[18,  6],
+			[17,  7],
+			[18,  8],
+			[18,  9],
+			[18, 10],
+			[19, 11],
+			[20, 11],
+			[21, 11],
+			[22, 12],
+			[23, 11],
+			[24, 11],
+			[25, 11],
+			[26, 10],
+			[26,  9],
+			[26,  8],
+			[27,  7],
+			[26,  6],
+			[26,  5],
+			[26,  4],
+			[25,  3],
+			[24,  3],
+			[23,  3]
+		], dtype=np.int32)
+	assert np.allclose(polygons[1], gt_poly1)
+	assert np.allclose(polygons[0], gt_poly2)
+	
+	# Will get exterior rectangle, and then bounding areas on the two holes
+	binary_img = label_map == 0
+	polygons, has_holes = get_polygons_from_binary_img(binary_img)
+	assert len(polygons) == 3
+	assert has_holes == 1
+
+	gt_poly_outer = np.array(
+		[
+			[ 0,  0],
+			[ 0,  1],
+			[ 0,  2],
+			[ 0,  3],
+			[ 0,  4],
+			[ 0,  5],
+			[ 0,  6],
+			[ 0,  7],
+			[ 0,  8],
+			[ 0,  9],
+			[ 0, 10],
+			[ 0, 11],
+			[ 0, 12],
+			[ 0, 13],
+			[ 0, 14],
+			[ 1, 14],
+			[ 2, 14],
+			[ 3, 14],
+			[ 4, 14],
+			[ 5, 14],
+			[ 6, 14],
+			[ 7, 14],
+			[ 8, 14],
+			[ 9, 14],
+			[10, 14],
+			[11, 14],
+			[12, 14],
+			[13, 14],
+			[14, 14],
+			[15, 14],
+			[16, 14],
+			[17, 14],
+			[18, 14],
+			[19, 14],
+			[20, 14],
+			[21, 14],
+			[22, 14],
+			[23, 14],
+			[24, 14],
+			[25, 14],
+			[26, 14],
+			[27, 14],
+			[28, 14],
+			[29, 14],
+			[29, 13],
+			[29, 12],
+			[29, 11],
+			[29, 10],
+			[29,  9],
+			[29,  8],
+			[29,  7],
+			[29,  6],
+			[29,  5],
+			[29,  4],
+			[29,  3],
+			[29,  2],
+			[29,  1],
+			[29,  0],
+			[28,  0],
+			[27,  0],
+			[26,  0],
+			[25,  0],
+			[24,  0],
+			[23,  0],
+			[22,  0],
+			[21,  0],
+			[20,  0],
+			[19,  0],
+			[18,  0],
+			[17,  0],
+			[16,  0],
+			[15,  0],
+			[14,  0],
+			[13,  0],
+			[12,  0],
+			[11,  0],
+			[10,  0],
+			[ 9,  0],
+			[ 8,  0],
+			[ 7,  0],
+			[ 6,  0],
+			[ 5,  0],
+			[ 4,  0],
+			[ 3,  0],
+			[ 2,  0],
+			[ 1,  0]
+		], dtype=np.int32)
+	assert np.allclose(gt_poly_outer, polygons[0])
+
+	# # # --- FOR VISUALIZATION ---
+	# for polygon in polygons:
+	# 	plt.imshow(label_map)
+	# 	plt.scatter(polygon[:,0], polygon[:,1], 10, color='r')
+	# 	plt.show()
+	# 	plt.close('all')
+
+
+def test_get_polygons_from_binary_img3():
+	""" """
+	rgb_img_fpath = f'{TEST_DATA_ROOT}/ADE20K_test_data/ADEChallengeData2016'
+	rgb_img_fpath += '/images/training/ADE_train_00000001.jpg'
+	label_fpath = f'{TEST_DATA_ROOT}/ADE20K_test_data/ADEChallengeData2016'
+	label_fpath += '/annotations/training/ADE_train_00000001.png'
+	label_img = imageio.imread(label_fpath)
+
+	# fountain class
+	class_idx = 105
+	binary_img = label_img == class_idx
+	polygons, has_holes = get_polygons_from_binary_img(binary_img)
+	assert len(polygons) == 1
+	assert np.sum(polygons) == 315790
+	assert np.median(polygons[0][:,0]) == 342.0
+	assert np.median(polygons[0][:,1]) == 430.0
+
+	# # --- FOR VISUALIZATION ---
+	# for polygon in polygons:
+	# 	plt.imshow(label_img)
+	# 	plt.scatter(polygon[:,0], polygon[:,1], 10, color='r')
+	# 	plt.show()
+	# 	plt.close('all')
+
+
+def test_get_polygons_from_binary_img4():
+	"""
+	Test degenerate case (empty mask)
+	"""
+	rgb_img_fpath = f'{TEST_DATA_ROOT}/ADE20K_test_data/ADEChallengeData2016'
+	rgb_img_fpath += '/images/training/ADE_train_00000001.jpg'
+	label_fpath = f'{TEST_DATA_ROOT}/ADE20K_test_data/ADEChallengeData2016'
+	label_fpath += '/annotations/training/ADE_train_00000001.png'
+	label_img = imageio.imread(label_fpath)
+
+	binary_img = np.zeros((480,640), dtype=np.uint8)
+	polygons, has_holes = get_polygons_from_binary_img(binary_img)
+
+	assert len(polygons) == 0
+	assert has_holes == False
+
+	# # --- FOR VISUALIZATION ---
+	# for polygon in polygons:
+	# 	plt.imshow(label_img)
+	# 	plt.scatter(polygon[:,0], polygon[:,1], 10, color='r')
+	# 	plt.show()
+	# 	plt.close('all')
+
+
+def test_polygon_to_mask_vline():
+	"""
+	Many thanks to jmsteitz for noting this case.
+	horizontal line
+	https://github.com/mseg-dataset/mseg-api/issues/7
+	"""
+	h, w = 8, 8
+	polygon = [(2,2),(2,8)]
+	mask = get_mask_from_polygon(polygon, h, w)
+	gt_mask = np.array(
+		[
+			[0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 1, 0, 0, 0, 0, 0],
+			[0, 0, 1, 0, 0, 0, 0, 0],
+			[0, 0, 1, 0, 0, 0, 0, 0],
+			[0, 0, 1, 0, 0, 0, 0, 0],
+			[0, 0, 1, 0, 0, 0, 0, 0],
+			[0, 0, 1, 0, 0, 0, 0, 0]
+		], dtype=np.uint8)
+	assert np.allclose(gt_mask, mask)
+
+
+def test_polygon_to_mask_hline():
+	"""
+	Many thanks to jmsteitz for noting this case.
+	horizontal line
+	https://github.com/mseg-dataset/mseg-api/issues/7
+	"""
+	h, w = 8, 8
+	polygon = [(2,2),(8,2)]
+	mask = get_mask_from_polygon(polygon, h, w)
+	gt_mask = np.array(
+		[
+			[0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 1, 1, 1, 1, 1, 1],
+			[0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0]
+		], dtype=np.uint8)
+	assert np.allclose(gt_mask, mask)
+
+
 if __name__ == '__main__':
 
 	
@@ -1107,10 +1516,16 @@ if __name__ == '__main__':
 	# test_map_semantic_img_uint16_stress_test()
 	# test_form_contained_classes_color_guide_smokescreen()
 	#test_search_jittered_location_in_mask()
-	test_get_most_populous_class1()
-	test_get_most_populous_class2()
+	# test_get_most_populous_class1()
+	# test_get_most_populous_class2()
 
+	# test_get_polygons_from_binary_img1()
+	# test_get_polygons_from_binary_img2()
+	#test_get_polygons_from_binary_img3()
+	#test_get_polygons_from_binary_img4()
 
+	#test_polygon_to_mask_vline()
+	test_polygon_to_mask_hline()
 
 
 
