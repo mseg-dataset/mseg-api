@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/mseg-dataset/mseg-api.svg?branch=master)](https://travis-ci.com/mseg-dataset/mseg-api)
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a>
 
 This is the code for the paper:
 
@@ -10,22 +11,33 @@ This is the code for the paper:
 [James Hays](https://www.cc.gatech.edu/~hays/),
 [Vladlen Koltun](http://vladlen.info/)
 <br>
-Presented at [CVPR 2020](http://cvpr2018.thecvf.com/)
-
-
+Presented at [CVPR 2020](http://cvpr2018.thecvf.com/). Link to [MSeg Video (3min.)](https://youtu.be/PzBK6K5gyyo)
 
 This repo is the first of 4 repos that introduce our work. It provides utilities to download the MSeg dataset (which is nontrivial), and prepare the data on disk in a unified taxonomy.
 
-In a few weeks, we will add the `TaxonomyConverter` class to this repo that supports on-the-fly mapping to a unified taxonomy during training.
+<p align="left">
+  <img src="https://user-images.githubusercontent.com/62491525/83895683-094caa00-a721-11ea-8905-2183df60bc4f.gif" height="250">
+  <img src="https://user-images.githubusercontent.com/62491525/83893966-aeb24e80-a71e-11ea-84cc-80e591f91ec0.gif" height="250">
+</p>
+<p align="left">
+  <img src="https://user-images.githubusercontent.com/62491525/83895915-57fa4400-a721-11ea-8fa9-3c2ff0361080.gif" height="250">
+  <img src="https://user-images.githubusercontent.com/62491525/83895972-73654f00-a721-11ea-8438-7bd43b695355.gif" height="250"> 
+</p>
 
-Three additional repos will be introduced in April and May 2020:
-- ` mseg_semantic`: provides HRNet-W48 Training (sufficient to train a winning entry on the [WildDash](https://wilddash.cc/benchmark/summary_tbl?hc=semantic_rob) benchmark)
-- `mseg_panoptic`: provides Panoptic-FPN and Mask-RCNN training, based on Detectron2
-- `mseg_mturk`: provides utilities to perform large-scale Mechanical Turk re-labeling
+<p align="left">
+  <img src="https://user-images.githubusercontent.com/62491525/83893958-abb75e00-a71e-11ea-978c-ab4080b4e718.gif" height="250">
+  <img src="https://user-images.githubusercontent.com/62491525/83895490-c094f100-a720-11ea-9f85-cf4c6b030e73.gif" height="250">
+</p>
 
-<div align='center'>
-  <img src='https://user-images.githubusercontent.com/16724970/80264666-d663c080-8662-11ea-9805-366c246befed.jpg' height="350px">
-</div>
+<p align="left">
+  <img src="https://user-images.githubusercontent.com/62491525/83895811-35682b00-a721-11ea-9641-38e3b2c1ad0e.gif" height="250">
+  <img src="https://user-images.githubusercontent.com/62491525/83896026-8710b580-a721-11ea-86d2-a0fff9c6e26e.gif" height="250">
+</p>
+
+Three additional repos are also provided:
+- [`mseg-semantic`](https://github.com/mseg-dataset/mseg-semantic): provides HRNet-W48 Training (sufficient to train a winning entry on the [WildDash](https://wilddash.cc/benchmark/summary_tbl?hc=semantic_rob) benchmark)
+- `mseg-panoptic`: provides Panoptic-FPN and Mask-RCNN training, based on Detectron2 (will be introduced in June 2020)
+- `mseg-mturk`: provides utilities to perform large-scale Mechanical Turk re-labeling (will be introduced in June 2020)
 
 ### Install the MSeg module:
 
@@ -54,3 +66,17 @@ booktitle = {Computer Vision and Pattern Recognition (CVPR)},
 year = {2020}
 }
 ```
+
+## Repo Structure
+- `download_scripts`: code and instructions to download the entire MSeg dataset
+- `mseg`: Python module, including
+    - `dataset_apis`
+    - `dataset_lists`: ordered classnames for each dataset, and corresponding relative rgb/label file paths
+    - `label_preparation`: code for remapping to `semseg` format, and for relabeling masks in place
+    - `relabeled_data`: MSeg data, annotated by Mechanical Turk workers, and verified by co-authors
+    - `taxonomy`: on-the-fly mapping to a unified taxonomy during training, and linear mapping to evaluation taxonomies
+    - `utils`: library functions for mask and image manipulation, filesystem, tsv/csv reading, and multiprocessing
+- `tests`: unit tests on all code
+
+## Data License
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
