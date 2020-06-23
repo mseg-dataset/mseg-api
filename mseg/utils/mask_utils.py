@@ -87,22 +87,33 @@ def search_jittered_location_in_mask(
 
 
 def save_classnames_in_image_sufficientpx(
-	rgb_img, 
-	label_img, 
-	id_to_class_name_map, 
+	rgb_img: np.ndarray, 
+	label_img: np.ndarray, 
+	id_to_class_name_map: Mapping[int,str], 
 	font_color = (0,0,0),
 	save_to_disk: bool = False,
 	save_fpath: str = '',
 	min_conncomp_px: int = 4000,
-	font_scale: int = 1):
+	font_scale: int = 1
+	):
 	"""
+		Write a classname over each connected component of a label
+		map as long as the connected component has a sufficiently
+		large number of pixels (specified as argument).
+
 		Args:
-		-	rgb_img
-		-	label_img
-		-	id_to_class_name_map: Mapping[int,str]
+		-	rgb_img: Numpy array (H,W,3) representing RGB image
+		-	label_img: Numpy array (H,W) representing label map 
+		-	id_to_class_name_map: mapping from class ID to classname
+		-	font_color: 3-tuple representing RGB font color
+		-	save_to_disk: whether to save image to disk
+		-	save_fpath: absolute file path
+		-	min_conncomp_px: minimum number of pixels to justify
+				placing a text label over connected component
+		-	font_scale: scale of font text
 
 		Returns:
-		-	
+		-	rgb_img: Numpy array (H,W,3) with embedded classanmes
 	"""
 	H, W, C = rgb_img.shape
 	class_to_conncomps_dict = scipy_conn_comp(label_img)
@@ -932,11 +943,14 @@ def get_np_mode(x: np.ndarray) -> int:
 	return np.argmax(counts)
 
 
-def get_mask_from_polygon(polygon, img_h, img_w):
+def get_mask_from_polygon(polygon, img_h: int, img_w: int):
 	"""
 	60x faster than the Matplotlib rasterizer... well done pillow!
-
-	polygon = [(x1,y1),(x2,y2),...] or [x1,y1,x2,y2,...]
+	
+		Args:
+		-	polygon: iterable e.g. [(x1,y1),(x2,y2),...]
+		-	img_h: integer representing image height
+		-	img_w: integer representing image width
 
 		PIL.Image.new(mode, size, color=0)
 		Creates a new image with the given mode and size.
@@ -965,7 +979,12 @@ def get_mask_from_polygon(polygon, img_h, img_w):
 
 	# include outline
 	# a drawer to draw into the image
-	ImageDraw.Draw(mask_img).polygon(polygon, outline=1, fill=1) 
+	if len(set([y for (x,y) in polygon])) == 1:
+		# draw only a line. because of known bug in .polygon() method
+		# https://github.com/python-pillow/Pillow/issues/4674
+		ImageDraw.Draw(mask_img).line(polygon, fill=1)
+	else:
+		ImageDraw.Draw(mask_img).polygon(polygon, outline=1, fill=1) 
 	mask = np.array(mask_img)
 	return mask
 
@@ -986,14 +1005,45 @@ def get_present_classes_in_img(
 	return present_classnames
 
 
-def get_most_populous_class(segment_mask: np.array, label_map: np.ndarray):
+def get_most_populous_class(segment_mask: np.array, label_map: np.ndarray) -> int:
 	"""
+		Args:
+		-	segment_mask
+		-	label_map
+
+		Returns:
+		-	class_mode_idx: integer representing most populous class index
 	"""
 	class_indices = label_map[segment_mask.nonzero()]
 	class_mode_idx = get_np_mode(class_indices)
 	return class_mode_idx
 
 
+def get_polygons_from_binary_img(
+	binary_img: np.ndarray
+	) -> Tuple[List[np.ndarray], Optional[bool]]:
+	"""
+	cv2.RETR_CCOMP flag retrieves all the contours and arranges them to a 2-level
+	hierarchy. External contours (boundary) of the object are placed in hierarchy-1.
+	Internal contours (holes) are placed in hierarchy-2.
+	cv2.CHAIN_APPROX_NONE flag gets vertices of polygons from contours.
 
+		Args:
+		-	binary_img: Numpy array with all 0s or 1s
+
+		Returns:
+		-	res: list of polygons, each (N,2) np.ndarray
+	"""
+	assert all( [val in [0,1] for val in np.unique(binary_img)] ) 
+	binary_img = binary_img.astype("uint8")
+	res, hierarchy = cv2.findContours(binary_img, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_NONE)
+
+	if hierarchy is None:  # empty mask
+		return [], False
+	has_holes = (hierarchy.reshape(-1, 4)[:, 3] >= 0).sum() > 0
+
+	res = [x.squeeze() for x in res]
+	res = [x for x in res if x.size >= 6] # should have at least 3 vertices to be valid
+	return res, has_holes
 
 
