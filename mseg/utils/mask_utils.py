@@ -938,7 +938,7 @@ def get_np_mode(x: np.ndarray) -> int:
 		Returns:
 		-	mode of array values (integer)
 	"""
-	assert x.dtype in [np.uint8, np.int16, np.int32, np.int64]
+	assert x.dtype in [np.uint8, np.uint16, np.int16, np.int32, np.int64]
 	counts = np.bincount(x)
 	return np.argmax(counts)
 
