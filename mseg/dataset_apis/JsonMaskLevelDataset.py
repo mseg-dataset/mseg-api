@@ -14,6 +14,12 @@ from mseg.utils.mask_utils import (
 	save_binary_mask_double
 )
 
+"""
+Note: this dataset API is not to be used at training or inference time.
+It is designed purely for generating the re-labeled masks of the 
+MSeg dataset (found in ground truth label maps) on disk, prior to 
+training/inference.
+"""
 
 class JsonMaskDataset:
 	"""
