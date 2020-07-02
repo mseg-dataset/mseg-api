@@ -20,7 +20,12 @@ from mseg.utils.mask_utils import (
 	get_present_classes_in_img
 )
 
-
+"""
+Note: We do not use this dataset API at training or inference time.
+It is designed purely for generating the re-labeled masks of the 
+MSeg dataset (found in ground truth label maps) on disk, prior to 
+training/inference.
+"""
 
 class SunrgbdImageLevelDataset:
 
