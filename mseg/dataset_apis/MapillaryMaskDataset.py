@@ -23,6 +23,13 @@ from mseg.utils.multiprocessing_utils import send_list_to_workers
 
 from typing import Any, List, Mapping
 
+"""
+Note: this dataset API is not to be used at training or inference time.
+It is designed purely for generating the re-labeled masks of the 
+MSeg dataset (found in ground truth label maps) on disk, prior to 
+training/inference.
+"""
+
 class MapillaryMaskDataset:
 
 	def __init__(self, dataroot: str):
