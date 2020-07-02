@@ -7,6 +7,11 @@ from mseg.utils.names_utils import get_dataloader_id_to_classname_map
 
 """
 Interface for semantic labels of COCO Panoptic dataset
+
+Note: this dataset API is not to be used at training or inference time.
+It is designed purely for generating the re-labeled masks of the 
+MSeg dataset (found in ground truth label maps) on disk, prior to 
+training/inference.
 """
 
 class COCOSemanticAPI:
