@@ -29,7 +29,7 @@ ADE20K data is distributed in two different forms -- one for the
 Scene Parsing Challenge, and another with the raw instance data.
 We require both forms (see download_scripts/README.md).
 
-Note: this dataset API is not to be used at training or inference time.
+Note: We do not use this dataset API at training or inference time.
 It is designed purely for generating the re-labeled masks of the 
 MSeg dataset (found in ground truth label maps) on disk, prior to 
 training/inference.
