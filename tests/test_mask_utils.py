@@ -1489,26 +1489,28 @@ def test_polygon_to_mask_hline():
 	assert np.allclose(gt_mask, mask)
 
 def test_write_six_img_grid_w_embedded_names() -> None:
-    """ """
-    id_to_class_name_map = {0: 'wall', 1: 'tv_monitor', 2: 'book'}
+	""" """
+	id_to_class_name_map = {0: 'wall', 1: 'tv_monitor', 2: 'book'}
 
-    rgb_fpath = '/Users/johnlamb/Desktop/tv_image.jpg'
-    rgb_img = cv2.imread(rgb_fpath)
-    h,w,_ = rgb_img.shape # 260 x 454 x 3
-    label_img = np.zeros((h,w), dtype=np.uint8)
-    label_img[50:210,80:420] = 1
+	rgb_fpath = f'{TEST_DATA_ROOT}/tv_image.jpg'
+	rgb_img = cv2.imread(rgb_fpath)
+	h,w,_ = rgb_img.shape # 260 x 454 x 3
+	label_img = np.zeros((h,w), dtype=np.uint8)
+	label_img[50:210,80:420] = 1
 
-    pred = np.zeros((h,w), dtype=np.uint8)
-    pred[50:210,80:420] = 2
-    
-    save_fpath = '/Users/johnlamb/Desktop/dummy_6img_grid.jpg'
-    write_six_img_grid_w_embedded_names(
-        rgb_img,
-        pred,
-        label_img,
-        id_to_class_name_map,
-        save_fpath
-    )
+	pred = np.zeros((h,w), dtype=np.uint8)
+	pred[50:210,80:420] = 2
+
+	save_fpath = f'{TEST_DATA_ROOT}/dummy_6img_grid.jpg'
+	write_six_img_grid_w_embedded_names(
+		rgb_img,
+		pred,
+		label_img,
+		id_to_class_name_map,
+		save_fpath
+	)
+	assert Path(save_fpath).exists()
+	os.remove(save_fpath)
 
 if __name__ == '__main__':
 
