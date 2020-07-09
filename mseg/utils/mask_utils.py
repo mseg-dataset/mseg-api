@@ -220,6 +220,57 @@ def form_mask_triple_embedded_classnames(
 	return form_hstacked_imgs([rgb_img, rgb2, rgb3], save_fpath, save_to_disk)
 
 
+def write_six_img_grid_w_embedded_names(
+    rgb_img: np.ndarray,
+    pred: np.ndarray,
+    label_img: np.ndarray,
+    id_to_class_name_map: Mapping[int,str],
+    save_fpath: str
+) -> None:
+    """
+    Create a 6-image tile grid with the following structure:
+    ------------------------------------------------------------
+    RGB Image | Blended RGB+GT Label Map   | GT Label Map
+    ------------------------------------------------------------
+    RGB Image | Blended RGB+Pred Label Map | Predicted Label Map
+    ------------------------------------------------------------
+    We embed classnames directly into the predicted and ground
+    truth label maps, instead of using a colorbar.
+
+        Args:
+        -   rgb_img: 
+        -   pred: predicted label map
+        -   label_img
+        id_to_class_name_map
+        -   save_fpath
+
+        Returns:
+        -   None
+    """
+    assert label_img.ndim == 2
+    assert pred.ndim == 2
+    assert rgb_img.ndim == 3
+    label_hgrid = form_mask_triple_embedded_classnames(
+        rgb_img,
+        label_img,
+        id_to_class_name_map,
+        save_fpath='dummy.jpg',
+        save_to_disk=False
+    )
+    pred_hgrid = form_mask_triple_embedded_classnames(
+        rgb_img,
+        pred,
+        id_to_class_name_map,
+        save_fpath='dummy.jpg',
+        save_to_disk=False
+    )
+    vstack_img = form_vstacked_imgs(
+        img_list=[label_hgrid,pred_hgrid],
+        vstack_save_fpath=save_fpath,
+        save_to_disk=True
+    )
+
+
 def map_semantic_img_fast_pytorch(
 	semantic_img: np.ndarray,
 	label_mapping_arr: np.ndarray
