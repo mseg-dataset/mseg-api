@@ -194,14 +194,16 @@ def save_classnames_in_image_maxcardinality(
 
 def form_mask_triple_embedded_classnames(
 	rgb_img: np.ndarray, 
-	 label_img: np.ndarray, 
-	 id_to_class_name_map,
-	 save_fpath: str,
-	 save_to_disk: bool = False) -> None:
+	label_img: np.ndarray, 
+	id_to_class_name_map: Mapping[int,str],
+	save_fpath: str,
+	save_to_disk: bool = False
+) -> np.ndarray:
 	"""
 		Args:
 		-	rgb_img: 
 		-	label_img: 
+		-	id_to_class_name_map
 		-	save_fpath
 		-	save_to_disk
 
@@ -306,7 +308,7 @@ def form_label_mapping_array(label_mapping_dict: Mapping[int,int]) -> np.ndarray
 def rgb_img_to_obj_cls_img(
 	label_img_rgb: np.ndarray,
 	dataset_ordered_colors: np.ndarray
-	) -> np.ndarray:
+) -> np.ndarray:
 	""" Any unmapped pixels (given no corresponding RGB values) will default to zero'th-class.
 
 		Args:
@@ -324,7 +326,7 @@ def rgb_img_to_obj_cls_img(
 	return object_cls_img
 
 
-def save_mask_triple_isolated_mask(rgb_img, label_img, id_to_class_name_map, class_name, save_fpath):
+def save_mask_triple_isolated_mask(rgb_img, label_img, id_to_class_name_map, class_name, save_fpath) -> None:
 	"""
 		Args:
 		-	rgb_img:
@@ -352,10 +354,12 @@ def save_mask_triple_isolated_mask(rgb_img, label_img, id_to_class_name_map, cla
 	cv2.imwrite(save_fpath, concat_img[:,:,::-1])
 
 
-def save_img_with_blendedmaskimg(   rgb_img: np.ndarray, 
-									label_img: np.ndarray, 
-									save_fpath: str,
-									save_to_disk: bool = False) -> None:
+def save_img_with_blendedmaskimg(
+	rgb_img: np.ndarray, 
+	label_img: np.ndarray, 
+	save_fpath: str,
+	save_to_disk: bool = False
+) -> None:
 	"""
 		Args:
 		-	rgb_img: 
@@ -376,7 +380,7 @@ def save_binary_mask_triple(
 	label_img: np.ndarray, 
 	save_fpath: str,
 	save_to_disk: bool = False
-	) -> None:
+) -> np.ndarray:
 	""" Currently mask img background is light-blue. Instead, could set it 
 		to white. np.array([255,255,255])
 
@@ -401,13 +405,12 @@ def save_binary_mask_triple(
 	return form_hstacked_imgs([rgb_img, rgb_with_mask, mask_img], save_fpath, save_to_disk)
 
 
-
-
 def save_binary_mask_double(
 	rgb_img: np.ndarray,
 	label_img: np.ndarray,
 	save_fpath: str,
-	save_to_disk: bool = False) -> None:
+	save_to_disk: bool = False
+) -> np.ndarray:
 	""" Currently blended mask img background is lime green. 
 
 		Args:
@@ -429,7 +432,7 @@ def save_binary_mask_double(
 def highlight_binary_mask(
 	label_mask: np.ndarray, 
 	img_rgb: Optional[np.ndarray] = None
-	) -> np.ndarray:
+) -> np.ndarray:
 	"""
 	Given a grayscale image where intensities denote instance IDs (same intensity denotes
 	belonging to same instance), convert this to an RGB image where all pixels corresponding
@@ -463,11 +466,13 @@ def highlight_binary_mask(
 
 
 
-def save_pred_vs_label_7tuple(img_rgb: np.ndarray,
-							pred_img: np.ndarray, 
-							label_img: np.ndarray, 
-							id_to_class_name_map: Mapping[int,str], 
-							save_fpath: str) -> None:
+def save_pred_vs_label_7tuple(
+	img_rgb: np.ndarray,
+	pred_img: np.ndarray, 
+	label_img: np.ndarray, 
+	id_to_class_name_map: Mapping[int,str], 
+	save_fpath: str
+) -> None:
 	""" 7-tuple consists of 
 			(1-3) rgb mask 3-sequence for label, 
 			(4-6) rgb mask 3-sequence for predictions,
@@ -525,9 +530,10 @@ def save_pred_vs_label_7tuple(img_rgb: np.ndarray,
 
 
 def save_pred_vs_label_4tuple(img_rgb: np.ndarray,
-							label_img: np.ndarray, 
-							id_to_class_name_map: Mapping[int,str], 
-							save_fpath: str) -> None:
+	label_img: np.ndarray, 
+	id_to_class_name_map: Mapping[int,str], 
+	save_fpath: str
+) -> None:
 	""" 7-tuple consists of 
 			(1-3) rgb mask 3-sequence for label or predictions
 			(4) color palette 
@@ -606,12 +612,13 @@ def vstack_img_with_palette(top_img: np.ndarray, palette_img: np.ndarray) -> np.
 
 
 def save_mask_triple_with_color_guide(
-		img_rgb: np.ndarray, 
-		label_img: np.ndarray, 
-		id_to_class_name_map: Mapping[int,str], 
-		fname_stem: str, 
-		save_dir: str, 
-		save_fpath: str):
+	img_rgb: np.ndarray, 
+	label_img: np.ndarray, 
+	id_to_class_name_map: Mapping[int,str], 
+	fname_stem: str, 
+	save_dir: str, 
+	save_fpath: str
+) -> None:
 	"""
 		Args:
 		-	img_rgb: Array representing 3-channel image in RGB order
@@ -643,7 +650,7 @@ def save_mask_triple_with_color_guide(
 
 
 
-def hstack_img_with_palette(left_img: np.array, palette_img: np.array):
+def hstack_img_with_palette(left_img: np.array, palette_img: np.array) -> np.ndarray:
 	"""
 	Horizontally stack a left image with a palette image on the right.
 	"""
@@ -673,7 +680,8 @@ def form_contained_classes_color_guide(
 	fname_stem: str, 
 	save_dir: str,
 	save_to_disk: bool = True,
-	max_colors_per_col: int = 10) -> None:
+	max_colors_per_col: int = 10
+) -> np.ndarray:
 	"""
 	Write out an image explaining the classes inside an image.
 
@@ -715,10 +723,12 @@ def form_contained_classes_color_guide(
 	return palette_img
 
 
-def form_mask_triple(rgb_img: np.ndarray, 
-					 label_img: np.ndarray, 
-					 save_fpath: str,
-					 save_to_disk: bool = False) -> None:
+def form_mask_triple(
+	rgb_img: np.ndarray, 
+	label_img: np.ndarray, 
+	save_fpath: str,
+	save_to_disk: bool = False
+) -> np.ndarray:
 	"""
 		Args:
 		-	rgb_img: 
@@ -741,7 +751,7 @@ def form_mask_triple_vertical(
 	label_img: np.ndarray, 
 	save_fpath: str,
 	save_to_disk: bool = False
-	) -> None:
+	) -> np.ndarray:
 	"""
 		Args:
 		-	rgb_img: 
