@@ -11,7 +11,7 @@ This is the code for the paper:
 [James Hays](https://www.cc.gatech.edu/~hays/),
 [Vladlen Koltun](http://vladlen.info/)
 <br>
-Presented at [CVPR 2020](http://cvpr2018.thecvf.com/). Link to [MSeg Video (3min.)](https://youtu.be/PzBK6K5gyyo)
+Presented at [CVPR 2020](http://cvpr2020.thecvf.com/). Link to [MSeg Video (3min.)](https://youtu.be/PzBK6K5gyyo)
 
 This repo is the first of 4 repos that introduce our work. It provides utilities to download the MSeg dataset (which is nontrivial), and prepare the data on disk in a unified taxonomy.
 
