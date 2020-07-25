@@ -83,6 +83,7 @@ for name, info in infos.items():
 
 	info.trainlist = f'{ROOT}/dataset_lists/{folder_name}/list/train.txt'
 	info.vallist = f'{ROOT}/dataset_lists/{folder_name}/list/val.txt'
+	info.testlist = f'{ROOT}/dataset_lists/{folder_name}/list/test.txt'
 	info.names_path = f'{ROOT}/dataset_lists/{folder_name}/{info.name}_names.txt'
 	info.vallist_small = f'{ROOT}/dataset_lists/{folder_name}/list/val_small.txt'
 	info.shortname = info.name
