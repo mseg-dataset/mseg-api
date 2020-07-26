@@ -19,7 +19,18 @@ if MSEG_DST_DIR == '':
 
 ROOT = Path(__file__).resolve().parent.parent  # ../..
 
-fields = ('name', 'dataroot', 'trainlist', 'vallist', 'vallist_small', 'names_path', 'shortname', 'num_classes', 'trainlen')
+fields = (
+	'name',
+	'dataroot',
+	'trainlist',
+	'vallist',
+	'vallist_small',
+	'testlist',
+	'names_path',
+	'shortname',
+	'num_classes',
+	'trainlen'
+	)
 # recordclass is the mutable analog of collections.namedtuple
 info = recordclass('info', fields, defaults=(None,) * len(fields))
 
