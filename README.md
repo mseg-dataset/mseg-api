@@ -60,7 +60,7 @@ We provide comprehensive class definitions and examples [here](https://drive.goo
 If you find this code useful for your research, please cite:
 ```
 @InProceedings{MSeg_2020_CVPR,
-author = {Lambert, John and Zhuang, Liu and Sener, Ozan and Hays, James and Koltun, Vladlen},
+author = {Lambert, John and Liu, Zhuang and Sener, Ozan and Hays, James and Koltun, Vladlen},
 title = {{MSeg}: A Composite Dataset for Multi-domain Semantic Segmentation},
 booktitle = {Computer Vision and Pattern Recognition (CVPR)},
 year = {2020}
