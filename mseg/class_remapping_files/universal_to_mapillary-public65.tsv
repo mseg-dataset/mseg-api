@@ -1,0 +1,196 @@
+universal	mapillary-public65
+backpack	Bird
+umbrella	Bird
+bag	Bird
+tie	Bird
+suitcase	Bird
+case	Bird
+bird	Bird
+cat	Ground Animal
+dog	Ground Animal
+horse	Ground Animal
+sheep	Ground Animal
+cow	Ground Animal
+elephant	Ground Animal
+bear	Ground Animal
+zebra	Ground Animal
+giraffe	Ground Animal
+animal_other	Ground Animal
+microwave	Bird
+radiator	Bird
+oven	Bird
+toaster	Bird
+storage_tank	Bird
+conveyor_belt	Bird
+sink	Bird
+refrigerator	Bird
+washer_dryer	Bird
+fan	Bird
+dishwasher	Bird
+toilet	Bird
+bathtub	Bird
+shower	Bird
+tunnel	Tunnel
+bridge	Bridge
+pier_wharf	Bridge
+tent	Bird
+building	Building
+ceiling	Bird
+laptop	Bird
+keyboard	Bird
+mouse	Bird
+remote	Bird
+cell phone	Bird
+television	Bird
+floor	Bird
+stage	Bird
+banana	Bird
+apple	Bird
+sandwich	Bird
+orange	Bird
+broccoli	Bird
+carrot	Bird
+hot_dog	Bird
+pizza	Bird
+donut	Bird
+cake	Bird
+fruit_other	Bird
+food_other	Bird
+chair_other	Bird
+armchair	Bird
+swivel_chair	Bird
+stool	Bird
+seat	Bird
+couch	Bird
+trash_can	Trash Can
+potted_plant	Bird
+nightstand	Bird
+bed	Bird
+table	Bird
+pool_table	Bird
+barrel	Bird
+desk	Bird
+ottoman	Bird
+wardrobe	Bird
+crib	Bird
+basket	Bird
+chest_of_drawers	Bird
+bookshelf	Bird
+counter_other	Bird
+bathroom_counter	Bird
+kitchen_island	Bird
+door	Bird
+light_other	Bird
+lamp	Bird
+sconce	Bird
+chandelier	Bird
+mirror	Bird
+whiteboard	Bird
+shelf	Bird
+stairs	Bird
+escalator	Bird
+cabinet	Bird
+fireplace	Bird
+stove	Bird
+arcade_machine	Bird
+gravel	Terrain
+platform	Sidewalk
+playingfield	Terrain
+railroad	Rail Track
+road	Road
+snow	Snow
+sidewalk_pavement	Sidewalk
+runway	Road
+terrain	Terrain
+book	Bird
+box	Bird
+clock	Bird
+vase	Bird
+scissors	Bird
+plaything_other	Bird
+teddy_bear	Bird
+hair_dryer	Bird
+toothbrush	Bird
+painting	Bird
+poster	Bird
+bulletin_board	Bird
+bottle	Bird
+cup	Bird
+wine_glass	Bird
+knife	Bird
+fork	Bird
+spoon	Bird
+bowl	Bird
+tray	Bird
+range_hood	Bird
+plate	Bird
+person	Person
+rider_other	Other Rider
+bicyclist	Bicyclist
+motorcyclist	Motorcyclist
+paper	Bird
+streetlight	Street Light
+road_barrier	Barrier
+mailbox	Mailbox
+cctv_camera	CCTV Camera
+junction_box	Junction Box
+traffic_sign	Traffic Sign (Front)
+traffic_light	Traffic Light
+fire_hydrant	Fire Hydrant
+parking_meter	Bird
+bench	Bench
+bike_rack	Bike Rack
+billboard	Billboard
+sky	Sky
+pole	Pole
+fence	Fence
+railing_banister	Bird
+guard_rail	Guard Rail
+mountain_hill	Mountain
+rock	Bird
+frisbee	Bird
+skis	Bird
+snowboard	Bird
+sports_ball	Bird
+kite	Bird
+baseball_bat	Bird
+baseball_glove	Bird
+skateboard	Bird
+surfboard	Bird
+tennis_racket	Bird
+net	Bird
+base	Bird
+sculpture	Bird
+column	Building
+fountain	Water
+awning	Building
+apparel	Bird
+banner	Banner
+flag	Banner
+blanket	Bird
+curtain_other	Bird
+shower_curtain	Bird
+pillow	Bird
+towel	Bird
+rug_floormat	Bird
+vegetation	Vegetation
+bicycle	Bicycle
+car	Car
+autorickshaw	Other Vehicle
+motorcycle	Motorcycle
+airplane	Bird
+bus	Bus
+train	On Rails
+truck	Truck
+trailer	Trailer
+boat_ship	Boat
+slow_wheeled_object	Wheeled Slow
+river_lake	Water
+sea	Water
+water_other	Water
+swimming_pool	Water
+waterfall	Water
+wall	Wall
+window	Building
+window_blind	Building
+unlabeled	Bird
