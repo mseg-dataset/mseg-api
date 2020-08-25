@@ -36,8 +36,8 @@ This repo is the first of 4 repos that introduce our work. It provides utilities
 
 Three additional repos are also provided:
 - [`mseg-semantic`](https://github.com/mseg-dataset/mseg-semantic): provides HRNet-W48 Training (sufficient to train a winning entry on the [WildDash](https://wilddash.cc/benchmark/summary_tbl?hc=semantic_rob) benchmark)
-- `mseg-panoptic`: provides Panoptic-FPN and Mask-RCNN training, based on Detectron2 (will be introduced in July 2020)
-- `mseg-mturk`: provides utilities to perform large-scale Mechanical Turk re-labeling (will be introduced in July 2020)
+- `mseg-panoptic`: provides Panoptic-FPN and Mask-RCNN training, based on Detectron2 (will be introduced in August 2020)
+- [`mseg-mturk`](https://github.com/mseg-dataset/mseg-mturk): utilities to perform large-scale Mechanical Turk re-labeling
 
 ### Install the MSeg module:
 
