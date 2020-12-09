@@ -36,8 +36,8 @@ This repo is the first of 4 repos that introduce our work. It provides utilities
 
 Three additional repos are also provided:
 - [`mseg-semantic`](https://github.com/mseg-dataset/mseg-semantic): provides HRNet-W48 Training (sufficient to train a winning entry on the [WildDash](https://wilddash.cc/benchmark/summary_tbl?hc=semantic_rob) benchmark)
-- `mseg-panoptic`: provides Panoptic-FPN and Mask-RCNN training, based on Detectron2 (will be introduced in July 2020)
-- `mseg-mturk`: provides utilities to perform large-scale Mechanical Turk re-labeling (will be introduced in July 2020)
+- `mseg-panoptic`: provides Panoptic-FPN and Mask-RCNN training, based on Detectron2 (will be introduced in August 2020)
+- [`mseg-mturk`](https://github.com/mseg-dataset/mseg-mturk): utilities to perform large-scale Mechanical Turk re-labeling
 
 ### Install the MSeg module:
 
@@ -60,7 +60,7 @@ We provide comprehensive class definitions and examples [here](https://drive.goo
 If you find this code useful for your research, please cite:
 ```
 @InProceedings{MSeg_2020_CVPR,
-author = {Lambert, John and Zhuang, Liu and Sener, Ozan and Hays, James and Koltun, Vladlen},
+author = {Lambert, John and Liu, Zhuang and Sener, Ozan and Hays, James and Koltun, Vladlen},
 title = {{MSeg}: A Composite Dataset for Multi-domain Semantic Segmentation},
 booktitle = {Computer Vision and Pattern Recognition (CVPR)},
 year = {2020}
@@ -82,6 +82,10 @@ year = {2020}
 <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
 
 ## Frequently Asked Questions (FAQ)
+**Q**: Do the weights include the model structure or it's just the weights? If the latter, which model do these weights refer to? Under the `models` directory, there are several model implementations.
+
+**A**: The pre-trained models follow the HRNet-W48 architecture. The model structure is defined in the code [here](https://github.com/mseg-dataset/mseg-semantic/blob/master/mseg_semantic/model/seg_hrnet.py#L274). The saved weights provide a dictionary between keys (unique IDs for each weight identifying the corresponding layer/layer type) and values (the floating point weights).
+
 **Q**: How is testing performed on the test datasets? In the paper you talk about "zero-shot transfer" -- how this is performed? Are the test dataset labels also mapped or included in the unified taxonomy? If you remapped the test dataset labels to the unified taxonomy, are the reported results the performances on the unified label space, or on each test dataset's original label space? How did you you obtain results on the WildDash dataset - which is evaluated by the server - when the MSeg taxonomy may be different from the WildDash dataset.
 
 **A**: Regarding "zero-shot transfer", please refer to section "Using the MSeg taxonomy on a held-out dataset" on page 6 of [our paper](http://vladlen.info/papers/MSeg.pdf). This section describes how we hand-specify mappings from the unified taxonomy to each test dataset's taxonomy as a linear mapping (implemented [here](https://github.com/mseg-dataset/mseg-api/blob/master/mseg/taxonomy/taxonomy_converter.py#L220) in mseg-api). All results are in the test dataset's original label space (i.e. if WildDash expects class indices in the range [0,18] per our [names_list](https://github.com/mseg-dataset/mseg-api/blob/master/mseg/dataset_lists/wilddash-19/wilddash-19_names.txt), our testing script uses the `TaxonomyConverter` [`transform_predictions_test()`](https://github.com/mseg-dataset/mseg-api/blob/master/mseg/taxonomy/taxonomy_converter.py#L267) functionality  to produce indices in that range, remapping probabilities.
