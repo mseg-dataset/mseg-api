@@ -7,3 +7,6 @@ temp_files/*
 *.DS_Store
 .DS_Store
 *set_credentials.sh
+
+# SLURM log files
+*.log
