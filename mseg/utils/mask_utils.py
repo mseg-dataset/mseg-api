@@ -31,12 +31,13 @@ LIME_GREEN = np.array([57,255,20])
 
 
 def get_mean_mask_location(mask):
-	"""
-		Args:
-		-	mask
+	""" Given a binary mask, find the mean location for entries equal to 1.
+	
+	Args:
+	    mask
 
-		Returns:
-		-	coordinate of mean pixel location as (x,y)
+	Returns:
+	    coordinate of mean pixel location as (x,y)
 	"""
 	coords = np.vstack(np.where(mask == 1)).T
 	return np.mean(coords, axis=0).astype(np.int32)
@@ -155,15 +156,16 @@ def save_classnames_in_image_maxcardinality(
 	id_to_class_name_map, 
 	font_color = (0,0,0),
 	save_to_disk: bool = False,
-	save_fpath: str = ''):
+	save_fpath: str = ''
+) -> np.ndarray:
 	"""
-		Args:
-		-	rgb_img
-		-	label_img
-		-	id_to_class_name_map: Mapping[int,str]
+	Args:
+	    rgb_img
+	    label_img
+	    id_to_class_name_map: Mapping[int,str]
 
-		Returns:
-		-	
+	Returns:
+	    rgb_img
 	"""
 	H, W, C = rgb_img.shape
 	class_to_conncomps_dict = scipy_conn_comp(label_img)
@@ -324,13 +326,13 @@ def map_semantic_img_fast(
 
 def form_label_mapping_array(label_mapping_dict: Mapping[int,int]) -> np.ndarray:
 	"""
-		Args:
-		-	label_mapping_dict: dictionary from int to int, from original class ID to a new class ID.
-				This is NOT the id_to_class_name dictionary.
-		-	dtype: data type, either np.uint8 or np.uint16 (default)
+	Args:
+	-	label_mapping_dict: dictionary from int to int, from original class ID to a new class ID.
+			This is NOT the id_to_class_name dictionary.
+	-	dtype: data type, either np.uint8 or np.uint16 (default)
 
-		Returns:
-		-	label_mapping_arr
+	Returns:
+	-	label_mapping_arr
 	"""
 	v_max = max(list(label_mapping_dict.values()))
 	keys_max = max(list(label_mapping_dict.keys()))
@@ -360,12 +362,12 @@ def rgb_img_to_obj_cls_img(
 ) -> np.ndarray:
 	""" Any unmapped pixels (given no corresponding RGB values) will default to zero'th-class.
 
-		Args:
-		-	label_img_rgb: Numpy array of shape (M,N,3)
-		-	dataset_ordered_colors: Numpy array of shape (K,3) with RGB values for K classes
+	Args:
+	-	label_img_rgb: Numpy array of shape (M,N,3)
+	-	dataset_ordered_colors: Numpy array of shape (K,3) with RGB values for K classes
 
-		Returns:
-		-	object_cls_img: grayscale image
+	Returns:
+	-	object_cls_img: grayscale image
 	"""
 	object_cls_img = np.zeros((label_img_rgb.shape[0], label_img_rgb.shape[1]), dtype=np.uint8)
 	for i, color in enumerate(dataset_ordered_colors):
@@ -375,17 +377,15 @@ def rgb_img_to_obj_cls_img(
 	return object_cls_img
 
 
-def save_mask_triple_isolated_mask(rgb_img, label_img, id_to_class_name_map, class_name, save_fpath) -> None:
-	"""
-		Args:
-		-	rgb_img:
-		-	label_img:
-		-	id_to_class_name_map:
-		-	class_name:
-		-	save_fpath:
+def save_mask_triple_isolated_mask(rgb_img: np.ndarray, label_img: np.ndarray, id_to_class_name_map, class_name: str, save_fpath: str) -> None:
+	""" Save a triplet of images to disk (RGB image, label map, and a blended version of the two).
 
-		Returns:
-		-	None
+	Args:
+	    rgb_img:
+	    label_img:
+	    id_to_class_name_map:
+	    class_name:
+	    save_fpath:
 	"""
 	for id, proposed_class_name in id_to_class_name_map.items():
 		if class_name == proposed_class_name:
@@ -462,15 +462,15 @@ def save_binary_mask_double(
 ) -> np.ndarray:
 	""" Currently blended mask img background is lime green. 
 
-		Args:
-		-	rgb_img: 
-		-	label_img: 
-		-	save_fpath
-		-	save_to_disk
+	Args:
+	    rgb_img: 
+	    label_img: 
+	    save_fpath
+	    save_to_disk
 
-		Returns:
-		-	Array, representing 2 horizontally concatenated images: from left-to-right, they are
-				RGB, RGB+Semantic Masks
+	Returns:
+	-	Array, representing 2 horizontally concatenated images: from left-to-right, they are
+			RGB, RGB+Semantic Masks
 	"""
 	img_h, img_w, _ = rgb_img.shape
 	lime_green_rgb = vis_mask(rgb_img.copy(), 1 - label_img, LIME_GREEN, alpha=0.2)
@@ -488,12 +488,12 @@ def highlight_binary_mask(
 	to the same instance get the same color. Note that two instances may not have unique colors,
 	do to a finite-length colormap.
 
-		Args:
-		-	instance_img: Numpy array of shape (M,N), representing grayscale image, in [0,255]
-		-	img_rgb: Numpy array representing RGB image, possibly blank, in [0,255]
+	Args:
+	    instance_img: Numpy array of shape (M,N), representing grayscale image, in [0,255]
+	    img_rgb: Numpy array representing RGB image, possibly blank, in [0,255]
 
-		Returns:
-		-	img_rgb: 
+	Returns:
+	    img_rgb: 
 	"""
 	img_h, img_w = label_mask.shape
 	if img_rgb is None:
@@ -527,15 +527,12 @@ def save_pred_vs_label_7tuple(
 			(4-6) rgb mask 3-sequence for predictions,
 			(7) color palette 
 
-		Args:
-		-	img_rgb
-		-	pred_img
-		-	label_img
-		-	id_to_class_name_map
-		-	save_fpath
-
-		Returns:
-		-	None
+	Args:
+	    img_rgb
+	    pred_img
+	    label_img
+	    id_to_class_name_map
+	    save_fpath
 	"""
 	img_h, img_w, _ = img_rgb.shape
 	assert pred_img.shape == (img_h, img_w)
@@ -587,14 +584,11 @@ def save_pred_vs_label_4tuple(img_rgb: np.ndarray,
 			(1-3) rgb mask 3-sequence for label or predictions
 			(4) color palette 
 
-		Args:
-		-	img_rgb
-		-	label_img
-		-	id_to_class_name_map
-		-	save_fpath
-
-		Returns:
-		-	None
+	Args:
+	    img_rgb
+	    label_img
+	    id_to_class_name_map
+	    save_fpath
 	"""
 	img_h, img_w, _ = img_rgb.shape
 	assert label_img.shape == (img_h, img_w)
@@ -633,12 +627,12 @@ def save_pred_vs_label_4tuple(img_rgb: np.ndarray,
 def vstack_img_with_palette(top_img: np.ndarray, palette_img: np.ndarray) -> np.ndarray:
 	""" Vertically stack an image and a palette image, placing the palette image below it.
 
-		Args:
-		-	top_img
-		-	palette_img
+	Args:
+	    top_img
+	    palette_img
 
-		Returns:
-		-	vstack_img
+	Returns:
+	    vstack_img
 	"""
 	img_n_rows = top_img.shape[0]
 	palette_n_rows = palette_img.shape[0]
@@ -669,17 +663,14 @@ def save_mask_triple_with_color_guide(
 	save_fpath: str
 ) -> None:
 	"""
-		Args:
-		-	img_rgb: Array representing 3-channel image in RGB order
-		-	label_img: Array representing grayscale image, where intensities correspond to semantic classses
-		-	id_to_class_name_map: dictionary that maps a grayscale intensity to a class name
-		-	fname_stem: string, representing unique name for image, e.g. `coco_40083bx` for `coco_40083bx.png`
-		-	save_dir: string, dir where to save output image, e.g. /my/save/directory
-		-	save_fpath: string, representing full absolute path to where image will be saved, e.g.
-				/my/save/directory/coco_40083bx.png
-
-		Returns:
-		-	None
+	Args:
+	    img_rgb: Array representing 3-channel image in RGB order
+	    label_img: Array representing grayscale image, where intensities correspond to semantic classses
+	    id_to_class_name_map: dictionary that maps a grayscale intensity to a class name
+	    fname_stem: string, representing unique name for image, e.g. `coco_40083bx` for `coco_40083bx.png`
+	    save_dir: string, dir where to save output image, e.g. /my/save/directory
+	    save_fpath: string, representing full absolute path to where image will be saved, e.g.
+	        /my/save/directory/coco_40083bx.png
 	"""
 
 	# for every 10 classes, save a new image
@@ -700,9 +691,7 @@ def save_mask_triple_with_color_guide(
 
 
 def hstack_img_with_palette(left_img: np.array, palette_img: np.array) -> np.ndarray:
-	"""
-	Horizontally stack a left image with a palette image on the right.
-	"""
+	""" Horizontally stack a left image with a palette image on the right. """
 	img_n_rows = left_img.shape[0]
 	palette_n_rows = palette_img.shape[0]
 
@@ -734,13 +723,14 @@ def form_contained_classes_color_guide(
 	"""
 	Write out an image explaining the classes inside an image.
 
-		Args:
-		-	label_img
-		-	id_to_class_name_map
-		-	fname_stem, save_dir
+	Args:
+	    label_img
+	    id_to_class_name_map
+	    fname_stem
+	    save_dir
 
-		Returns:
-		-	palette_img: Array with cells colored with class color from palette
+	Returns:
+	    palette_img: Array with cells colored with class color from palette
 	"""
 	ids_present = np.unique(label_img)
 	num_cols = math.ceil(len(ids_present) / max_colors_per_col)
@@ -779,15 +769,15 @@ def form_mask_triple(
 	save_to_disk: bool = False
 ) -> np.ndarray:
 	"""
-		Args:
-		-	rgb_img: 
-		-	label_img: 
-		-	save_fpath
-		-	save_to_disk
+	Args:
+	    rgb_img: 
+	    label_img: 
+	    save_fpath
+	    save_to_disk
 
-		Returns:
-		-	Array, representing 3 horizontally concatenated images: from left-to-right, they are
-				RGB, RGB+Semantic Masks, Semantic Masks 
+	Returns:
+	    Array, representing 3 horizontally concatenated images: from left-to-right, they are
+	        RGB, RGB+Semantic Masks, Semantic Masks 
 	"""
 	rgb_with_mask = convert_instance_img_to_mask_img(label_img, rgb_img.copy())
 	mask_img = convert_instance_img_to_mask_img(label_img, img_rgb=None)
@@ -802,15 +792,15 @@ def form_mask_triple_vertical(
 	save_to_disk: bool = False
 	) -> np.ndarray:
 	"""
-		Args:
-		-	rgb_img: 
-		-	label_img: 
-		-	save_fpath
-		-	save_to_disk
+	Args:
+	    rgb_img: 
+	    label_img: 
+	    save_fpath
+	    save_to_disk
 
-		Returns:
-		-	Array, representing 3 horizontally concatenated images: from left-to-right, they are
-				RGB, RGB+Semantic Masks, Semantic Masks 
+	Returns:
+	-	Array, representing 3 horizontally concatenated images: from left-to-right, they are
+			RGB, RGB+Semantic Masks, Semantic Masks 
 	"""
 	rgb_with_mask = convert_instance_img_to_mask_img(label_img, rgb_img.copy())
 	mask_img = convert_instance_img_to_mask_img(label_img, img_rgb=None)
@@ -1064,11 +1054,11 @@ def get_polygons_from_binary_img(
 	Internal contours (holes) are placed in hierarchy-2.
 	cv2.CHAIN_APPROX_NONE flag gets vertices of polygons from contours.
 
-		Args:
-		-	binary_img: Numpy array with all 0s or 1s
+	Args:
+	    binary_img: Numpy array with all 0s or 1s
 
-		Returns:
-		-	res: list of polygons, each (N,2) np.ndarray
+	Returns:
+	    res: list of polygons, each (N,2) np.ndarray
 	"""
 	assert all( [val in [0,1] for val in np.unique(binary_img)] ) 
 	binary_img = binary_img.astype("uint8")

@@ -6,8 +6,9 @@ from mseg.utils.conn_comp import scipy_conn_comp
 
 
 def test_scipy_conn_comp():
-	"""
-	"""
+	""" Make sure we can recover a dictionary of binary masks for each conn. component"""
+	
+	# toy semantic label map / label image
 	img = np.array(
 		[
 			[1,1,2,3],
