@@ -29,15 +29,14 @@ def create_leading_fpath_dirs_exist_ok(save_fpath: str, return_dir: bool = False
 
 
 def get_rel_path_len(data_root: str, fpath: str) -> int:
-	"""
-		Determine the length of a relative path (depth in file system tree).
+	""" Determine the length of a relative path (depth in file system tree).
 
-		Args:
-		-	data_root
-		-	fpath
+	Args:
+	    data_root
+	    fpath
 
-		Returns:
-		-	rel_path_len: integer
+	Returns:
+	    rel_path_len: integer
 	"""
 	data_root_len = len(Path(data_root).parts)
 	path_len = len(Path(fpath).parts)

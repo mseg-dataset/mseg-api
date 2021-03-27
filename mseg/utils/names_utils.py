@@ -17,11 +17,11 @@ def read_str_list(fpath: str) -> List[str]:
 
 def load_class_names(dataset_name: str) -> List[str]:
 	"""
-		Args:
-		-	dataset_name: str
+	Args:
+	    dataset_name: str
 
-		Returns: 
-		-	list of strings, representing class names
+	Returns: 
+	    list of strings, representing class names
 	"""
 	return read_str_list(f'{ROOT}/dataset_lists/{dataset_name}/{dataset_name}_names.txt')
 
