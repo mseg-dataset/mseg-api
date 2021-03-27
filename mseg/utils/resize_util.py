@@ -51,28 +51,22 @@ def resize_img_by_short_side(img: np.ndarray, short_side_len: int, img_type: str
 
 
 
-def read_resize_write_rgb(old_fpath, new_fpath, short_side_sz):
+def read_resize_write_rgb(old_fpath: str, new_fpath: str, short_side_sz) -> None:
 	"""
-		Args:
-		-	old_fpath
-		-	new_fpath
-
-		Returns:
-		-	None
+	Args:
+	    old_fpath
+	    new_fpath
 	"""
 	img_rgb = cv2_imread_rgb(old_fpath)
 	img_rgb_resized = resize_img_by_short_side(img_rgb, short_side_len=short_side_sz, img_type='rgb')
 	cv2.imwrite(new_fpath, img_rgb_resized[:,:,::-1])
 
 
-def read_resize_write_label(old_fpath, new_fpath, short_side_sz):
+def read_resize_write_label(old_fpath: str, new_fpath: str, short_side_sz):
 	"""
-		Args:
-		-	old_fpath
-		-	new_fpath
-
-		Returns:
-		-	None
+	Args:
+	    old_fpath
+	    new_fpath
 	"""
 
 	label = imageio.imread(old_fpath)

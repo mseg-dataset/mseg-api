@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.com/mseg-dataset/mseg-api.svg?branch=master)](https://travis-ci.com/mseg-dataset/mseg-api)
+![Linux CI](https://github.com/mseg-dataset/mseg-api/workflows/Python%20CI/badge.svg)
+
 <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a>
 
 This is the code for the paper:

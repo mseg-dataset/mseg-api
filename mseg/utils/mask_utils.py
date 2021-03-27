@@ -31,12 +31,13 @@ LIME_GREEN = np.array([57,255,20])
 
 
 def get_mean_mask_location(mask):
-	"""
-		Args:
-		-	mask
+	""" Given a binary mask, find the mean location for entries equal to 1.
+	
+	Args:
+	    mask
 
-		Returns:
-		-	coordinate of mean pixel location as (x,y)
+	Returns:
+	    coordinate of mean pixel location as (x,y)
 	"""
 	coords = np.vstack(np.where(mask == 1)).T
 	return np.mean(coords, axis=0).astype(np.int32)
@@ -97,23 +98,23 @@ def save_classnames_in_image_sufficientpx(
 	font_scale: int = 1
 	):
 	"""
-		Write a classname over each connected component of a label
-		map as long as the connected component has a sufficiently
-		large number of pixels (specified as argument).
+	Write a classname over each connected component of a label
+	map as long as the connected component has a sufficiently
+	large number of pixels (specified as argument).
 
-		Args:
-		-	rgb_img: Numpy array (H,W,3) representing RGB image
-		-	label_img: Numpy array (H,W) representing label map 
-		-	id_to_class_name_map: mapping from class ID to classname
-		-	font_color: 3-tuple representing RGB font color
-		-	save_to_disk: whether to save image to disk
-		-	save_fpath: absolute file path
-		-	min_conncomp_px: minimum number of pixels to justify
-				placing a text label over connected component
-		-	font_scale: scale of font text
+	Args:
+	    rgb_img: Numpy array (H,W,3) representing RGB image
+	    label_img: Numpy array (H,W) representing label map 
+	    id_to_class_name_map: mapping from class ID to classname
+	    font_color: 3-tuple representing RGB font color
+	    save_to_disk: whether to save image to disk
+	    save_fpath: absolute file path
+	    min_conncomp_px: minimum number of pixels to justify 
+	        placing a text label over connected component
+	    font_scale: scale of font text
 
-		Returns:
-		-	rgb_img: Numpy array (H,W,3) with embedded classanmes
+	Returns:
+	    rgb_img: Numpy array (H,W,3) with embedded classanmes
 	"""
 	H, W, C = rgb_img.shape
 	class_to_conncomps_dict = scipy_conn_comp(label_img)
@@ -155,15 +156,16 @@ def save_classnames_in_image_maxcardinality(
 	id_to_class_name_map, 
 	font_color = (0,0,0),
 	save_to_disk: bool = False,
-	save_fpath: str = ''):
+	save_fpath: str = ''
+) -> np.ndarray:
 	"""
-		Args:
-		-	rgb_img
-		-	label_img
-		-	id_to_class_name_map: Mapping[int,str]
+	Args:
+	    rgb_img
+	    label_img
+	    id_to_class_name_map: Mapping[int,str]
 
-		Returns:
-		-	
+	Returns:
+	    rgb_img
 	"""
 	H, W, C = rgb_img.shape
 	class_to_conncomps_dict = scipy_conn_comp(label_img)
@@ -237,15 +239,12 @@ def write_six_img_grid_w_embedded_names(
     We embed classnames directly into the predicted and ground
     truth label maps, instead of using a colorbar.
 
-        Args:
-        -   rgb_img: 
-        -   pred: predicted label map
-        -   label_img
+    Args:
+        rgb_img: 
+        pred: predicted label map
+        label_img
         id_to_class_name_map
-        -   save_fpath
-
-        Returns:
-        -   None
+        save_fpath
     """
     assert label_img.ndim == 2
     assert pred.ndim == 2
@@ -275,17 +274,18 @@ def map_semantic_img_fast_pytorch(
 	semantic_img: np.ndarray,
 	label_mapping_arr: np.ndarray
 	) -> np.ndarray:
-	"""
-		TODO: may need to make a copy here, if it won't make one for us.
+	""" Quickly remap a semantic labelmap (integers) to a new taxonomy.
+	
+	TODO: may need to make a copy here, if it won't make one for us.
 
-		Args:
-		-	semantic_img: Pytorch CPU long tensor representing (M,N) matrix, 
-				with Torch Tensor type Long (int64)
-		-	label_mapping_arr:  Pytorch CPU long tensor representing (K+1,1) array, where
-				K represents the number of classes.  With Torch Tensor type Long (int64)
+	Args:
+	    semantic_img: Pytorch CPU long tensor representing (M,N) matrix, 
+	        with Torch Tensor type Long (int64)
+	    label_mapping_arr:  Pytorch CPU long tensor representing (K+1,1) array, where
+	        K represents the number of classes.  With Torch Tensor type Long (int64)
 
-		Returns:
-		-	img:  with Torch Tensor type Long (int64)
+	Returns:
+	    img:  with Torch Tensor type Long (int64)
 	"""
 	return label_mapping_arr[semantic_img.squeeze()].squeeze()
 
@@ -293,12 +293,12 @@ def map_semantic_img_fast_pytorch(
 
 def form_label_mapping_array_pytorch(label_mapping_dict: Mapping[int,int]) -> np.ndarray:
 	"""
-		Args:
-		-	label_mapping_dict: dictionary from int to int, from original class ID to a new class ID.
-				This is NOT the id_to_class_name dictionary.
+	Args:
+	    label_mapping_dict: dictionary from int to int, from original class ID to a new class ID.
+	        This is NOT the id_to_class_name dictionary.
 
-		Returns:
-		-	label_mapping_arr, with Torch Tensor type Long (int64)
+	Returns:
+	    label_mapping_arr, with Torch Tensor type Long (int64)
 	"""
 	keys_max = max(list(label_mapping_dict.keys()))
 	arr_len = keys_max + 1
@@ -326,13 +326,13 @@ def map_semantic_img_fast(
 
 def form_label_mapping_array(label_mapping_dict: Mapping[int,int]) -> np.ndarray:
 	"""
-		Args:
-		-	label_mapping_dict: dictionary from int to int, from original class ID to a new class ID.
-				This is NOT the id_to_class_name dictionary.
-		-	dtype: data type, either np.uint8 or np.uint16 (default)
+	Args:
+	-	label_mapping_dict: dictionary from int to int, from original class ID to a new class ID.
+			This is NOT the id_to_class_name dictionary.
+	-	dtype: data type, either np.uint8 or np.uint16 (default)
 
-		Returns:
-		-	label_mapping_arr
+	Returns:
+	-	label_mapping_arr
 	"""
 	v_max = max(list(label_mapping_dict.values()))
 	keys_max = max(list(label_mapping_dict.keys()))
@@ -362,12 +362,12 @@ def rgb_img_to_obj_cls_img(
 ) -> np.ndarray:
 	""" Any unmapped pixels (given no corresponding RGB values) will default to zero'th-class.
 
-		Args:
-		-	label_img_rgb: Numpy array of shape (M,N,3)
-		-	dataset_ordered_colors: Numpy array of shape (K,3) with RGB values for K classes
+	Args:
+	-	label_img_rgb: Numpy array of shape (M,N,3)
+	-	dataset_ordered_colors: Numpy array of shape (K,3) with RGB values for K classes
 
-		Returns:
-		-	object_cls_img: grayscale image
+	Returns:
+	-	object_cls_img: grayscale image
 	"""
 	object_cls_img = np.zeros((label_img_rgb.shape[0], label_img_rgb.shape[1]), dtype=np.uint8)
 	for i, color in enumerate(dataset_ordered_colors):
@@ -377,17 +377,15 @@ def rgb_img_to_obj_cls_img(
 	return object_cls_img
 
 
-def save_mask_triple_isolated_mask(rgb_img, label_img, id_to_class_name_map, class_name, save_fpath) -> None:
-	"""
-		Args:
-		-	rgb_img:
-		-	label_img:
-		-	id_to_class_name_map:
-		-	class_name:
-		-	save_fpath:
+def save_mask_triple_isolated_mask(rgb_img: np.ndarray, label_img: np.ndarray, id_to_class_name_map, class_name: str, save_fpath: str) -> None:
+	""" Save a triplet of images to disk (RGB image, label map, and a blended version of the two).
 
-		Returns:
-		-	None
+	Args:
+	    rgb_img:
+	    label_img:
+	    id_to_class_name_map:
+	    class_name:
+	    save_fpath:
 	"""
 	for id, proposed_class_name in id_to_class_name_map.items():
 		if class_name == proposed_class_name:
@@ -464,15 +462,15 @@ def save_binary_mask_double(
 ) -> np.ndarray:
 	""" Currently blended mask img background is lime green. 
 
-		Args:
-		-	rgb_img: 
-		-	label_img: 
-		-	save_fpath
-		-	save_to_disk
+	Args:
+	    rgb_img: 
+	    label_img: 
+	    save_fpath
+	    save_to_disk
 
-		Returns:
-		-	Array, representing 2 horizontally concatenated images: from left-to-right, they are
-				RGB, RGB+Semantic Masks
+	Returns:
+	-	Array, representing 2 horizontally concatenated images: from left-to-right, they are
+			RGB, RGB+Semantic Masks
 	"""
 	img_h, img_w, _ = rgb_img.shape
 	lime_green_rgb = vis_mask(rgb_img.copy(), 1 - label_img, LIME_GREEN, alpha=0.2)
@@ -490,12 +488,12 @@ def highlight_binary_mask(
 	to the same instance get the same color. Note that two instances may not have unique colors,
 	do to a finite-length colormap.
 
-		Args:
-		-	instance_img: Numpy array of shape (M,N), representing grayscale image, in [0,255]
-		-	img_rgb: Numpy array representing RGB image, possibly blank, in [0,255]
+	Args:
+	    instance_img: Numpy array of shape (M,N), representing grayscale image, in [0,255]
+	    img_rgb: Numpy array representing RGB image, possibly blank, in [0,255]
 
-		Returns:
-		-	img_rgb: 
+	Returns:
+	    img_rgb: 
 	"""
 	img_h, img_w = label_mask.shape
 	if img_rgb is None:
@@ -529,15 +527,12 @@ def save_pred_vs_label_7tuple(
 			(4-6) rgb mask 3-sequence for predictions,
 			(7) color palette 
 
-		Args:
-		-	img_rgb
-		-	pred_img
-		-	label_img
-		-	id_to_class_name_map
-		-	save_fpath
-
-		Returns:
-		-	None
+	Args:
+	    img_rgb
+	    pred_img
+	    label_img
+	    id_to_class_name_map
+	    save_fpath
 	"""
 	img_h, img_w, _ = img_rgb.shape
 	assert pred_img.shape == (img_h, img_w)
@@ -589,14 +584,11 @@ def save_pred_vs_label_4tuple(img_rgb: np.ndarray,
 			(1-3) rgb mask 3-sequence for label or predictions
 			(4) color palette 
 
-		Args:
-		-	img_rgb
-		-	label_img
-		-	id_to_class_name_map
-		-	save_fpath
-
-		Returns:
-		-	None
+	Args:
+	    img_rgb
+	    label_img
+	    id_to_class_name_map
+	    save_fpath
 	"""
 	img_h, img_w, _ = img_rgb.shape
 	assert label_img.shape == (img_h, img_w)
@@ -635,12 +627,12 @@ def save_pred_vs_label_4tuple(img_rgb: np.ndarray,
 def vstack_img_with_palette(top_img: np.ndarray, palette_img: np.ndarray) -> np.ndarray:
 	""" Vertically stack an image and a palette image, placing the palette image below it.
 
-		Args:
-		-	top_img
-		-	palette_img
+	Args:
+	    top_img
+	    palette_img
 
-		Returns:
-		-	vstack_img
+	Returns:
+	    vstack_img
 	"""
 	img_n_rows = top_img.shape[0]
 	palette_n_rows = palette_img.shape[0]
@@ -671,17 +663,14 @@ def save_mask_triple_with_color_guide(
 	save_fpath: str
 ) -> None:
 	"""
-		Args:
-		-	img_rgb: Array representing 3-channel image in RGB order
-		-	label_img: Array representing grayscale image, where intensities correspond to semantic classses
-		-	id_to_class_name_map: dictionary that maps a grayscale intensity to a class name
-		-	fname_stem: string, representing unique name for image, e.g. `coco_40083bx` for `coco_40083bx.png`
-		-	save_dir: string, dir where to save output image, e.g. /my/save/directory
-		-	save_fpath: string, representing full absolute path to where image will be saved, e.g.
-				/my/save/directory/coco_40083bx.png
-
-		Returns:
-		-	None
+	Args:
+	    img_rgb: Array representing 3-channel image in RGB order
+	    label_img: Array representing grayscale image, where intensities correspond to semantic classses
+	    id_to_class_name_map: dictionary that maps a grayscale intensity to a class name
+	    fname_stem: string, representing unique name for image, e.g. `coco_40083bx` for `coco_40083bx.png`
+	    save_dir: string, dir where to save output image, e.g. /my/save/directory
+	    save_fpath: string, representing full absolute path to where image will be saved, e.g.
+	        /my/save/directory/coco_40083bx.png
 	"""
 
 	# for every 10 classes, save a new image
@@ -702,9 +691,7 @@ def save_mask_triple_with_color_guide(
 
 
 def hstack_img_with_palette(left_img: np.array, palette_img: np.array) -> np.ndarray:
-	"""
-	Horizontally stack a left image with a palette image on the right.
-	"""
+	""" Horizontally stack a left image with a palette image on the right. """
 	img_n_rows = left_img.shape[0]
 	palette_n_rows = palette_img.shape[0]
 
@@ -736,13 +723,14 @@ def form_contained_classes_color_guide(
 	"""
 	Write out an image explaining the classes inside an image.
 
-		Args:
-		-	label_img
-		-	id_to_class_name_map
-		-	fname_stem, save_dir
+	Args:
+	    label_img
+	    id_to_class_name_map
+	    fname_stem
+	    save_dir
 
-		Returns:
-		-	palette_img: Array with cells colored with class color from palette
+	Returns:
+	    palette_img: Array with cells colored with class color from palette
 	"""
 	ids_present = np.unique(label_img)
 	num_cols = math.ceil(len(ids_present) / max_colors_per_col)
@@ -781,15 +769,15 @@ def form_mask_triple(
 	save_to_disk: bool = False
 ) -> np.ndarray:
 	"""
-		Args:
-		-	rgb_img: 
-		-	label_img: 
-		-	save_fpath
-		-	save_to_disk
+	Args:
+	    rgb_img: 
+	    label_img: 
+	    save_fpath
+	    save_to_disk
 
-		Returns:
-		-	Array, representing 3 horizontally concatenated images: from left-to-right, they are
-				RGB, RGB+Semantic Masks, Semantic Masks 
+	Returns:
+	    Array, representing 3 horizontally concatenated images: from left-to-right, they are
+	        RGB, RGB+Semantic Masks, Semantic Masks 
 	"""
 	rgb_with_mask = convert_instance_img_to_mask_img(label_img, rgb_img.copy())
 	mask_img = convert_instance_img_to_mask_img(label_img, img_rgb=None)
@@ -804,15 +792,15 @@ def form_mask_triple_vertical(
 	save_to_disk: bool = False
 	) -> np.ndarray:
 	"""
-		Args:
-		-	rgb_img: 
-		-	label_img: 
-		-	save_fpath
-		-	save_to_disk
+	Args:
+	    rgb_img: 
+	    label_img: 
+	    save_fpath
+	    save_to_disk
 
-		Returns:
-		-	Array, representing 3 horizontally concatenated images: from left-to-right, they are
-				RGB, RGB+Semantic Masks, Semantic Masks 
+	Returns:
+	-	Array, representing 3 horizontally concatenated images: from left-to-right, they are
+			RGB, RGB+Semantic Masks, Semantic Masks 
 	"""
 	rgb_with_mask = convert_instance_img_to_mask_img(label_img, rgb_img.copy())
 	mask_img = convert_instance_img_to_mask_img(label_img, img_rgb=None)
@@ -821,9 +809,9 @@ def form_mask_triple_vertical(
 
 
 def convert_instance_img_to_mask_img(
-		instance_img: np.ndarray, 
-		img_rgb: Optional[np.ndarray] = None
-	) -> np.ndarray:
+	instance_img: np.ndarray, 
+	img_rgb: Optional[np.ndarray] = None
+) -> np.ndarray:
 	"""
 	Given a grayscale image where intensities denote instance IDs (same intensity denotes
 	belonging to same instance), convert this to an RGB image where all pixels corresponding
@@ -902,15 +890,15 @@ def swap_px_inside_mask(
 	require_strict_boundaries: bool
 ):
 	"""
-		Args:
-		-	label_img: label map before any update has taken place.
-		-	segment_mask: 0/1 binary image showing segment pixels
-		-	old_val: old pixel value/category
-		-	new_val: new pixel value/category
-			require_strict_boundaries
+	Args:
+	    label_img: label map before any update has taken place.
+	    segment_mask: 0/1 binary image showing segment pixels
+	    old_val: old pixel value/category
+	    new_val: new pixel value/category 
+	    require_strict_boundaries: 
 
-		Returns:
-		-	label_img: updated label map
+	Returns:
+	-	label_img: updated label map
 	"""
 	unique_vals = np.unique(segment_mask)
 	zeros_and_ones = np.array([0, 1], dtype=np.uint8)
@@ -928,52 +916,24 @@ def swap_px_inside_mask(
 	return label_img
 
 
-def test_swap_px_inside_mask():
-
-	label_img = np.array(
-		[
-			[7,8,9,0],
-			[0,7,0,7],
-			[3,4,7,1]
-		], dtype=np.uint8)
-
-	segment_mask = np.array(
-		[
-			[1,0,0,0],
-			[0,1,0,1],
-			[0,0,1,0]
-		], dtype=np.uint8)
-
-	old_val = 7
-	new_val = 255
-	new_label_img = swap_px_inside_mask(label_img, segment_mask, old_val, new_val)
-	gt_new_label_img = np.array(
-		[
-			[255,8,9,0],
-			[0,255,0,255],
-			[3,4,255,1]
-		], dtype=np.uint8)
-
-	assert np.allclose(new_label_img, gt_new_label_img)
-
-
 def get_instance_mask_class_votes(
 	instance_mask: np.ndarray, 
 	label_img: np.ndarray,
 	verbose: bool = False
-	) -> Tuple[np.ndarray, int]:
+) -> Tuple[np.ndarray, int]:
 	"""
-		Since the class masks to instance masks don't match up exactly, and are provided
-		in images with very different resolutions, we have to take the majority vote
-		for which semantic class the instance mask belongs to.
 
-		Args:
-		-	instance_mask
-		-	label_img
+	Since the class masks to instance masks don't match up exactly, and are provided
+	in images with very different resolutions, we have to take the majority vote
+	for which semantic class the instance mask belongs to.
 
-		Returns:
-		-	label_votes: 1d array, containing all category votes from instance mask
-		-	majority_vote: most likely category for this instance.
+	Args:
+	    instance_mask
+	    label_img
+
+	Returns:
+	    label_votes: 1d array, containing all category votes from instance mask
+	    majority_vote: most likely category for this instance.
 	"""
 	coords = np.vstack(np.where(instance_mask == 1)).T
 
@@ -992,12 +952,13 @@ def get_instance_mask_class_votes(
 
 
 def get_np_mode(x: np.ndarray) -> int:
-	"""
-		Args:
-		-	x: Numpy array of integers:
+	""" Get mode value of a 1d or 2d integer array.
+	
+	Args:
+	    x: Numpy array of integers:
 
-		Returns:
-		-	mode of array values (integer)
+	Returns:
+	    integer representing mode of array values
 	"""
 	assert x.dtype in [np.uint8, np.uint16, np.int16, np.int32, np.int64]
 	counts = np.bincount(x)
@@ -1005,34 +966,38 @@ def get_np_mode(x: np.ndarray) -> int:
 
 
 def get_mask_from_polygon(polygon, img_h: int, img_w: int):
-	"""
-	60x faster than the Matplotlib rasterizer... well done pillow!
-	
-		Args:
-		-	polygon: iterable e.g. [(x1,y1),(x2,y2),...]
-		-	img_h: integer representing image height
-		-	img_w: integer representing image width
+	""" Rasterize a 2d polygon to a binary mask.
 
-		PIL.Image.new(mode, size, color=0)
-		Creates a new image with the given mode and size.
-		Parameters:	
-		mode – The mode to use for the new image. See: Modes.
-		size – A 2-tuple, containing (width, height) in pixels.
-		color – What color to use for the image. Default is black. 
-			If given, this should be a single integer or floating point 
-			value for single-band modes, and a tuple for multi-band modes 
-			(one value per band). When creating RGB images, you can also 
-			use color strings as supported by the ImageColor module. If 
-			the color is None, the image is not initialised.
+	Note: 60x faster than the Matplotlib rasterizer... well done pillow!
 
-		https://pillow.readthedocs.io/en/3.1.x/reference/ImageDraw.html
-		The polygon outline consists of straight lines between the given coordinates, 
-		plus a straight line between the last and the first coordinate.
+	Args:
+	    polygon: iterable e.g. [(x1,y1),(x2,y2),...]
+	    img_h: integer representing image height
+	    img_w: integer representing image width
 
-		Parameters:	
-		xy – Sequence of either 2-tuples like [(x, y), (x, y), ...] or numeric values like [x, y, x, y, ...].
-		outline – Color to use for the outline.
-		fill – Color to use for the fill.
+	Returns:
+	    mask
+
+	PIL.Image.new(mode, size, color=0)
+	Creates a new image with the given mode and size.
+	Parameters:	
+	mode – The mode to use for the new image. See: Modes.
+	size – A 2-tuple, containing (width, height) in pixels.
+	color – What color to use for the image. Default is black. 
+		If given, this should be a single integer or floating point 
+		value for single-band modes, and a tuple for multi-band modes 
+		(one value per band). When creating RGB images, you can also 
+		use color strings as supported by the ImageColor module. If 
+		the color is None, the image is not initialised.
+
+	https://pillow.readthedocs.io/en/3.1.x/reference/ImageDraw.html
+	The polygon outline consists of straight lines between the given coordinates, 
+	plus a straight line between the last and the first coordinate.
+
+	Parameters:	
+	xy – Sequence of either 2-tuples like [(x, y), (x, y), ...] or numeric values like [x, y, x, y, ...].
+	outline – Color to use for the outline.
+	fill – Color to use for the fill.
 	"""
 	polygon = [ tuple([x,y]) for (x,y) in polygon]
 	# this is the image that we want to create
@@ -1055,11 +1020,11 @@ def get_present_classes_in_img(
 	id_to_classname_map
 	) -> List[str]:
 	"""
-		Args:
-		-	label_img:
+	Args:
+	    label_img:
 
-		Returns:
-		-	list of strings, representing classnames
+	Returns:
+	    list of strings, representing classnames
 	"""
 	present_class_idxs = np.unique(label_img)
 	present_classnames = [id_to_classname_map[idx] for idx in present_class_idxs]
@@ -1089,11 +1054,11 @@ def get_polygons_from_binary_img(
 	Internal contours (holes) are placed in hierarchy-2.
 	cv2.CHAIN_APPROX_NONE flag gets vertices of polygons from contours.
 
-		Args:
-		-	binary_img: Numpy array with all 0s or 1s
+	Args:
+	    binary_img: Numpy array with all 0s or 1s
 
-		Returns:
-		-	res: list of polygons, each (N,2) np.ndarray
+	Returns:
+	    res: list of polygons, each (N,2) np.ndarray
 	"""
 	assert all( [val in [0,1] for val in np.unique(binary_img)] ) 
 	binary_img = binary_img.astype("uint8")

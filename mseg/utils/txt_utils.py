@@ -87,11 +87,6 @@ def subsample_txt_lines(txt_fpath: str, save_fpath: str, subsample_nth: str) -> 
 
 def generate_all_img_label_pair_fpaths(data_root: str, split_txt_fpath: str):
 	""" 
-		Args:
-		-	
-
-		Returns:
-		-	
 	"""
 	pairs = []
 	rgb_img_fpaths, label_fpaths = read_rgb_and_label_tuple_file(split_txt_fpath)
@@ -104,12 +99,12 @@ def generate_all_img_label_pair_fpaths(data_root: str, split_txt_fpath: str):
 
 def generate_all_img_label_pair_relative_fpaths(dname: str, split: str):
 	""" 
-		Args:
-		-	dname:
-		-	split: e.g. 'train', 'val', 'trainval', etc.
+	Args:
+	    dname:
+	    split: e.g. 'train', 'val', 'trainval', etc.
 
-		Returns:
-		-	
+	Returns:
+	-	
 	"""
 	split_txt_fpath = _ROOT / f'dataset_lists/{dname}/list/{split}.txt'
 	pairs = []

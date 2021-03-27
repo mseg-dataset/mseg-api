@@ -68,15 +68,15 @@ def get_unique_mask_identifiers(
 	identifiers per mask. The sequence ID should always be the 2nd to last item in the 
 	file path so that given an absolute path, we can immediately find it (`fname_parent`)
 
-		Args:
-		-	dname: dataset_name
-		-	annot_fname:
-		-	data_split: string representing data subset, e.g. 'train' or 'val'
+	Args:
+	    dname: dataset_name
+	    annot_fname:
+	    data_split: string representing data subset, e.g. 'train' or 'val'
 
-		Returns:
-		-	fname_parent: label file path parent
-		-	fname_stem: rgb file name stem
-		-	segment_id: integer unique segment identifier
+	Returns:
+	    fname_parent: label file path parent
+	    fname_stem: rgb file name stem
+	    segment_id: integer unique segment identifier
 	"""
 	annot_fname = Path(annot_fname).stem
 	fname_parent = None
@@ -177,15 +177,12 @@ def write_out_updated_dataset(
 	"""
 	By using remap.py, we already have converted label img from original taxonomy, to universal taxonomy.
 
-		Args:
-		-	num_processes: number of processes to launch; shouldn't exceed number of cores on machine
-		-	mld: Mask Level Dataset
-		-	dname: string representing name of a dataset taxonomy
-		-	dataroot: string representing path to a file directory
-		-	update_records
-
-		Returns:
-		-	None
+	Args:
+	    num_processes: number of processes to launch; shouldn't exceed number of cores on machine
+	    mld: Mask Level Dataset
+	    dname: string representing name of a dataset taxonomy
+	    dataroot: string representing path to a file directory
+	    update_records
 	"""
 	classname_to_id_map = get_classname_to_dataloaderid_map(dname, include_ignore_idx_cls=True)
 	# Check for incorrect class names.
@@ -237,14 +234,11 @@ def overwrite_mask_worker(pairs: List[Tuple[str,str]],
 	"""	Given a list of (rgb image, label image) pairs to remap, call relabel_pair()
 		on each one of them.
 
-		Args:
-		-	img_fpath_list: list of strings
-		-	start_idx: integer
-		-	end_idx: integer
-		-	kwargs: dictionary with argument names mapped to argument values
-
-		Returns:
-		-	None
+	Args:
+	    img_fpath_list: list of strings
+	    start_idx: integer
+	    end_idx: integer
+	    kwargs: dictionary with argument names mapped to argument values
 	"""
 	parent_fname_to_updatelist_dict = kwargs['parent_fname_to_updatelist_dict']
 	mld = kwargs['mld']
@@ -278,7 +272,8 @@ def overwrite_label_img_masks(
 	mld: Any,
 	classname_to_id_map: Mapping[str,int],
 	require_strict_boundaries: bool,
-	split: str) -> None:
+	split: str
+) -> None:
 	"""
 	Swap the pixel values inside a label map's mask to a new value. This
 	effectively changes the mask's category on disk.
@@ -286,17 +281,14 @@ def overwrite_label_img_masks(
 	Get fname stem from rgb image file path
 	Get sequence ID/parent from label image path file system parent.
 
-		Args:
-		-	img_fpath:
-		-	label_img_fpath:
-		-	parent_fname_to_updatelist_dict:
-		-	mld:
-		-	classname_to_id_map:
-		-	require_strict_boundaries:
-		-	split:
-
-		Returns:
-		-	None
+	Args:
+	    img_fpath:
+	    label_img_fpath:
+	    parent_fname_to_updatelist_dict:
+	    mld:
+	    classname_to_id_map:
+	    require_strict_boundaries:
+	    split:
 	"""
 	fname_stem = Path(img_fpath).stem
 	parent = Path(label_img_fpath).parts[-2] # get parent name, functions as sequence ID

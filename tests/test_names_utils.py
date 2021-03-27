@@ -13,7 +13,7 @@ _TEST_DIR = Path(__file__).resolve().parent
 
 
 def test_read_str_list():
-	""" """
+	""" Ensure we can read the 3 lines in a dummy txt file. """
 	fpath = f'{_TEST_DIR}/test_data/str_test1.txt'
 	str_list = read_str_list(fpath)
 	gt_str_list = [
@@ -24,8 +24,8 @@ def test_read_str_list():
 	assert str_list == gt_str_list
 
 
-def test_read_str_list_extrablankline():
-	""" """
+def test_read_str_list_extrablankline() -> None:
+	""" Ensure we read only the non-blank lines, if txt file has empty line at end. """
 	fpath = f'{_TEST_DIR}/test_data/str_test2.txt'
 	str_list = read_str_list(fpath)
 	gt_str_list = [
@@ -37,7 +37,7 @@ def test_read_str_list_extrablankline():
 
 
 def test_load_class_names():
-	""" """
+	""" Ensure we can read in the 11 class names from the Camvid-11 `names.txt` file."""
 	dataset_name = 'camvid-11'
 	class_names = load_class_names(dataset_name)
 	gt_class_names = [
