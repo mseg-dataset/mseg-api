@@ -37,6 +37,7 @@ from mseg.utils.mask_utils import (
 	save_classnames_in_image_maxcardinality,
 	save_classnames_in_image_sufficientpx,
 	save_pred_vs_label_7tuple,
+	swap_px_inside_mask,
 	vis_mask,
 	write_six_img_grid_w_embedded_names
 )
@@ -47,6 +48,37 @@ from mseg.utils.test_utils import dict_is_equal
 
 ROOT = Path(__file__).resolve().parent
 TEST_DATA_ROOT = ROOT / "test_data"
+
+
+
+def test_swap_px_inside_mask():
+
+	label_img = np.array(
+		[
+			[7,8,9,0],
+			[0,7,0,7],
+			[3,4,7,1]
+		], dtype=np.uint8)
+
+	segment_mask = np.array(
+		[
+			[1,0,0,0],
+			[0,1,0,1],
+			[0,0,1,0]
+		], dtype=np.uint8)
+
+	old_val = 7
+	new_val = 255
+	new_label_img = swap_px_inside_mask(label_img, segment_mask, old_val, new_val)
+	gt_new_label_img = np.array(
+		[
+			[255,8,9,0],
+			[0,255,0,255],
+			[3,4,255,1]
+		], dtype=np.uint8)
+
+	assert np.allclose(new_label_img, gt_new_label_img)
+
 
 
 def test_find_max_cardinality_mask():

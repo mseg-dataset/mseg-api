@@ -97,23 +97,23 @@ def save_classnames_in_image_sufficientpx(
 	font_scale: int = 1
 	):
 	"""
-		Write a classname over each connected component of a label
-		map as long as the connected component has a sufficiently
-		large number of pixels (specified as argument).
+	Write a classname over each connected component of a label
+	map as long as the connected component has a sufficiently
+	large number of pixels (specified as argument).
 
-		Args:
-		-	rgb_img: Numpy array (H,W,3) representing RGB image
-		-	label_img: Numpy array (H,W) representing label map 
-		-	id_to_class_name_map: mapping from class ID to classname
-		-	font_color: 3-tuple representing RGB font color
-		-	save_to_disk: whether to save image to disk
-		-	save_fpath: absolute file path
-		-	min_conncomp_px: minimum number of pixels to justify
-				placing a text label over connected component
-		-	font_scale: scale of font text
+	Args:
+	    rgb_img: Numpy array (H,W,3) representing RGB image
+	    label_img: Numpy array (H,W) representing label map 
+	    id_to_class_name_map: mapping from class ID to classname
+	    font_color: 3-tuple representing RGB font color
+	    save_to_disk: whether to save image to disk
+	    save_fpath: absolute file path
+	    min_conncomp_px: minimum number of pixels to justify 
+	        placing a text label over connected component
+	    font_scale: scale of font text
 
-		Returns:
-		-	rgb_img: Numpy array (H,W,3) with embedded classanmes
+	Returns:
+	    rgb_img: Numpy array (H,W,3) with embedded classanmes
 	"""
 	H, W, C = rgb_img.shape
 	class_to_conncomps_dict = scipy_conn_comp(label_img)
@@ -237,15 +237,12 @@ def write_six_img_grid_w_embedded_names(
     We embed classnames directly into the predicted and ground
     truth label maps, instead of using a colorbar.
 
-        Args:
-        -   rgb_img: 
-        -   pred: predicted label map
-        -   label_img
+    Args:
+        rgb_img: 
+        pred: predicted label map
+        label_img
         id_to_class_name_map
-        -   save_fpath
-
-        Returns:
-        -   None
+        save_fpath
     """
     assert label_img.ndim == 2
     assert pred.ndim == 2
@@ -275,17 +272,18 @@ def map_semantic_img_fast_pytorch(
 	semantic_img: np.ndarray,
 	label_mapping_arr: np.ndarray
 	) -> np.ndarray:
-	"""
-		TODO: may need to make a copy here, if it won't make one for us.
+	""" Quickly remap a semantic labelmap (integers) to a new taxonomy.
+	
+	TODO: may need to make a copy here, if it won't make one for us.
 
-		Args:
-		-	semantic_img: Pytorch CPU long tensor representing (M,N) matrix, 
-				with Torch Tensor type Long (int64)
-		-	label_mapping_arr:  Pytorch CPU long tensor representing (K+1,1) array, where
-				K represents the number of classes.  With Torch Tensor type Long (int64)
+	Args:
+	    semantic_img: Pytorch CPU long tensor representing (M,N) matrix, 
+	        with Torch Tensor type Long (int64)
+	    label_mapping_arr:  Pytorch CPU long tensor representing (K+1,1) array, where
+	        K represents the number of classes.  With Torch Tensor type Long (int64)
 
-		Returns:
-		-	img:  with Torch Tensor type Long (int64)
+	Returns:
+	    img:  with Torch Tensor type Long (int64)
 	"""
 	return label_mapping_arr[semantic_img.squeeze()].squeeze()
 
@@ -293,12 +291,12 @@ def map_semantic_img_fast_pytorch(
 
 def form_label_mapping_array_pytorch(label_mapping_dict: Mapping[int,int]) -> np.ndarray:
 	"""
-		Args:
-		-	label_mapping_dict: dictionary from int to int, from original class ID to a new class ID.
-				This is NOT the id_to_class_name dictionary.
+	Args:
+	    label_mapping_dict: dictionary from int to int, from original class ID to a new class ID.
+	        This is NOT the id_to_class_name dictionary.
 
-		Returns:
-		-	label_mapping_arr, with Torch Tensor type Long (int64)
+	Returns:
+	    label_mapping_arr, with Torch Tensor type Long (int64)
 	"""
 	keys_max = max(list(label_mapping_dict.keys()))
 	arr_len = keys_max + 1
@@ -821,9 +819,9 @@ def form_mask_triple_vertical(
 
 
 def convert_instance_img_to_mask_img(
-		instance_img: np.ndarray, 
-		img_rgb: Optional[np.ndarray] = None
-	) -> np.ndarray:
+	instance_img: np.ndarray, 
+	img_rgb: Optional[np.ndarray] = None
+) -> np.ndarray:
 	"""
 	Given a grayscale image where intensities denote instance IDs (same intensity denotes
 	belonging to same instance), convert this to an RGB image where all pixels corresponding
@@ -902,15 +900,15 @@ def swap_px_inside_mask(
 	require_strict_boundaries: bool
 ):
 	"""
-		Args:
-		-	label_img: label map before any update has taken place.
-		-	segment_mask: 0/1 binary image showing segment pixels
-		-	old_val: old pixel value/category
-		-	new_val: new pixel value/category
-			require_strict_boundaries
+	Args:
+	    label_img: label map before any update has taken place.
+	    segment_mask: 0/1 binary image showing segment pixels
+	    old_val: old pixel value/category
+	    new_val: new pixel value/category 
+	    require_strict_boundaries: 
 
-		Returns:
-		-	label_img: updated label map
+	Returns:
+	-	label_img: updated label map
 	"""
 	unique_vals = np.unique(segment_mask)
 	zeros_and_ones = np.array([0, 1], dtype=np.uint8)
@@ -928,52 +926,24 @@ def swap_px_inside_mask(
 	return label_img
 
 
-def test_swap_px_inside_mask():
-
-	label_img = np.array(
-		[
-			[7,8,9,0],
-			[0,7,0,7],
-			[3,4,7,1]
-		], dtype=np.uint8)
-
-	segment_mask = np.array(
-		[
-			[1,0,0,0],
-			[0,1,0,1],
-			[0,0,1,0]
-		], dtype=np.uint8)
-
-	old_val = 7
-	new_val = 255
-	new_label_img = swap_px_inside_mask(label_img, segment_mask, old_val, new_val)
-	gt_new_label_img = np.array(
-		[
-			[255,8,9,0],
-			[0,255,0,255],
-			[3,4,255,1]
-		], dtype=np.uint8)
-
-	assert np.allclose(new_label_img, gt_new_label_img)
-
-
 def get_instance_mask_class_votes(
 	instance_mask: np.ndarray, 
 	label_img: np.ndarray,
 	verbose: bool = False
-	) -> Tuple[np.ndarray, int]:
+) -> Tuple[np.ndarray, int]:
 	"""
-		Since the class masks to instance masks don't match up exactly, and are provided
-		in images with very different resolutions, we have to take the majority vote
-		for which semantic class the instance mask belongs to.
 
-		Args:
-		-	instance_mask
-		-	label_img
+	Since the class masks to instance masks don't match up exactly, and are provided
+	in images with very different resolutions, we have to take the majority vote
+	for which semantic class the instance mask belongs to.
 
-		Returns:
-		-	label_votes: 1d array, containing all category votes from instance mask
-		-	majority_vote: most likely category for this instance.
+	Args:
+	    instance_mask
+	    label_img
+
+	Returns:
+	    label_votes: 1d array, containing all category votes from instance mask
+	    majority_vote: most likely category for this instance.
 	"""
 	coords = np.vstack(np.where(instance_mask == 1)).T
 
@@ -992,12 +962,13 @@ def get_instance_mask_class_votes(
 
 
 def get_np_mode(x: np.ndarray) -> int:
-	"""
-		Args:
-		-	x: Numpy array of integers:
+	""" Get mode value of a 1d or 2d integer array.
+	
+	Args:
+	    x: Numpy array of integers:
 
-		Returns:
-		-	mode of array values (integer)
+	Returns:
+	    integer representing mode of array values
 	"""
 	assert x.dtype in [np.uint8, np.uint16, np.int16, np.int32, np.int64]
 	counts = np.bincount(x)
@@ -1005,34 +976,38 @@ def get_np_mode(x: np.ndarray) -> int:
 
 
 def get_mask_from_polygon(polygon, img_h: int, img_w: int):
-	"""
-	60x faster than the Matplotlib rasterizer... well done pillow!
-	
-		Args:
-		-	polygon: iterable e.g. [(x1,y1),(x2,y2),...]
-		-	img_h: integer representing image height
-		-	img_w: integer representing image width
+	""" Rasterize a 2d polygon to a binary mask.
 
-		PIL.Image.new(mode, size, color=0)
-		Creates a new image with the given mode and size.
-		Parameters:	
-		mode – The mode to use for the new image. See: Modes.
-		size – A 2-tuple, containing (width, height) in pixels.
-		color – What color to use for the image. Default is black. 
-			If given, this should be a single integer or floating point 
-			value for single-band modes, and a tuple for multi-band modes 
-			(one value per band). When creating RGB images, you can also 
-			use color strings as supported by the ImageColor module. If 
-			the color is None, the image is not initialised.
+	Note: 60x faster than the Matplotlib rasterizer... well done pillow!
 
-		https://pillow.readthedocs.io/en/3.1.x/reference/ImageDraw.html
-		The polygon outline consists of straight lines between the given coordinates, 
-		plus a straight line between the last and the first coordinate.
+	Args:
+	    polygon: iterable e.g. [(x1,y1),(x2,y2),...]
+	    img_h: integer representing image height
+	    img_w: integer representing image width
 
-		Parameters:	
-		xy – Sequence of either 2-tuples like [(x, y), (x, y), ...] or numeric values like [x, y, x, y, ...].
-		outline – Color to use for the outline.
-		fill – Color to use for the fill.
+	Returns:
+	    mask
+
+	PIL.Image.new(mode, size, color=0)
+	Creates a new image with the given mode and size.
+	Parameters:	
+	mode – The mode to use for the new image. See: Modes.
+	size – A 2-tuple, containing (width, height) in pixels.
+	color – What color to use for the image. Default is black. 
+		If given, this should be a single integer or floating point 
+		value for single-band modes, and a tuple for multi-band modes 
+		(one value per band). When creating RGB images, you can also 
+		use color strings as supported by the ImageColor module. If 
+		the color is None, the image is not initialised.
+
+	https://pillow.readthedocs.io/en/3.1.x/reference/ImageDraw.html
+	The polygon outline consists of straight lines between the given coordinates, 
+	plus a straight line between the last and the first coordinate.
+
+	Parameters:	
+	xy – Sequence of either 2-tuples like [(x, y), (x, y), ...] or numeric values like [x, y, x, y, ...].
+	outline – Color to use for the outline.
+	fill – Color to use for the fill.
 	"""
 	polygon = [ tuple([x,y]) for (x,y) in polygon]
 	# this is the image that we want to create
@@ -1055,11 +1030,11 @@ def get_present_classes_in_img(
 	id_to_classname_map
 	) -> List[str]:
 	"""
-		Args:
-		-	label_img:
+	Args:
+	    label_img:
 
-		Returns:
-		-	list of strings, representing classnames
+	Returns:
+	    list of strings, representing classnames
 	"""
 	present_class_idxs = np.unique(label_img)
 	present_classnames = [id_to_classname_map[idx] for idx in present_class_idxs]
