@@ -24,4 +24,5 @@ jobs:
       run: |
         sed -i '12s/.*/MSEG_DST_DIR="\/dummy\/path"/' mseg/utils/dataset_config.py
         pip install -e .
+        pip install pytest
         pytest tests/
