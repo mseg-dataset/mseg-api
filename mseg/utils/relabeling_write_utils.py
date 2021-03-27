@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 
 from pathlib import Path
+from typing import List
 
 
-def read_txt_file(txt_fpath):
+def read_txt_file(txt_fpath: str) -> List[str]:
 	"""
 		Args:
 		-	
