@@ -9,12 +9,12 @@ from typing import Any, List, Mapping
 def read_csv(csv_fpath: str, delimiter='\t') -> List[collections.OrderedDict]:
 	"""	Copy the data out of a csv file, as a list of OrderedDicts.
 
-		Args:
-		-	csv_fpath: string representing path to a csv file.
+	Args:
+	    csv_fpath: string representing path to a csv file.
 
-		Rows:
-		-	rows: list of OrderedDicts. key is column name, value is entry at
-				(row,column) of csv file.
+	Rows:
+	    rows: list of OrderedDicts. key is column name, value is entry at
+	        (row,column) of csv file.
 	"""
 	rows = []
 	with open(csv_fpath, 'r') as csv_file:
@@ -24,14 +24,8 @@ def read_csv(csv_fpath: str, delimiter='\t') -> List[collections.OrderedDict]:
 	return rows
 
 
-def write_csv(csv_fpath: str, dict_list: List[Mapping[Any,Any]], delimiter='\t'):
-	"""
-		Args:
-		-	
-
-		Returns:
-		-	
-	"""
+def write_csv(csv_fpath: str, dict_list: List[Mapping[Any,Any]], delimiter='\t') -> None:
+	""" Write rows to CSV, with column names populated from dictionary keys. """
 	with open(csv_fpath, 'w', newline='') as csvfile:
 
 		fieldnames = dict_list[0].keys()
