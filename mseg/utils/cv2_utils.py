@@ -1,21 +1,20 @@
 #!/usr/bin/python3
 
-import cv2
 import os
-import numpy as np
 from pathlib import Path
 from typing import List
+
+import cv2
+import numpy as np
 
 from mseg.utils.dir_utils import create_leading_fpath_dirs
 
 
-def cv2_write_rgb(save_fpath: str, img_rgb: np.ndarray):
+def cv2_write_rgb(save_fpath: str, img_rgb: np.ndarray) -> None:
 	"""
-		Args:
-		-	save_fpath
-
-		Returns:
-		-	None
+	Args:
+	    save_fpath: string representing absolute path where image should be saved
+	    img_rgb: (H,W,C) array representing Numpy image in RGB order
 	"""
 	img_file_type = Path(save_fpath).suffix
 	assert img_file_type in ['.jpg', '.png']
@@ -23,26 +22,25 @@ def cv2_write_rgb(save_fpath: str, img_rgb: np.ndarray):
 	cv2.imwrite(save_fpath, img_rgb[:,:,::-1])
 
 
-def cv2_imread_rgb(fpath):
+def cv2_imread_rgb(fpath: str) -> np.ndarray:
 	"""
 	Args:
-	-	string
+	    fpath:  string representing absolute path where image should be loaded from
 	"""
 	if not Path(fpath).exists():
 		print(f'{fpath} does not exist.')
+		raise RuntimeError
 		exit()
 	return cv2.imread(fpath).copy()[:,:,::-1]
 
-
-
-def grayscale_to_color(gray_img):
+def grayscale_to_color(gray_img: np.ndarray) -> np.ndarray:
 	""" Duplicate the grayscale channel 3 times.
-
-		Args:
-		-	gray_img: Array with shape (M,N)
-
-		Returns:
-		-	rgb_img: Array with shape (M,N,3)
+	
+	Args:
+	    gray_img: Array with shape (M,N)
+	
+	Returns:
+	    rgb_img: Array with shape (M,N,3)
 	"""
 	h, w = gray_img.shape
 	rgb_img = np.zeros((h,w,3), dtype=np.uint8)
@@ -51,23 +49,22 @@ def grayscale_to_color(gray_img):
 	return rgb_img
 
 
-
 def form_hstacked_imgs(
 	img_list: List[np.ndarray],
 	hstack_save_fpath: str,
 	save_to_disk: bool=True
-	)-> np.ndarray:
+)-> np.ndarray:
 	"""
 	Concatenate images along a horizontal axis and save them.
 	Accept RGB images, and convert to BGR for OpenCV to save them.
 
-		Args:
-		-	img_list: list of Numpy arrays e.g. representing different RGB visualizations of same image,
-				must all be of same height
-		-	hstack_save_fpath: string, representing file path
-
-		Returns:
-		-	hstack_img: Numpy array representing RGB image, containing horizontally stacked images as tiles.
+	Args:
+	    img_list: list of Numpy arrays e.g. representing different RGB visualizations of same image,
+	        must all be of same height
+	    hstack_save_fpath: string, representing file path
+	
+	Returns:
+	    hstack_img: Numpy array representing RGB image, containing horizontally stacked images as tiles.
 	"""
 	img_file_type = Path(hstack_save_fpath).suffix
 	assert img_file_type in ['.jpg', '.png']
@@ -98,22 +95,18 @@ def form_hstacked_imgs(
 	return hstack_img
 
 
-def form_vstacked_imgs(
-	img_list: List[np.ndarray],
-	vstack_save_fpath: str,
-	save_to_disk: bool=True
-	)-> np.ndarray:
+def form_vstacked_imgs(img_list: List[np.ndarray], vstack_save_fpath: str, save_to_disk: bool=True)-> np.ndarray:
 	"""
 	Concatenate images along a vertical axis and save them.
 	Accept RGB images, and convert to BGR for OpenCV to save them.
 
-		Args:
-		-	img_list: list of Numpy arrays representing different RGB visualizations of same image,
-				must all be of same shape
-		-	hstack_save_fpath: string, representing file path
-
-		Returns:
-		-	hstack_img: Numpy array representing RGB image, containing vertically stacked images as tiles.
+	Args:
+	    img_list: list of Numpy arrays representing different RGB visualizations of same image,
+	        must all be of same shape
+	    hstack_save_fpath: string, representing file path
+	
+	Returns:
+	    hstack_img: Numpy array representing RGB image, containing vertically stacked images as tiles.
 	"""
 	img_file_type = Path(vstack_save_fpath).suffix
 	assert img_file_type in ['.jpg', '.png']
@@ -149,7 +142,8 @@ def add_text_cv2(
 	coords_to_plot_at=None,
 	font_color=(0,0,0),
 	font_scale = 1,
-	thickness=2) -> np.ndarray:
+	thickness=2
+) -> np.ndarray:
 	"""
 	font_color = (0,0,0)
 	x: x-coordinate from image origin to plot text at
