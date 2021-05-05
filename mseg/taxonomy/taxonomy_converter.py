@@ -315,7 +315,7 @@ def parse_test_entry(test_entry) -> Tuple[str,str]:
 	return test_entry
 
 
-def parse_entry(entry: str) -> Tuple[List[str], str]:
+def parse_entry(entry: str) -> List[str]:
 	""" Parse a spreadsheet entry from dataset's column, return list of classes in this spreadsheet cell.
 	
 	TODO: handle case for last column in spreadsheet, when contains carriage return
