@@ -1,15 +1,16 @@
 #!/usr/bin/python3
 
 from collections import defaultdict, namedtuple
+from pathlib import Path
+from typing import List, Mapping, Tuple
+
 import numpy as np
 import os
 import pandas as pd
-from pathlib import Path
-import pdb
 import torch
 import torch.nn as nn
+
 from mseg.utils.names_utils import load_class_names
-from typing import List, Mapping, Tuple
 
 """
 We train in a common, unified label space.
@@ -63,20 +64,18 @@ class TaxonomyConverter:
 		tsv_fpath: str = f'{_ROOT}/class_remapping_files/MSeg_master.tsv'
 		) -> None:
 		"""
-			Note about pandas `read_csv` parameter `keep_default_na`:
-			Whether or not to include the default NaN values when parsing the data
-			If keep_default_na is False, and na_values are not specified, no strings
-			will be parsed as NaN.
-
-			Args:
-			-	train_datasets: list of training datasets
-			-	test_datasets: list of test datasets
-			-	tsv_fpath: absolute path to a tsv file showing the mapping between
-					training datasets to universal taxonomy, and universal taxonomy
-					to testing datasets.
-
-			Returns:
-			-	None
+		
+		Note about pandas `read_csv` parameter `keep_default_na`:
+		    Whether or not to include the default NaN values when parsing the data
+		    If keep_default_na is False, and na_values are not specified, no strings
+		    will be parsed as NaN.
+		
+		Args:
+		    train_datasets: list of training datasets
+		    test_datasets: list of test datasets
+		    tsv_fpath: absolute path to a tsv file showing the mapping between
+		        training datasets to universal taxonomy, and universal taxonomy
+			to testing datasets.
 		"""
 		self.train_datasets = train_datasets
 		self.test_datasets = test_datasets
@@ -103,14 +102,7 @@ class TaxonomyConverter:
 
 
 	def _init_mappings(self) -> None:
-		""" Populate the train->universal, and universal->test mappings.
-
-			Args:
-			-	None
-
-			Returns:
-			-	None
-		"""
+		""" Populate the train->universal, and universal->test mappings."""
 		# Map train_dataset_id -> universal_id
 		for d in self.train_datasets:
 			print(f'\tMapping {d} -> universal')
@@ -122,16 +114,10 @@ class TaxonomyConverter:
 
 
 	def _build_universal_tax(self) -> None:
-		''' 
-			Build a flat label space by adding each `universal` taxonomy entry from the TSV here.
-			We make a mapping from universal_name->universal_id, and vice versa.
-
-			Args:
-			-	None
-
-			Returns:
-			-	None
-		'''
+		"""Build a flat label space by adding each `universal` taxonomy entry from the TSV here.
+		
+		We make a mapping from universal_name->universal_id, and vice versa.
+		"""
 		for id, row in self.tsv_data.iterrows():
 			u_name = parse_uentry(row['universal'])
 			assert(u_name not in self.uname2uid.keys()) # no duplicate names
@@ -143,16 +129,16 @@ class TaxonomyConverter:
 
 
 	def _transform_d2u(self, dataset: str) -> Mapping[int,int]:
-		''' Transform a training dataset to the universal taxonomy.
-
-			For one training dataset, map each of its class ids to one universal ids.
-
-			Args:
-			-	dataset: string representing name of dataset
-
-			Returns:
-			-	id2uid_map: provide mapping from training dataset id to universal id.
-		'''
+		""" Transform a training dataset to the universal taxonomy.
+		
+		For one training dataset, map each of its class ids to one universal ids.
+		
+		Args:
+		    dataset: string representing name of dataset
+		
+		Returns:
+		    id2uid_map: provide mapping from training dataset id to universal id.
+		"""
 		id2uid_map = {}
 	 
 		for index, row in self.tsv_data.iterrows():
@@ -170,17 +156,14 @@ class TaxonomyConverter:
 		return id2uid_map
 
 
-	def _form_label_mapping_arrs(self)->Mapping[str, np.array]:
-		""" Cache conversion maps so we will later be able to perform fast 
-			grayscale->grayscale mapping for training data transformation.
-			Each map is implemented as an integer array (given integer index, 
-			give back integer value stored at that location).
-
-			Args:
-			-	None
-
-			Returns:
-			-	label_mapping_arr_dict: map dataset names to numpy arrays.
+	def _form_label_mapping_arrs(self)->Mapping[str, np.ndarray]:
+		""" Cache conversion maps so we will later be able to perform fast grayscale->grayscale mapping
+		for training data transformation.
+		
+		Each map is implemented as an integer array (given integer index, give back integer value stored at that location).
+		
+		Returns:
+		    label_mapping_arr_dict: map dataset names to numpy arrays.
 		"""
 		label_mapping_arr_dict = {}
 		from mseg.utils.mask_utils import form_label_mapping_array_pytorch
@@ -192,16 +175,16 @@ class TaxonomyConverter:
 
 
 	def _transform_u2d(self, dataset):
-		''' Explicitly for inference on our test datasets. Store correspondences
-			between universal_taxonomy and test_dataset_taxonomy.
-
-			Args:
-			-	dataset: string representing dataset's name
-
-			Returns:
-			-	uid2testid: list of tuples (i,j) that form linear mapping P from
-					universal -> test_dataset.
-		'''
+		"""Store correspondences between universal_taxonomy and test_dataset_taxonomy.
+		
+		Note: Explicitly for inference on our test datasets.
+		
+		Args:
+		    dataset: string representing dataset's name
+		
+		Returns:
+		    uid2testid: list of tuples (i,j) that form linear mapping P from universal -> test_dataset.
+		"""
 		uid2testid = []
 
 		for index, row in self.tsv_data.iterrows():
@@ -219,22 +202,18 @@ class TaxonomyConverter:
 
 	def _get_convolution_test(self, dataset: str) -> nn.Module:
 		""" Explicitly for inference on our test datasets.
-
-			We implement this remapping from mu classes to mt classes 
-			for the evaluation dataset as a linear mapping P.
-
-			The matrix weights Pij are binary 0/1 values and are fixed
-			before training or evaluation; the weights are determined
-			manually by inspecting label maps of the test datasets. Pij
-			is set to 1 if unified taxonomy class j contributes to
-			evaluation dataset class i, otherwise Pij = 0.
-
-			Args:
-			-	dataset: string representing dataset's name
-
-			Returns:
-			-	conv: nn.Conv2d module representing linear mapping from universal_taxonomy
-				to test_dataset_taxonomy.
+		
+		We implement this remapping from mu classes to mt classes for the evaluation dataset as a linear mapping P.
+		
+		The matrix weights Pij are binary 0/1 values and are fixed before training or evaluation; the weights are determined
+		manually by inspecting label maps of the test datasets. Pij is set to 1 if unified taxonomy class j contributes to
+		evaluation dataset class i, otherwise Pij = 0.
+		
+		Args:
+		    dataset: string representing dataset's name
+		
+		Returns:
+		    conv: nn.Conv2d module representing linear mapping from universal_taxonomy to test_dataset_taxonomy.
 		"""
 		assert dataset in self.test_datasets
 		uid2testid = self._transform_u2d(dataset)
@@ -248,16 +227,17 @@ class TaxonomyConverter:
 
 
 	def transform_label(self, label: torch.Tensor, dataset: str) -> Mapping[int, torch.Tensor]:
-		""" Function to be called externally for training.
-			Perform fast grayscale->grayscale mapping for training data transformation.
-
-			Args:
-			-	label: Pytorch tensor on the cpu with dtype Torch.LongTensor, 
-					representing a semantic image, according to PNG/dataloader format.
-			-	dataset: string representing dataset's name
-
-			Returns:
-			-	labels: vector label for each depth in the tree, compatible with softmax
+		"""Perform fast grayscale->grayscale mapping for training data transformation.
+		
+		Note: Function to be called externally for training.
+		
+		Args:
+		    label: Pytorch tensor on the cpu with dtype Torch.LongTensor, 
+		        representing a semantic image, according to PNG/dataloader format.
+		    dataset: string representing dataset's name
+		
+		Returns:
+		    labels: vector label for each depth in the tree, compatible with softmax
 		"""
 		from mseg.utils.mask_utils import map_semantic_img_fast_pytorch
 		label = map_semantic_img_fast_pytorch(label, self.label_mapping_arr_dict[dataset])
@@ -265,18 +245,17 @@ class TaxonomyConverter:
 
 
 	def transform_predictions_test(self, input: torch.Tensor, dataset: str):
-		""" Function to be called outside.
-			Explicitly for inference on our test datasets.
-			Suppose universal taxonomy has N_u classes, and test taxonomy
-			has N_t classes.
-
-			Args:
-			-	input: Pytorch tensor of shape (N_u,C,H,W) 
-					before softmax, in universal taxonomy.
-			-	dataset: string representing dataset's name
-
-			Returns:
-			-	output: Pytorch tensor of shape (N_t,C,H,W) 
+		"""Transform predictions from the universal taxonomy to another taxonomy, at test time.
+		
+		Note: Explicitly for inference on our test datasets. Function to be called externally.
+		Suppose universal taxonomy has N_u classes, and test taxonomy has N_t classes.
+		
+		Args:
+		    input: Pytorch tensor of shape (N_u,C,H,W) before softmax, in universal taxonomy.
+		    dataset: string representing dataset's name
+		
+		Returns:
+		    output: Pytorch tensor of shape (N_t,C,H,W) 
 		"""
 		input = self.softmax(input)
 		output = self.convs[dataset](input)
@@ -290,59 +269,63 @@ class TaxonomyConverter:
 
 
 	def transform_predictions_universal(self, input: torch.Tensor, dataset: str):
-		""" Function to be called outside.
-			Explicitly for inference on our test datasets.
-
-			Args:
-			-	input: after softmax probability, of universal
-			-	dataset: string representing dataset's name
-
-			Returns:
-			-	output: 
+		"""Transform predictions from the universal taxonomy to the universal taxonomy, at test time.
+		
+		Note: essentially a no-op, other than the softmax. Function to be called externally.
+		
+		Args:
+		    input: after softmax probability, of universal
+		    dataset: string representing dataset's name
+		
+		Returns:
+		    output: 
 		"""
 		output = self.softmax(input)
 		return output
 
 
 def parse_uentry(uentry: str) -> Tuple[int, List[str], str]:
-	""" Cannot be a blank string.
-
-		Args:
-		-	uentry: string, representing TSV entry from `Universal` taxonomy column
-
-		Returns:
-		-	full_name: exact duplicate of uentry string input
+	"""Parse a universal taxonomy entry from the Master.tsv sheet.
+	
+	Note: universal taxonomy entries cannot be a blank string.
+	
+	Args:
+	    uentry: string, representing TSV entry from `Universal` taxonomy column
+	
+	Returns:
+	    full_name: exact duplicate of uentry string input
 	"""
-
 	full_name = uentry.strip()
 	assert(full_name != '')
 	return full_name
 
 
 def parse_test_entry(test_entry) -> Tuple[str,str]:
-	"""
-	Can be a blank string, e.g. ''. We ensure no additional whitespace present.
-
-		Args:
-		-	test_entry
-
-		Returns:
-		-	test_entry
+	"""Parse a test taxonomy entry from the Master.tsv sheet.
+	
+	Note: Can be a blank string, e.g. ''. We ensure no additional whitespace present.
+	
+	Args:
+	    test_entry
+	
+	Returns:
+	    test_entry
 	"""
 	assert(test_entry.strip() == test_entry) # don't want entry to contain or be space/tab
 	return test_entry
 
 
 def parse_entry(entry: str) -> Tuple[List[str], str]:
-	''' Parse a spreadsheet entry from dataset's column, return list of classes in this spreadsheet cell.
-		TODO: handle case for last column in spreadsheet, when contains carriage return
-
-		Args:
-		-	entry: string, representing cell in taxonomy spreadsheet
-
-		Returns:
-		-	classes: list of strings, representing class names in a non-universal dataset taxonomy
-	'''
+	""" Parse a spreadsheet entry from dataset's column, return list of classes in this spreadsheet cell.
+	
+	TODO: handle case for last column in spreadsheet, when contains carriage return
+	
+	Args:
+	    entry: string, representing cell in taxonomy spreadsheet
+	
+	Returns:
+	    classes: list of strings, representing class names in a non-universal dataset taxonomy
+	"""
 	assert entry.strip() == entry, print(entry + 'is not stripped') # don't want entry to contain or be space/tab
 	if entry == '':
 		classes = []
@@ -362,22 +345,19 @@ def populate_linear_mapping(
 	out_channel: int,
 	inid2outid: List[Tuple[int,int]]
 	) -> nn.Module:
-	""" Use 1x1 convolution to create linear mapping P of each pixel's probabilities
-		to a new space.
-
-		The matrix weights Pij are binary 0/1 values and are fixed
-		before training or evaluation; the weights are determined
-		manually by inspecting label maps of the test datasets. Pij
-		is set to 1 if input class j contributes to
-		output class i, otherwise Pij = 0.
-
-		Args:
-		-	in_channel: number of input channels
-		-	out_channel: number of output channels
-		-	inid2outid: list of (j,i) tuples defining linear mapping P
-
-		Returns:
-		-	conv: 1x1 convolutional kernels. padding is zero by default.
+	""" Use 1x1 convolution to create linear mapping P of each pixel's probabilities to a new space.
+	
+	The matrix weights Pij are binary 0/1 values and are fixed before training or evaluation; the weights are determined
+	manually by inspecting label maps of the test datasets. Pij is set to 1 if input class j contributes to
+	output class i, otherwise Pij = 0.
+	
+	Args:
+	    in_channel: number of input channels
+	    out_channel: number of output channels
+	    inid2outid: list of (j,i) tuples defining linear mapping P
+	
+	Returns:
+	    conv: 1x1 convolutional kernels. padding is zero by default.
 	"""
 	conv = nn.Conv2d(in_channel, out_channel, kernel_size=1, bias=False)
 	conv.weight.data.fill_(0)
@@ -388,5 +368,4 @@ def populate_linear_mapping(
 	for (j,i) in inid2outid:
 		conv.weight[i][j] = 1
 	return conv
-
 
