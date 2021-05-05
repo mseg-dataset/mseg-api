@@ -202,16 +202,16 @@ def form_mask_triple_embedded_classnames(
 	save_to_disk: bool = False
 ) -> np.ndarray:
 	"""
-		Args:
-		-	rgb_img: 
-		-	label_img: 
-		-	id_to_class_name_map
-		-	save_fpath
-		-	save_to_disk
-
-		Returns:
-		-	Array, representing 3 horizontally concatenated images: from left-to-right, they are
-				RGB, RGB+Semantic Masks, Semantic Masks 
+	Args:
+	    rgb_img: 
+	    label_img: 
+	    id_to_class_name_map
+	    save_fpath
+	    save_to_disk
+	    
+	Returns:
+	    Array, representing 3 horizontally concatenated images: from left-to-right, they are
+	        RGB, RGB+Semantic Masks, Semantic Masks 
 	"""
 	rgb_with_mask = convert_instance_img_to_mask_img(label_img, rgb_img.copy())
 
@@ -314,12 +314,12 @@ def map_semantic_img_fast(
 	label_mapping_arr: np.ndarray
 	) -> np.ndarray:
 	"""
-		Args:
-		-	semantic_img:
-		-	label_mapping_arr:
-
-		Returns:
-		-	img:
+	Args:
+	    semantic_img:
+	    label_mapping_arr:
+	
+	Returns:
+	    img:
 	"""
 	return label_mapping_arr[semantic_img.squeeze()].squeeze()
 
@@ -327,12 +327,12 @@ def map_semantic_img_fast(
 def form_label_mapping_array(label_mapping_dict: Mapping[int,int]) -> np.ndarray:
 	"""
 	Args:
-	-	label_mapping_dict: dictionary from int to int, from original class ID to a new class ID.
-			This is NOT the id_to_class_name dictionary.
-	-	dtype: data type, either np.uint8 or np.uint16 (default)
+	    label_mapping_dict: dictionary from int to int, from original class ID to a new class ID.
+	        This is NOT the id_to_class_name dictionary.
+	    dtype: data type, either np.uint8 or np.uint16 (default)
 
 	Returns:
-	-	label_mapping_arr
+	    label_mapping_arr
 	"""
 	v_max = max(list(label_mapping_dict.values()))
 	keys_max = max(list(label_mapping_dict.keys()))
@@ -363,11 +363,11 @@ def rgb_img_to_obj_cls_img(
 	""" Any unmapped pixels (given no corresponding RGB values) will default to zero'th-class.
 
 	Args:
-	-	label_img_rgb: Numpy array of shape (M,N,3)
-	-	dataset_ordered_colors: Numpy array of shape (K,3) with RGB values for K classes
+	    label_img_rgb: Numpy array of shape (M,N,3)
+	    dataset_ordered_colors: Numpy array of shape (K,3) with RGB values for K classes
 
 	Returns:
-	-	object_cls_img: grayscale image
+	    object_cls_img: grayscale image
 	"""
 	object_cls_img = np.zeros((label_img_rgb.shape[0], label_img_rgb.shape[1]), dtype=np.uint8)
 	for i, color in enumerate(dataset_ordered_colors):
@@ -410,15 +410,15 @@ def save_img_with_blendedmaskimg(
 	save_to_disk: bool = False
 ) -> None:
 	"""
-		Args:
-		-	rgb_img: 
-		-	label_img: 
-		-	save_fpath
-		-	save_to_disk
-
-		Returns:
-		-	Array, representing 3 horizontally concatenated images: from left-to-right, they are
-				RGB, RGB+Semantic Masks, Semantic Masks 
+	Args:
+	    rgb_img: 
+	    label_img: 
+	    save_fpath
+	    save_to_disk
+	
+	Returns:
+	    Array, representing 3 horizontally concatenated images: from left-to-right, they are
+	        RGB, RGB+Semantic Masks, Semantic Masks 
 	"""
 	rgb_with_mask = highlight_binary_mask(label_img, rgb_img.copy())
 	return form_hstacked_imgs([rgb_img, rgb_with_mask], save_fpath, save_to_disk)
@@ -430,18 +430,17 @@ def save_binary_mask_triple(
 	save_fpath: str,
 	save_to_disk: bool = False
 ) -> np.ndarray:
-	""" Currently mask img background is light-blue. Instead, could set it 
-		to white. np.array([255,255,255])
-
-		Args:
-		-	rgb_img: 
-		-	label_img: 
-		-	save_fpath
-		-	save_to_disk
-
-		Returns:
-		-	Array, representing 3 horizontally concatenated images: from left-to-right, they are
-				RGB, RGB+Semantic Masks, Semantic Masks 
+	""" Currently mask img background is light-blue. Instead, could set it to white. np.array([255,255,255])
+	
+	Args:
+	    rgb_img: 
+	    label_img: 
+	    save_fpath
+	    save_to_disk
+	
+	Returns:
+	    Array, representing 3 horizontally concatenated images: from left-to-right, they are
+	        RGB, RGB+Semantic Masks, Semantic Masks 
 	"""
 	img_h, img_w, _ = rgb_img.shape
 	rgb_with_mask = highlight_binary_mask(label_img, rgb_img.copy())
@@ -469,8 +468,8 @@ def save_binary_mask_double(
 	    save_to_disk
 
 	Returns:
-	-	Array, representing 2 horizontally concatenated images: from left-to-right, they are
-			RGB, RGB+Semantic Masks
+	    Array, representing 2 horizontally concatenated images: from left-to-right, they are
+	        RGB, RGB+Semantic Masks
 	"""
 	img_h, img_w, _ = rgb_img.shape
 	lime_green_rgb = vis_mask(rgb_img.copy(), 1 - label_img, LIME_GREEN, alpha=0.2)
@@ -817,13 +816,13 @@ def convert_instance_img_to_mask_img(
 	belonging to same instance), convert this to an RGB image where all pixels corresponding
 	to the same instance get the same color. Note that two instances may not have unique colors,
 	do to a finite-length colormap.
-
-		Args:
-		-	instance_img: Numpy array of shape (M,N), representing grayscale image, in [0,255]
-		-	img_rgb: Numpy array representing RGB image, possibly blank, in [0,255]
-
-		Returns:
-		-	img_rgb: 
+	
+	Args:
+	    instance_img: Numpy array of shape (M,N), representing grayscale image, in [0,255]
+	    img_rgb: Numpy array representing RGB image, possibly blank, in [0,255]
+	
+	Returns:
+	    img_rgb: 
 	"""
 	img_h, img_w = instance_img.shape
 	if img_rgb is None:
@@ -846,17 +845,17 @@ def vis_mask(img: np.ndarray, mask: np.ndarray, col: Tuple[int,int,int], alpha: 
 	"""
 	Visualizes a single binary mask by coloring the region inside a binary mask
 	as a specific color, and then blending it with an RGB image.
-
-		Args:
-		-	img: Numpy array, representing RGB image with values in the [0,255] range
-		-	mask: Numpy integer array, with values in [0,1] representing mask region
-		-	col: color, tuple of integers in [0,255] representing RGB values
-		-	alpha: blending coefficient (higher alpha shows more of mask,
-				lower alpha preserves original image)
-
-		Returns:
-		-	image: Numpy array, representing an RGB image, representing a blended image
-				of original RGB image and specified colors in mask region.
+	
+	Args:
+	    img: Numpy array, representing RGB image with values in the [0,255] range
+	    mask: Numpy integer array, with values in [0,1] representing mask region
+	    col: color, tuple of integers in [0,255] representing RGB values
+	    alpha: blending coefficient (higher alpha shows more of mask,
+	        lower alpha preserves original image)
+	
+	Returns:
+	    image: Numpy array, representing an RGB image, representing a blended image
+	        of original RGB image and specified colors in mask region.
 	"""
 	img = img.astype(np.float32)
 	idx = np.nonzero(mask)
@@ -1071,5 +1070,3 @@ def get_polygons_from_binary_img(
 	res = [x.squeeze() for x in res]
 	res = [x for x in res if x.size >= 6] # should have at least 3 vertices to be valid
 	return res, has_holes
-
-
