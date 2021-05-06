@@ -237,7 +237,7 @@ class TaxonomyConverter:
 		    dataset: string representing dataset's name
 		
 		Returns:
-		    label: tensor also of shape (H,W), representing semantic classes in nex taxonomy at each pixel
+		    label: tensor also of shape (H,W), representing semantic classes in new taxonomy at each pixel
 		"""
 		from mseg.utils.mask_utils import map_semantic_img_fast_pytorch
 		label = map_semantic_img_fast_pytorch(label, self.label_mapping_arr_dict[dataset])
