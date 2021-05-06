@@ -232,12 +232,12 @@ class TaxonomyConverter:
 		Note: Function to be called externally for training.
 		
 		Args:
-		    label: Pytorch tensor on the cpu with dtype Torch.LongTensor, 
+		    label: Pytorch tensor on the cpu of shape (H,W) with dtype Torch.LongTensor, 
 		        representing a semantic image, according to PNG/dataloader format.
 		    dataset: string representing dataset's name
 		
 		Returns:
-		    labels: vector label for each depth in the tree, compatible with softmax
+		    labels: tensor also of shape (H,W), representing semantic classes in nex taxonomy at each pixel
 		"""
 		from mseg.utils.mask_utils import map_semantic_img_fast_pytorch
 		label = map_semantic_img_fast_pytorch(label, self.label_mapping_arr_dict[dataset])
