@@ -1,0 +1,196 @@
+universal	mapillary-public66
+backpack	Unlabeled
+umbrella	Unlabeled
+bag	Unlabeled
+tie	Unlabeled
+suitcase	Unlabeled
+case	Unlabeled
+bird	Bird
+cat	Ground Animal
+dog	Ground Animal
+horse	Ground Animal
+sheep	Ground Animal
+cow	Ground Animal
+elephant	Ground Animal
+bear	Ground Animal
+zebra	Ground Animal
+giraffe	Ground Animal
+animal_other	Ground Animal
+microwave	Unlabeled
+radiator	Unlabeled
+oven	Unlabeled
+toaster	Unlabeled
+storage_tank	Unlabeled
+conveyor_belt	Unlabeled
+sink	Unlabeled
+refrigerator	Unlabeled
+washer_dryer	Unlabeled
+fan	Unlabeled
+dishwasher	Unlabeled
+toilet	Unlabeled
+bathtub	Unlabeled
+shower	Unlabeled
+tunnel	Tunnel
+bridge	Bridge
+pier_wharf	Bridge
+tent	Unlabeled
+building	Building
+ceiling	Unlabeled
+laptop	Unlabeled
+keyboard	Unlabeled
+mouse	Unlabeled
+remote	Unlabeled
+cell phone	Unlabeled
+television	Unlabeled
+floor	Unlabeled
+stage	Unlabeled
+banana	Unlabeled
+apple	Unlabeled
+sandwich	Unlabeled
+orange	Unlabeled
+broccoli	Unlabeled
+carrot	Unlabeled
+hot_dog	Unlabeled
+pizza	Unlabeled
+donut	Unlabeled
+cake	Unlabeled
+fruit_other	Unlabeled
+food_other	Unlabeled
+chair_other	Unlabeled
+armchair	Unlabeled
+swivel_chair	Unlabeled
+stool	Unlabeled
+seat	Unlabeled
+couch	Unlabeled
+trash_can	Trash Can
+potted_plant	Unlabeled
+nightstand	Unlabeled
+bed	Unlabeled
+table	Unlabeled
+pool_table	Unlabeled
+barrel	Unlabeled
+desk	Unlabeled
+ottoman	Unlabeled
+wardrobe	Unlabeled
+crib	Unlabeled
+basket	Unlabeled
+chest_of_drawers	Unlabeled
+bookshelf	Unlabeled
+counter_other	Unlabeled
+bathroom_counter	Unlabeled
+kitchen_island	Unlabeled
+door	Unlabeled
+light_other	Unlabeled
+lamp	Unlabeled
+sconce	Unlabeled
+chandelier	Unlabeled
+mirror	Unlabeled
+whiteboard	Unlabeled
+shelf	Unlabeled
+stairs	Unlabeled
+escalator	Unlabeled
+cabinet	Unlabeled
+fireplace	Unlabeled
+stove	Unlabeled
+arcade_machine	Unlabeled
+gravel	Terrain
+platform	Sidewalk
+playingfield	Terrain
+railroad	Rail Track
+road	Road
+snow	Snow
+sidewalk_pavement	Sidewalk
+runway	Road
+terrain	Terrain
+book	Unlabeled
+box	Unlabeled
+clock	Unlabeled
+vase	Unlabeled
+scissors	Unlabeled
+plaything_other	Unlabeled
+teddy_bear	Unlabeled
+hair_dryer	Unlabeled
+toothbrush	Unlabeled
+painting	Unlabeled
+poster	Unlabeled
+bulletin_board	Unlabeled
+bottle	Unlabeled
+cup	Unlabeled
+wine_glass	Unlabeled
+knife	Unlabeled
+fork	Unlabeled
+spoon	Unlabeled
+bowl	Unlabeled
+tray	Unlabeled
+range_hood	Unlabeled
+plate	Unlabeled
+person	Person
+rider_other	Other Rider
+bicyclist	Bicyclist
+motorcyclist	Motorcyclist
+paper	Unlabeled
+streetlight	Street Light
+road_barrier	Barrier
+mailbox	Mailbox
+cctv_camera	CCTV Camera
+junction_box	Junction Box
+traffic_sign	Traffic Sign (Front)
+traffic_light	Traffic Light
+fire_hydrant	Fire Hydrant
+parking_meter	Unlabeled
+bench	Bench
+bike_rack	Bike Rack
+billboard	Billboard
+sky	Sky
+pole	Pole
+fence	Fence
+railing_banister	Unlabeled
+guard_rail	Guard Rail
+mountain_hill	Mountain
+rock	Unlabeled
+frisbee	Unlabeled
+skis	Unlabeled
+snowboard	Unlabeled
+sports_ball	Unlabeled
+kite	Unlabeled
+baseball_bat	Unlabeled
+baseball_glove	Unlabeled
+skateboard	Unlabeled
+surfboard	Unlabeled
+tennis_racket	Unlabeled
+net	Unlabeled
+base	Unlabeled
+sculpture	Unlabeled
+column	Building
+fountain	Water
+awning	Building
+apparel	Unlabeled
+banner	Banner
+flag	Banner
+blanket	Unlabeled
+curtain_other	Unlabeled
+shower_curtain	Unlabeled
+pillow	Unlabeled
+towel	Unlabeled
+rug_floormat	Unlabeled
+vegetation	Vegetation
+bicycle	Bicycle
+car	Car
+autorickshaw	Other Vehicle
+motorcycle	Motorcycle
+airplane	Unlabeled
+bus	Bus
+train	On Rails
+truck	Truck
+trailer	Trailer
+boat_ship	Boat
+slow_wheeled_object	Wheeled Slow
+river_lake	Water
+sea	Water
+water_other	Water
+swimming_pool	Water
+waterfall	Water
+wall	Wall
+window	Unlabeled
+window_blind	Unlabeled
+unlabeled	Unlabeled
