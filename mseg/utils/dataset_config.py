@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 
-import numpy as np
+from dataclasses import dataclass
 from pathlib import Path
-import pdb
-from recordclass import recordclass
+from typing import Optional
+
+import numpy as np
 
 from mseg.utils.names_utils import load_class_names
 
@@ -17,54 +18,64 @@ if MSEG_DST_DIR == "":
 
 ROOT = Path(__file__).resolve().parent.parent  # ../..
 
-fields = (
-    "name",
-    "dataroot",
-    "trainlist",
-    "vallist",
-    "vallist_small",
-    "names_path",
-    "shortname",
-    "num_classes",
-    "trainlen",
-)
-# recordclass is the mutable analog of collections.namedtuple
-info = recordclass("info", fields, defaults=(None,) * len(fields))
+@dataclass
+class DatasetInfo:
+    """Contains information about a particular dataset.
+
+    Args:
+        name: nickname for the dataset.
+        dataroot: str
+        trainlist: path to .txt file containing file paths for the train split.
+        vallist: path to .txt file containing file paths for the validation split.
+        vallist_small: path to .txt file containing file paths for a subsampled version of the validation split.
+        names_path: path to .txt file containing ordered class names for the dataset.
+        shortname: 
+        num_classes: number of classes in the dataset.
+    """
+    name: str
+    dataroot: str
+    trainlist: Optional[str] = None
+    vallist: Optional[str] = None
+    vallist_small: Optional[str] = None
+    names_path: Optional[str] = None
+    shortname: Optional[str] = None
+    num_classes: Optional[str] = None
+
 
 infos = [
-    info("ade20k-151-inst", f"{MSEG_DST_DIR}/mseg_dataset/ADE20K/ADE20K_2016_07_26"),
-    info("ade20k-151", f"{MSEG_DST_DIR}/mseg_dataset/ADE20K/ADEChallengeData2016"),
-    info("ade20k-150", f"{MSEG_DST_DIR}/mseg_dataset/ADE20K/ADEChallengeData2016"),
-    info("ade20k-150-relabeled", f"{MSEG_DST_DIR}/mseg_dataset/ADE20K/ADEChallengeData2016"),
-    info("bdd", f"{MSEG_DST_DIR}/mseg_dataset/BDD/bdd100k"),
-    info("bdd-relabeled", f"{MSEG_DST_DIR}/mseg_dataset/BDD/bdd100k"),
-    info("camvid-11", f"{MSEG_DST_DIR}/mseg_dataset/Camvid"),
-    info("cityscapes-34", f"{MSEG_DST_DIR}/mseg_dataset/Cityscapes"),
-    info("cityscapes-19", f"{MSEG_DST_DIR}/mseg_dataset/Cityscapes"),
-    info("cityscapes-19-relabeled", f"{MSEG_DST_DIR}/mseg_dataset/Cityscapes"),
-    info("cityscapes-34-relabeled", f"{MSEG_DST_DIR}/mseg_dataset/Cityscapes"),
-    info("coco-panoptic-inst-201", f"{MSEG_DST_DIR}/mseg_dataset/COCOPanoptic"),
-    info("coco-panoptic-201", f"{MSEG_DST_DIR}/mseg_dataset/COCOPanoptic"),
-    info("coco-panoptic-133", f"{MSEG_DST_DIR}/mseg_dataset/COCOPanoptic"),
-    info("coco-panoptic-133-relabeled", f"{MSEG_DST_DIR}/mseg_dataset/COCOPanoptic"),
-    info("idd-40", f"{MSEG_DST_DIR}/mseg_dataset/IDD/IDD_Segmentation"),
-    info("idd-39", f"{MSEG_DST_DIR}/mseg_dataset/IDD/IDD_Segmentation"),
-    info("idd-39-relabeled", f"{MSEG_DST_DIR}/mseg_dataset/IDD/IDD_Segmentation"),
-    info("kitti-34", f"{MSEG_DST_DIR}/mseg_dataset/KITTI/"),
-    info("kitti-19", f"{MSEG_DST_DIR}/mseg_dataset/KITTI/"),
+    DatasetInfo("ade20k-151-inst", f"{MSEG_DST_DIR}/mseg_dataset/ADE20K/ADE20K_2016_07_26"),
+    DatasetInfo("ade20k-151", f"{MSEG_DST_DIR}/mseg_dataset/ADE20K/ADEChallengeData2016"),
+    DatasetInfo("ade20k-150", f"{MSEG_DST_DIR}/mseg_dataset/ADE20K/ADEChallengeData2016"),
+    DatasetInfo("ade20k-150-relabeled", f"{MSEG_DST_DIR}/mseg_dataset/ADE20K/ADEChallengeData2016"),
+    DatasetInfo("bdd", f"{MSEG_DST_DIR}/mseg_dataset/BDD/bdd100k"),
+    DatasetInfo("bdd-relabeled", f"{MSEG_DST_DIR}/mseg_dataset/BDD/bdd100k"),
+    DatasetInfo("camvid-11", f"{MSEG_DST_DIR}/mseg_dataset/Camvid"),
+    DatasetInfo("cityscapes-34", f"{MSEG_DST_DIR}/mseg_dataset/Cityscapes"),
+    DatasetInfo("cityscapes-19", f"{MSEG_DST_DIR}/mseg_dataset/Cityscapes"),
+    DatasetInfo("cityscapes-19-relabeled", f"{MSEG_DST_DIR}/mseg_dataset/Cityscapes"),
+    DatasetInfo("cityscapes-34-relabeled", f"{MSEG_DST_DIR}/mseg_dataset/Cityscapes"),
+    DatasetInfo("coco-panoptic-inst-201", f"{MSEG_DST_DIR}/mseg_dataset/COCOPanoptic"),
+    DatasetInfo("coco-panoptic-201", f"{MSEG_DST_DIR}/mseg_dataset/COCOPanoptic"),
+    DatasetInfo("coco-panoptic-133", f"{MSEG_DST_DIR}/mseg_dataset/COCOPanoptic"),
+    DatasetInfo("coco-panoptic-133-relabeled", f"{MSEG_DST_DIR}/mseg_dataset/COCOPanoptic"),
+    DatasetInfo("idd-40", f"{MSEG_DST_DIR}/mseg_dataset/IDD/IDD_Segmentation"),
+    DatasetInfo("idd-39", f"{MSEG_DST_DIR}/mseg_dataset/IDD/IDD_Segmentation"),
+    DatasetInfo("idd-39-relabeled", f"{MSEG_DST_DIR}/mseg_dataset/IDD/IDD_Segmentation"),
+    DatasetInfo("kitti-34", f"{MSEG_DST_DIR}/mseg_dataset/KITTI/"),
+    DatasetInfo("kitti-19", f"{MSEG_DST_DIR}/mseg_dataset/KITTI/"),
     #  mapillary-public66 -> labels are not in semseg format (RGB labels)
-    info("mapillary-public66", f"{MSEG_DST_DIR}/mseg_dataset/MapillaryVistasPublic"),
-    info("mapillary-public65", f"{MSEG_DST_DIR}/mseg_dataset/MapillaryVistasPublic"),
-    info("mapillary-public65-relabeled", f"{MSEG_DST_DIR}/mseg_dataset/MapillaryVistasPublic"),
-    info("pascal-context-460", f"{MSEG_DST_DIR}/mseg_dataset/PASCAL_Context"),
-    info("pascal-context-60", f"{MSEG_DST_DIR}/mseg_dataset/PASCAL_Context"),
-    info("scannet-41", f"{MSEG_DST_DIR}/mseg_dataset/ScanNet/scannet_frames_25k"),
-    info("scannet-20", f"{MSEG_DST_DIR}/mseg_dataset/ScanNet/scannet_frames_25k"),
-    info("sunrgbd-38", f"{MSEG_DST_DIR}/mseg_dataset/SUNRGBD"),
-    info("sunrgbd-37", f"{MSEG_DST_DIR}/mseg_dataset/SUNRGBD"),
-    info("sunrgbd-37-relabeled", f"{MSEG_DST_DIR}/mseg_dataset/SUNRGBD"),
-    info("voc2012", f"{MSEG_DST_DIR}/mseg_dataset/PASCAL_VOC_2012"),
-    info("wilddash-19", f"{MSEG_DST_DIR}/mseg_dataset/WildDash"),
+    DatasetInfo("mapillary-public66", f"{MSEG_DST_DIR}/mseg_dataset/MapillaryVistasPublic"),
+    DatasetInfo("mapillary-public65", f"{MSEG_DST_DIR}/mseg_dataset/MapillaryVistasPublic"),
+    DatasetInfo("mapillary-public65-relabeled", f"{MSEG_DST_DIR}/mseg_dataset/MapillaryVistasPublic"),
+    DatasetInfo("pascal-context-460", f"{MSEG_DST_DIR}/mseg_dataset/PASCAL_Context"),
+    DatasetInfo("pascal-context-60", f"{MSEG_DST_DIR}/mseg_dataset/PASCAL_Context"),
+    DatasetInfo("scannet-41", f"{MSEG_DST_DIR}/mseg_dataset/ScanNet/scannet_frames_25k"),
+    DatasetInfo("scannet-20", f"{MSEG_DST_DIR}/mseg_dataset/ScanNet/scannet_frames_25k"),
+    DatasetInfo("sunrgbd-38", f"{MSEG_DST_DIR}/mseg_dataset/SUNRGBD"),
+    DatasetInfo("sunrgbd-37", f"{MSEG_DST_DIR}/mseg_dataset/SUNRGBD"),
+    DatasetInfo("sunrgbd-37-relabeled", f"{MSEG_DST_DIR}/mseg_dataset/SUNRGBD"),
+    DatasetInfo("voc2012", f"{MSEG_DST_DIR}/mseg_dataset/PASCAL_VOC_2012"),
+    DatasetInfo("wilddash-19", f"{MSEG_DST_DIR}/mseg_dataset/WildDash"),
 ]
 
 # Dictionary with concise metadata object for each dataset
