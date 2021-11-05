@@ -58,11 +58,9 @@ def test_get_segment_mask_cityscapes():
 """
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
-	test_constructor_idd()
-	test_constructor_cityscapes()
-	# test_get_segment_mask_idd()
-	# test_get_segment_mask_cityscapes()
-
-
+    test_constructor_idd()
+    test_constructor_cityscapes()
+    # test_get_segment_mask_idd()
+    # test_get_segment_mask_cityscapes()
