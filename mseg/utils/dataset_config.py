@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
@@ -86,7 +85,7 @@ infos = [
     DatasetInfo("sunrgbd-37-relabeled", f"{MSEG_DST_DIR}/mseg_dataset/SUNRGBD"),
 
     DatasetInfo("voc2012", f"{MSEG_DST_DIR}/mseg_dataset/PASCAL_VOC_2012"),
-    
+
     DatasetInfo("wilddash-19", f"{MSEG_DST_DIR}/mseg_dataset/WildDash"),
 ]
 
