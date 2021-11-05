@@ -23,8 +23,6 @@ from mseg.utils.fb_colormap import random_color, fixed_color
 from mseg.utils.mask_utils import get_mask_from_polygon, get_most_populous_class
 
 
-
-
 logger = logging.getLogger(__name__)
 
 __all__ = ["ColorMode", "VisImage", "Visualizer"]
@@ -35,7 +33,6 @@ _LARGE_MASK_AREA_THRESH = 120000
 _OFF_WHITE = (1.0, 1.0, 240.0 / 255)
 _BLACK = (0, 0, 0)
 _RED = (1.0, 0, 0)
-
 
 
 @unique
@@ -119,13 +116,13 @@ class GenericMask:
         # Internal contours (holes) are placed in hierarchy-2.
         # cv2.CHAIN_APPROX_NONE flag gets vertices of polygons from contours.
         res, hierarchy = cv2.findContours(mask.astype("uint8"), cv2.RETR_CCOMP, cv2.CHAIN_APPROX_NONE)
-        
+
         if hierarchy is None:  # empty mask
             return [], False
         has_holes = (hierarchy.reshape(-1, 4)[:, 3] >= 0).sum() > 0
 
         res = [x.squeeze() for x in res]
-        res = [x for x in res if x.size >= 6] # should have at least 3 vertices to be valid
+        res = [x for x in res if x.size >= 6]  # should have at least 3 vertices to be valid
         return res, has_holes
 
     def polygons_to_mask(self, polygons):
@@ -170,9 +167,7 @@ class _PanopticPrediction:
                 empty_ids.append(id)
         if len(empty_ids) == 0:
             return np.zeros(self._seg.shape, dtype=np.uint8)
-        assert (
-            len(empty_ids) == 1
-        ), ">1 ids corresponds to no labels. This is currently not supported"
+        assert len(empty_ids) == 1, ">1 ids corresponds to no labels. This is currently not supported"
         return (self._seg != empty_ids[0]).numpy().astype(np.bool)
 
     def semantic_masks(self):
@@ -321,11 +316,8 @@ class Visualizer:
         self.cpu_device = torch.device("cpu")
 
         # too small texts are useless, therefore clamp to 9
-        self._default_font_size = max(
-            np.sqrt(self.output.height * self.output.width) // 90, 10 // scale
-        )
+        self._default_font_size = max(np.sqrt(self.output.height * self.output.width) // 90, 10 // scale)
         self._instance_mode = instance_mode
-
 
     def draw_sem_seg(self, sem_seg, area_threshold=None, alpha=0.8):
         """
@@ -362,9 +354,7 @@ class Visualizer:
             )
         return self.output
 
-    def draw_panoptic_seg_predictions(
-        self, panoptic_seg, segments_info, area_threshold=None, alpha=0.7
-    ):
+    def draw_panoptic_seg_predictions(self, panoptic_seg, segments_info, area_threshold=None, alpha=0.7):
         """
         Draw panoptic prediction results on an image.
 
@@ -422,13 +412,7 @@ class Visualizer:
 
         return self.output
 
-
-    def overlay_instances(
-        self,
-        label_map,
-        id_to_class_name_map,
-        alpha=0.5
-    ):
+    def overlay_instances(self, label_map, id_to_class_name_map, alpha=0.5):
         """
         Args:
             boxes (Boxes, RotatedBoxes or ndarray): either a :class:`Boxes`,
@@ -463,15 +447,13 @@ class Visualizer:
 
             segment = label_map == label_idx
 
-            #import pdb; pdb.set_trace()
+            # import pdb; pdb.set_trace()
             mask_obj = GenericMask(segment, self.output.height, self.output.width)
             polygons, _ = mask_obj.mask_to_polygons(segment)
 
-
-
             for polygon_verts in polygons:
-                #print('Polygon verts: ', polygon_verts)
-                
+                # print('Polygon verts: ', polygon_verts)
+
                 # rasterize this specific polygon
                 segment_mask = get_mask_from_polygon(polygon_verts, self.output.height, self.output.width)
                 class_mode_idx = get_most_populous_class(segment_mask, label_map)
@@ -488,11 +470,11 @@ class Visualizer:
                 text_pos = np.median(segment_mask.nonzero(), axis=1)[::-1]
                 horiz_align = "center"
 
-                x0 = np.amin(polygon_verts[:,0])
-                x1 = np.amax(polygon_verts[:,0])
+                x0 = np.amin(polygon_verts[:, 0])
+                x1 = np.amax(polygon_verts[:, 0])
 
-                y0 = np.amin(polygon_verts[:,1])
-                y1 = np.amax(polygon_verts[:,1])
+                y0 = np.amin(polygon_verts[:, 1])
+                y1 = np.amax(polygon_verts[:, 1])
 
                 # else:
                 #     continue  # drawing the box confidence for keypoints isn't very useful.
@@ -509,11 +491,7 @@ class Visualizer:
 
                 height_ratio = (y1 - y0) / np.sqrt(self.output.height * self.output.width)
                 lighter_color = self._change_color_brightness(color, brightness_factor=0.7)
-                font_size = (
-                    np.clip((height_ratio - 0.02) / 0.08 + 1, 1.2, 2)
-                    * 0.5
-                    * self._default_font_size
-                )
+                font_size = np.clip((height_ratio - 0.02) / 0.08 + 1, 1.2, 2) * 0.5 * self._default_font_size
                 self.draw_text(
                     text,
                     text_pos,
@@ -527,21 +505,11 @@ class Visualizer:
 
         return self.output.get_image()
 
-
     """
     Primitive drawing functions:
     """
 
-    def draw_text(
-        self,
-        text,
-        position,
-        *,
-        font_size=None,
-        color="g",
-        horizontal_alignment="center",
-        rotation=0
-    ):
+    def draw_text(self, text, position, *, font_size=None, color="g", horizontal_alignment="center", rotation=0):
         """
         Args:
             text (str): class label
@@ -560,11 +528,11 @@ class Visualizer:
             font_size = self._default_font_size
 
         # since the text background is dark, we don't want the text to be dark
-        #color = np.maximum(list(mplc.to_rgb(color)), 0.2)
-        #color[np.argmax(color)] = max(0.8, np.max(color))
+        # color = np.maximum(list(mplc.to_rgb(color)), 0.2)
+        # color[np.argmax(color)] = max(0.8, np.max(color))
 
         # force text color to be white!
-        color = np.array([1.,1.,1.])
+        color = np.array([1.0, 1.0, 1.0])
 
         x, y = position
         self.output.ax.text(
@@ -582,10 +550,7 @@ class Visualizer:
         )
         return self.output
 
-
-    def draw_binary_mask(
-        self, binary_mask, color=None, *, edge_color=None, text=None, alpha=0.5, area_threshold=4096
-    ):
+    def draw_binary_mask(self, binary_mask, color=None, *, edge_color=None, text=None, alpha=0.5, area_threshold=4096):
         """
         Args:
             binary_mask (ndarray): numpy array of shape (H, W), where H is the image height and
@@ -733,7 +698,6 @@ class Visualizer:
         modified_lightness = 1.0 if modified_lightness > 1.0 else modified_lightness
         modified_color = colorsys.hls_to_rgb(polygon_color[0], modified_lightness, polygon_color[2])
         return modified_color
-
 
     def get_output(self):
         """

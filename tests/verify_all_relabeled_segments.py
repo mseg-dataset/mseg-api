@@ -21,11 +21,6 @@ from mseg.dataset_apis.JsonMaskLevelDataset import JsonMaskDataset
 from mseg.dataset_apis.MapillaryMaskDataset import MapillaryMaskDataset
 from mseg.dataset_apis.SunrgbdImageLevelDataset import SunrgbdImageLevelDataset
 
-from mseg.label_preparation.relabeled_data_containers import (
-	LabelImageUpdateRecord,
-	DatasetClassUpdateRecord
-)
-from mseg.label_preparation.remap_dataset import remap_dataset
 from mseg.label_preparation.dataset_update_records import (
 	cocop_update_records,
 	ade20k_update_records,

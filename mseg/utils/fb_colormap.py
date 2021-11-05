@@ -124,13 +124,11 @@ def random_color(rgb=False, maximum=255):
         ret = ret[::-1]
     return ret
 
-def fixed_color(rgb=False, maximum=255, idx: int=0):
-    """
-    """
+
+def fixed_color(rgb=False, maximum=255, idx: int = 0):
+    """ """
     num_colors = _COLORS.shape[0]
-    ret = _COLORS[ idx % num_colors ] * maximum
+    ret = _COLORS[idx % num_colors] * maximum
     if not rgb:
         ret = ret[::-1]
     return ret
-
-
