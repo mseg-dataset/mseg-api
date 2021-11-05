@@ -168,7 +168,7 @@ class Ade20kMaskDataset:
                 break
 
         # test the instance's class
-        label_votes, majority_vote = get_instance_mask_class_votes(copy.deepcopy(segment_mask), label_img)
+        label_votes, majority_vote = mask_utils.get_instance_mask_class_votes(copy.deepcopy(segment_mask), label_img)
 
         if label_votes.size < MIN_REQ_PX:
             print("Big problem here! quitting...")
