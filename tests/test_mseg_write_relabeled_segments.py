@@ -5,7 +5,7 @@ from mseg.label_preparation.mseg_write_relabeled_segments import (
     get_unique_mask_identifiers,
     form_fname_to_updatelist_dict,
 )
-from mseg.utils.relabeling_write_utils import DatasetClassUpdateRecord
+from mseg.label_preparation.relabeled_data_containers import DatasetClassUpdateRecord
 
 
 def test_get_unique_mask_identifiers_ade20k() -> None:
