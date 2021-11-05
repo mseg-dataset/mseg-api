@@ -69,13 +69,13 @@ class COCOInstanceAPI:
         have color close to the predefined semantic category color.
         The RGB encoding used is ID = R * 256 * G + 256 * 256 + B."
 
-                    Args:
-                    -	label_img_fpath
+        Args:
+            label_img_fpath
 
-                    Returns:
-                    -	rgb_img: color image.
-                    -	label_img: category ID image
-                    -	ids: instance ID image
+        Returns:
+            rgb_img: color image.
+            label_img: category ID image
+            ids: instance ID image
         """
         # get the path to the 3-channel instance id image
         instance_img_fpath = self.fname_to_instanceimgfpath_dict[fname_stem]

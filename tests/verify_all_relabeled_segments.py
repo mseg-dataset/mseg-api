@@ -4,7 +4,7 @@ import argparse
 import collections
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, List, Mapping, Tuple
+from typing import Any, List, Mapping, NamedTuple, Tuple
 
 import imageio
 import numpy as np
@@ -229,24 +229,28 @@ def assert_mask_identical(
     assert identical
 
 
-#####---------------------------------------------------------------
+class DatasetRewritingTask(NamedTuple):
+    """Define the parameters need to rewrite the dataset on disk.
 
-# Define the parameters need to rewrite the dataset on disk.
-# Requires providing a mask-level dataset API as argument.
-DatasetRewritingTask = collections.namedtuple(
-    typename="DatasetRewritingTask",
-    field_names="orig_dname remapped_dname mapping_tsv_fpath "
-    "orig_dataroot remapped_dataroot dataset_api update_records require_strict_boundaries",
-)
+    Requires providing a mask-level dataset API as argument.
+    """
+    orig_dname: str
+    remapped_dname: str
+    mapping_tsv_fpath: str
+    orig_dataroot: str
+    remapped_dataroot: str
+    dataset_api: Any
+    update_records: Any
+    require_strict_boundaries: bool
 
 
 def get_relabeling_task(dname: str) -> DatasetRewritingTask:
     """
     Args:
-    -	dname: name of dataset to apply re-labeling to
+        dname: name of dataset to apply re-labeling to
 
     Returns:
-    -	DatasetRewritingTask to complete
+        DatasetRewritingTask to complete
     """
     if dname == "ade20k-150":
         return DatasetRewritingTask(

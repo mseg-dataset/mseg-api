@@ -11,8 +11,8 @@ from pathlib import Path
 
 from typing import List, Optional, Tuple
 
-from mseg.utils.mask_utils import save_binary_mask_double, get_instance_mask_class_votes
-from mseg.utils.names_utils import get_dataloader_id_to_classname_map, get_classname_to_dataloaderid_map
+import mseg.utils.mask_utils as mask_utils
+import mseg.utils.names_utils as names_utils
 from mseg.utils.cv2_utils import grayscale_to_color
 
 
@@ -45,8 +45,8 @@ class Ade20kMaskDataset:
         self.ade20k_instance_dataroot = instance_version_dataroot
 
         # following two maps are only used for relabeling original data
-        self.id_to_classname_map = get_dataloader_id_to_classname_map(dataset_name="ade20k-151")
-        self.classname_to_id_map = get_classname_to_dataloaderid_map(dataset_name="ade20k-151")
+        self.id_to_classname_map = names_utils.get_dataloader_id_to_classname_map(dataset_name="ade20k-151")
+        self.classname_to_id_map = names_utils.get_classname_to_dataloaderid_map(dataset_name="ade20k-151")
 
         self.ade20k_split_nickname_dict = {"train": "training", "val": "validation"}
 
@@ -103,7 +103,7 @@ class Ade20kMaskDataset:
                 for (instance_mask, instance_id) in zip(instance_masks, instance_ids):
 
                     # test the instance's class
-                    label_votes, majority_vote = get_instance_mask_class_votes(instance_mask, label_img)
+                    label_votes, majority_vote = mask_utils.get_instance_mask_class_votes(instance_mask, label_img)
                     if label_votes.size < MIN_REQ_PX:
                         continue
 
@@ -113,7 +113,7 @@ class Ade20kMaskDataset:
 
                     save_fname = f"{fname_stem}_{instance_id}.png"
                     save_fpath = f"temp_files/{folder_prefix}_{split}_2019_12_16/{save_fname}"
-                    save_binary_mask_double(rgb_img, instance_mask, save_fpath, save_to_disk=True)
+                    mask_utils.save_binary_mask_double(rgb_img, instance_mask, save_fpath, save_to_disk=True)
 
     def get_img_pair(self, fname_stem: str) -> Tuple[np.ndarray, np.ndarray]:
         """Load 2-tuple of image data from disk (RGB and label).

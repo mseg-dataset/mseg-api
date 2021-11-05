@@ -4,10 +4,8 @@ import numpy as np
 from pathlib import Path
 
 import mseg.utils.json_utils as json_utils
-from mseg.utils.names_utils import (
-    get_dataloader_id_to_classname_map,
-    load_dataset_colors_arr,
-)
+import mseg.utils.names_utils as names_utils
+
 from mseg.utils.test_utils import dict_is_equal
 from mseg.dataset_apis.MapillaryMaskDataset import MapillaryMaskDataset
 
@@ -22,13 +20,13 @@ CONFIG_JSON_FPATH = (
 
 def read_mapillary_config_helper():
     """ """
-    return json_utilsread_json_file(CONFIG_JSON_FPATH)
+    return json_utils.read_json_file(CONFIG_JSON_FPATH)
 
 
 def test_load_names() -> None:
     """ """
     tax_data = read_mapillary_config_helper()
-    id_to_classname_map = get_dataloader_id_to_classname_map(
+    id_to_classname_map = names_utils.get_dataloader_id_to_classname_map(
         dataset_name="mapillary-public66", include_ignore_idx_cls=False
     )
     gt_id_to_classname = {
@@ -46,7 +44,7 @@ def test_load_colors() -> None:
     for i in range(num_classes):
         gt_dataset_ordered_colors[i] = np.array(tax_data["labels"][i]["color"])
 
-    colors = load_dataset_colors_arr("mapillary-public66")
+    colors = names_utils.load_dataset_colors_arr("mapillary-public66")
     assert np.allclose(colors, gt_dataset_ordered_colors)
 
 

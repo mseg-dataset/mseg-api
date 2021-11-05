@@ -1,18 +1,20 @@
 #!/usr/bin/python3
 
 import argparse
-from collections import namedtuple
+
 import glob
 import json
-from multiprocessing import Pool
-import numpy as np
 import os
-import pdb
+from collections import namedtuple
+from multiprocessing import Pool
+
+
+import numpy as np
 import PIL.Image as Image
 import PIL.ImageDraw as ImageDraw
 from tqdm import tqdm
 
-from mseg.utils.names_utils import get_classname_to_dataloaderid_map, get_dataloader_id_to_classname_map
+import mseg.utils.names_utils as names_utils
 
 
 """
@@ -24,8 +26,8 @@ Ref:
 https://github.com/AutoNUE/public-code/blob/master/preperation/createLabels.py
 """
 
-name2labelid = get_classname_to_dataloaderid_map("idd-40", include_ignore_idx_cls=False)
-id2label = get_dataloader_id_to_classname_map("idd-40", include_ignore_idx_cls=False)
+name2labelid = names_utils.get_classname_to_dataloaderid_map("idd-40", include_ignore_idx_cls=False)
+id2label = names_utils.get_dataloader_id_to_classname_map("idd-40", include_ignore_idx_cls=False)
 
 
 # A point in a polygon

@@ -8,9 +8,9 @@ from pathlib import Path
 import pdb
 from typing import List
 
+import mseg.utils.names_utils as names_utils
 from mseg.utils.mask_utils import save_binary_mask_double
 from mseg.utils.cv2_utils import grayscale_to_color
-from mseg.utils.names_utils import get_dataloader_id_to_classname_map
 from mseg.dataset_apis.COCOSemanticAPI import COCOSemanticAPI
 from mseg.dataset_apis.COCOInstanceAPI import COCOInstanceAPI
 
@@ -32,14 +32,14 @@ class COCOPanopticJsonMaskDataset:
 
     def __init__(self, coco_dataroot: str) -> None:
         """ """
-        self.categoryid_to_classname_map = get_dataloader_id_to_classname_map(dataset_name="coco-panoptic-201")
+        self.categoryid_to_classname_map = names_utils.get_dataloader_id_to_classname_map(dataset_name="coco-panoptic-201")
         self.coco_dataroot = coco_dataroot
         self.semantic_api = COCOSemanticAPI(coco_dataroot)
         self.instance_api = COCOInstanceAPI(coco_dataroot)
 
     def dump_class_masks(
         self, required_class_names: List[str], highlight_classname: str, condition: str, folder_prefix: str
-    ):
+    ) -> None:
         """
         Write out all requested COCO masks to disk. Get for all splits, at once.
         If person-car combinations are desired, this tuple may be specified
@@ -98,7 +98,7 @@ class COCOPanopticJsonMaskDataset:
             rgb_img = grayscale_to_color(rgb_img)
         return rgb_img
 
-    def get_segment_mask(self, seq_id: None, segmentid: int, fname_stem: str, split: str):
+    def get_segment_mask(self, seq_id: None, segmentid: int, fname_stem: str, split: str) -> np.ndarray:
         """
         Use semantic and instance APIs to identify
 

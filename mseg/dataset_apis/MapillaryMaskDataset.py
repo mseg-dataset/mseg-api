@@ -2,22 +2,18 @@
 
 import argparse
 import glob
-import imageio
-
-import numpy as np
 from pathlib import Path
-import pdb
+from typing import Any, List, Mapping
 
+import imageio
+import numpy as np
+
+import mseg.utils.names_utils as names_utils
 from mseg.utils.mask_utils import save_binary_mask_double, rgb_img_to_obj_cls_img, form_mask_triple_embedded_classnames
 from mseg.utils.cv2_utils import cv2_imread_rgb
-from mseg.utils.names_utils import (
-    get_dataloader_id_to_classname_map,
-    get_classname_to_dataloaderid_map,
-    load_dataset_colors_arr,
-)
 from mseg.utils.multiprocessing_utils import send_list_to_workers
 
-from typing import Any, List, Mapping
+
 
 """
 Note: We do not use this dataset API at training or inference time.
@@ -34,8 +30,8 @@ class MapillaryMaskDataset:
             dataroot: string representing path to unzipped Mapillary file
         """
         self.dataroot = dataroot
-        self.dataset_ordered_colors = load_dataset_colors_arr("mapillary-public66")
-        self.id_to_classname_map = get_dataloader_id_to_classname_map(dataset_name="mapillary-public66")
+        self.dataset_ordered_colors = names_utils.load_dataset_colors_arr("mapillary-public66")
+        self.id_to_classname_map = names_utils.get_dataloader_id_to_classname_map(dataset_name="mapillary-public66")
 
     def labelrgb_to_label(self, label_img_rgb: np.ndarray) -> np.ndarray:
         """
@@ -70,7 +66,7 @@ class MapillaryMaskDataset:
                     print(i)
                     dump_img_masks(highlight_classname, split, rgb_img_fpaths[0], folder_prefix, api=self)
 
-    def get_segment_mask(self, seq_id: None, segmentid: int, fname_stem: str, split: str):
+    def get_segment_mask(self, seq_id: None, segmentid: int, fname_stem: str, split: str) -> np.ndarray:
         """
         Use instance images and a designated image and instance ID to obtain a specific
         instance mask.

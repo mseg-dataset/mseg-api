@@ -41,7 +41,16 @@ RELABELED_TRAIN_DATASETS = [
     "sunrgbd-37-relabeled",
 ]
 DEFAULT_TRAIN_DATASETS = UNRELABELED_TRAIN_DATASETS + RELABELED_TRAIN_DATASETS
-TEST_DATASETS = ["camvid-11", "kitti-19", "pascal-context-60", "scannet-20", "voc2012", "wilddash-19"]
+# fmt: off
+TEST_DATASETS = [
+    "camvid-11",
+    "kitti-19",
+    "pascal-context-60",
+    "scannet-20",
+    "voc2012",
+    "wilddash-19"
+]
+# fmt: on
 
 _ROOT = Path(__file__).resolve().parent.parent
 

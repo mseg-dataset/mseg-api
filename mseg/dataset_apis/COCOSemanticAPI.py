@@ -2,8 +2,10 @@
 
 import pdb
 from typing import Any, List, Mapping
+
+import mseg.utils.names_utils as names_utils
 from mseg.utils.json_utils import read_json_file
-from mseg.utils.names_utils import get_dataloader_id_to_classname_map
+
 
 """
 Interface for semantic labels of COCO Panoptic dataset
@@ -23,7 +25,7 @@ class COCOSemanticAPI:
         """
         self.annotations_root = f"{coco_dataroot}/annotations"
         self.fname_to_annot_map_splitdict = {}
-        self.categoryid_to_classname_map = get_dataloader_id_to_classname_map(dataset_name="coco-panoptic-201")
+        self.categoryid_to_classname_map = names_utils.get_dataloader_id_to_classname_map(dataset_name="coco-panoptic-201")
 
         for split in ["train", "val"]:
             fname_to_annot_map = self.get_semantic_annotations(split)

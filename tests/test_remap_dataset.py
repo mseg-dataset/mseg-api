@@ -26,15 +26,22 @@ def test_relabel_pair() -> None:
 
     # fmt: off
     semantic_img = np.array(
-    	[
-    		[254, 0, 1],
-    		[7, 8, 9]
-    	], dtype=np.uint8
+        [
+            [254, 0, 1],
+            [7, 8, 9]
+        ], dtype=np.uint8
     )
     # fmt: on
     imageio.imwrite(old_label_fpath, semantic_img)
     # fmt: off
-    label_mapping = {254: 253, 0: 255, 1: 0, 7: 6, 8: 7, 9: 8}
+    label_mapping = {
+        254: 253,
+        0: 255,
+        1: 0,
+        7: 6,
+        8: 7,
+        9: 8
+    }
     # fmt: on
     label_mapping_arr = form_label_mapping_array(label_mapping)
     relabel_pair(
@@ -48,10 +55,10 @@ def test_relabel_pair() -> None:
 
     # fmt: off
     gt_mapped_img = np.array(
-    	[
-    		[253, 255, 0],
-    		[6, 7, 8]
-    	], dtype=np.uint8
+        [
+            [253, 255, 0],
+            [6, 7, 8]
+        ], dtype=np.uint8
     )
     # fmt: on
     remapped_img = imageio.imread(new_label_fpath)

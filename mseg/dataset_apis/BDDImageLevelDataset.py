@@ -9,7 +9,7 @@ from pathlib import Path
 import pdb
 from typing import List, Optional, Tuple
 
-from mseg.utils.names_utils import get_dataloader_id_to_classname_map, get_classname_to_dataloaderid_map
+import mseg.utils.names_utils as names_utils
 
 from mseg.utils.mask_utils import (
     form_mask_triple_embedded_classnames,
@@ -37,8 +37,8 @@ class BDDImageLevelDataset:
         self.dataroot = dataroot
         self.img_dir = f"{self.dataroot}/seg/images"
         self.label_dir = f"{self.dataroot}/seg/labels"
-        self.id_to_classname_map = get_dataloader_id_to_classname_map(dataset_name="bdd")
-        self.classname_to_id_map = get_classname_to_dataloaderid_map(dataset_name="bdd")
+        self.id_to_classname_map = names_utils.get_dataloader_id_to_classname_map(dataset_name="bdd")
+        self.classname_to_id_map = names_utils.get_classname_to_dataloaderid_map(dataset_name="bdd")
 
     def get_class_masks(self, required_class_names: List[str], highlight_classname: str, condition, folder_prefix: str):
         """ """
