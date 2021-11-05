@@ -60,7 +60,7 @@ setup(
     package_data={"mseg": ["dataset_lists/**/*"]},
     scripts=files_in_subdirs(path.join(here,'download_scripts'),"mseg_download_*.sh"),
     include_package_data=True,
-    python_requires=">= 3.6",
+    python_requires=">= 3.7",
     install_requires=[
         "imageio",
         "matplotlib",
@@ -68,7 +68,6 @@ setup(
         "pandas",
         "Pillow", # rather than "pillow"
         "opencv-python>=4.1.0.25",
-        "recordclass",
         "scipy",
         "torch",
         "tqdm"
