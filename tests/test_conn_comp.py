@@ -20,7 +20,7 @@ def test_scipy_conn_comp():
 
 	gt_class_to_conncomps_dict = {
 		0: [
-			np.array([	[0, 0, 0, 0],
+			np.array([[0, 0, 0, 0],
 					[0, 0, 0, 0],
 					[1, 1, 0, 0]], dtype=np.uint8)
 		], 

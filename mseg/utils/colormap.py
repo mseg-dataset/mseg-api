@@ -9,7 +9,7 @@ import numpy as np
 import pdb
 
 
-def colormap(rgb: bool=False):
+def colormap(rgb: bool = False):
     """
     Create an array of visually distinctive RGB values.
 
@@ -57,21 +57,17 @@ def colormap(rgb: bool=False):
         color_list = color_list[:, ::-1]
     return color_list
 
-if __name__ == '__main__':
-    """ Make sure things work as expected"""
+
+if __name__ == "__main__":
+    """Make sure things work as expected"""
     colors = colormap(rgb=True)
     num_colors = colors.shape[0]
 
     pdb.set_trace()
     semantic_img = np.arange(num_colors)
-    semantic_img = np.tile(semantic_img, (10,1))
+    semantic_img = np.tile(semantic_img, (10, 1))
     semantic_img = semantic_img.T
 
     img = colors[semantic_img]
     plt.imshow(img)
     plt.show()
-
-
-
-
-

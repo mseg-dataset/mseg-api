@@ -3,11 +3,10 @@ import pdb
 from mseg.dataset_apis.BDDImageLevelDataset import BDDImageLevelDataset
 
 
-def test_constructor():
-	"""
-	"""
-	dataroot = 'test_data/BDD100K_test_data/bdd100k'
-	bddild = BDDImageLevelDataset(dataroot)
+def test_constructor() -> None:
+    """ """
+    dataroot = "test_data/BDD100K_test_data/bdd100k"
+    bddild = BDDImageLevelDataset(dataroot)
 
 
 """
@@ -44,11 +43,8 @@ def test_get_segment_mask():
 """
 
 
-
-if __name__ == '__main__':
-	pass
-	#test_constructor()
-	#test_get_img_pair()
-	#test_get_segment_mask()
-
-
+if __name__ == "__main__":
+    pass
+    # test_constructor()
+    # test_get_img_pair()
+    # test_get_segment_mask()

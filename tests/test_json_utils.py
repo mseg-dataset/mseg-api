@@ -39,4 +39,3 @@ def test_save_json_dict() -> None:
 
     for k in intended_dict.keys():
         assert intended_dict[k] == loaded_dict[k]
-
