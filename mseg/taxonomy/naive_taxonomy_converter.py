@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from typing import List, Mapping, Optional,Tuple
+from typing import List, Mapping, Optional, Tuple
 
 import torch.nn as nn
 
@@ -38,7 +38,9 @@ class NaiveTaxonomyConverter(TaxonomyConverter):
         # Inverse -- find universal index from universal name.
         self.uname2uid = {}
 
-        self.dataset_classnames = {d: names_utils.load_class_names(d) for d in (self.train_datasets + self.test_datasets)}
+        self.dataset_classnames = {
+            d: names_utils.load_class_names(d) for d in (self.train_datasets + self.test_datasets)
+        }
         self._build_universal_tax()
 
         # including ignored label（id=255), since total id > 255. (note previously it's -1)
@@ -66,7 +68,7 @@ class NaiveTaxonomyConverter(TaxonomyConverter):
                 lowercase = c.lower()
 
                 if lowercase in self.uname2uid.keys():
-                    #print(f'class {c} already in, lowercase is {lowercase}')
+                    # print(f'class {c} already in, lowercase is {lowercase}')
                     continue
 
                 # otherwise, `lowercase` is not found in `self.uname2uid` yet, so we'll make a new entry.
@@ -83,7 +85,7 @@ class NaiveTaxonomyConverter(TaxonomyConverter):
         Returns:
             classnames: order list of classnames in the taxonomy. The ignore index is filled with `None`.
         """
-        num_classes = max(self.uid2uname.keys()) + 1 # can't use len, since `255' is a missing key.
+        num_classes = max(self.uid2uname.keys()) + 1  # can't use len, since `255' is a missing key.
         classnames = [None] * num_classes
 
         for uid, uname in self.uid2uname.items():
@@ -113,7 +115,7 @@ class NaiveTaxonomyConverter(TaxonomyConverter):
         id2uid_map[self.ignore_label] = self.ignore_label
         return id2uid_map
 
-    def _transform_u2d(self, dataset: str) -> List[Tuple[int,int]]:
+    def _transform_u2d(self, dataset: str) -> List[Tuple[int, int]]:
         """Explicitly for inference on our test datasets. Store correspondences
         between universal_taxonomy and test_dataset_taxonomy.
         Lowercase string would be the universal taxonomy classname, if exists.
