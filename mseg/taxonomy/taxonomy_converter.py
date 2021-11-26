@@ -24,12 +24,13 @@ UNRELABELED_TRAIN_DATASETS = [
     "ade20k-150",
     "bdd",
     "cityscapes-19",
-    "cityscapes-34",
     "coco-panoptic-133",
     "idd-39",
     "mapillary-public65",
     "sunrgbd-37",
 ]
+# unrelabeled "cityscapes-34" is not used for training, but it could be, if desired.
+
 RELABELED_TRAIN_DATASETS = [
     "ade20k-150-relabeled",
     "bdd-relabeled",
