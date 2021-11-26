@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 
-import torch.nn as nn
-from typing import List, Mapping, Tuple
+from typing import List, Mapping, Optional, Tuple
 
-from mseg.utils.names_utils import load_class_names
+import torch.nn as nn
+
+import mseg.utils.names_utils as names_utils
 from mseg.taxonomy.taxonomy_converter import TaxonomyConverter, UNRELABELED_TRAIN_DATASETS, TEST_DATASETS
 
 
@@ -37,7 +38,9 @@ class NaiveTaxonomyConverter(TaxonomyConverter):
         # Inverse -- find universal index from universal name.
         self.uname2uid = {}
 
-        self.dataset_classnames = {d: load_class_names(d) for d in (self.train_datasets + self.test_datasets)}
+        self.dataset_classnames = {
+            d: names_utils.load_class_names(d) for d in (self.train_datasets + self.test_datasets)
+        }
         self._build_universal_tax()
 
         # including ignored label（id=255), since total id > 255. (note previously it's -1)
@@ -63,17 +66,35 @@ class NaiveTaxonomyConverter(TaxonomyConverter):
             classes = self.dataset_classnames[d]
             for c in classes:
                 lowercase = c.lower()
-                if lowercase not in self.uname2uid.keys():
-                    self.uname2uid[lowercase] = id
-                    self.uid2uname[id] = lowercase
-                    id += 1
-                    # if incremented id is 255, then skip it
-                    if id == self.ignore_label:
-                        # skip 255, since want to reserve 255 as ignore_label
-                        id += 1
-                else:
+
+                if lowercase in self.uname2uid.keys():
                     # print(f'class {c} already in, lowercase is {lowercase}')
-                    pass
+                    continue
+
+                # otherwise, `lowercase` is not found in `self.uname2uid` yet, so we'll make a new entry.
+                self.uname2uid[lowercase] = id
+                self.uid2uname[id] = lowercase
+                id += 1
+                # if incremented id is 255, then skip it
+                if id == self.ignore_label:
+                    # skip 255, since want to reserve 255 as ignore_label
+                    id += 1
+
+    def get_naive_taxonomy_classnames(self) -> List[Optional[str]]:
+        """Get a list of ordered classes in the naive taxonomy.
+
+        The logits of a model's predictions at each pixel should also be ordered accordingly.
+
+        Returns:
+            classnames: order list of classnames in the taxonomy. The ignore index is filled with `None`.
+        """
+        num_classes = max(self.uid2uname.keys()) + 1  # can't use len, since `255' is a missing key.
+        classnames = [None] * num_classes
+
+        for uid, uname in self.uid2uname.items():
+            classnames[uid] = uname
+
+        return classnames
 
     def _transform_d2u(self, dataset: str) -> Mapping[int, int]:
         """Transform a training dataset to the universal taxonomy.
@@ -97,7 +118,7 @@ class NaiveTaxonomyConverter(TaxonomyConverter):
         id2uid_map[self.ignore_label] = self.ignore_label
         return id2uid_map
 
-    def _transform_u2d(self, dataset):
+    def _transform_u2d(self, dataset: str) -> List[Tuple[int, int]]:
         """Explicitly for inference on our test datasets. Store correspondences
         between universal_taxonomy and test_dataset_taxonomy.
         Lowercase string would be the universal taxonomy classname, if exists.
