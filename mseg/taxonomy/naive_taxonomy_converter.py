@@ -81,7 +81,10 @@ class NaiveTaxonomyConverter(TaxonomyConverter):
                     id += 1
 
     def get_naive_taxonomy_classnames(self) -> List[Optional[str]]:
-        """
+        """Get a list of ordered classes in the naive taxonomy.
+
+        The logits of a model's predictions at each pixel should also be ordered accordingly.
+
         Returns:
             classnames: order list of classnames in the taxonomy. The ignore index is filled with `None`.
         """
