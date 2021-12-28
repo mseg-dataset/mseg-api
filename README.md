@@ -4,7 +4,7 @@
 
 This is the code for the paper:
 
-**MSeg: A Composite Dataset for Multi-domain Semantic Segmentation** (CVPR 2020, Official Repo) [[PDF]](http://vladlen.info/papers/MSeg.pdf)
+**MSeg: A Composite Dataset for Multi-domain Semantic Segmentation** (CVPR 2020, Official Repo) [[CVPR PDF]](http://vladlen.info/papers/MSeg.pdf) [[Journal PDF]](https://arxiv.org/abs/2112.13762)
 <br>
 [John Lambert*](https://johnwlambert.github.io/),
 [Zhuang Liu*](https://liuzhuang13.github.io/),
@@ -12,7 +12,10 @@ This is the code for the paper:
 [James Hays](https://www.cc.gatech.edu/~hays/),
 [Vladlen Koltun](http://vladlen.info/)
 <br>
-Presented at [CVPR 2020](http://cvpr2020.thecvf.com/). Link to [MSeg Video (3min.)](https://youtu.be/PzBK6K5gyyo)
+Presented at [CVPR 2020](http://cvpr2020.thecvf.com/). Link to [MSeg Video (3min) ](https://youtu.be/PzBK6K5gyyo)
+
+**NEWS**:
+- [Dec. 2021]: An updated journal-length version of our work is now available on ArXiv [here](https://arxiv.org/abs/2112.13762).
 
 This repo is the first of 4 repos that introduce our work. It provides utilities to download the MSeg dataset (which is nontrivial), and prepare the data on disk in a unified taxonomy.
 
