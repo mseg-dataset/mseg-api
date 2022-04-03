@@ -2,7 +2,7 @@
 
 import os
 from pathlib import Path
-from typing import List
+from typing import List, Tuple
 
 import cv2
 import numpy as np
@@ -11,7 +11,8 @@ from mseg.utils.dir_utils import create_leading_fpath_dirs
 
 
 def cv2_write_rgb(save_fpath: str, img_rgb: np.ndarray) -> None:
-    """
+    """Write an RGB image to disk with OpenCV, flipping channel order to satisfy OpenCV BGR convention.
+
     Args:
         save_fpath: string representing absolute path where image should be saved
         img_rgb: (H,W,C) array representing Numpy image in RGB order
@@ -23,9 +24,13 @@ def cv2_write_rgb(save_fpath: str, img_rgb: np.ndarray) -> None:
 
 
 def cv2_imread_rgb(fpath: str) -> np.ndarray:
-    """
+    """Read in image using OpenCV, and swap channel order to return it as RGB.
+
     Args:
-        fpath:  string representing absolute path where image should be loaded from
+        fpath:  string representing absolute path where image should be loaded from.
+
+    Returns:
+        Array of shape (H,W,3) representing RGB image.
     """
     if not Path(fpath).exists():
         print(f"{fpath} does not exist.")
@@ -51,14 +56,15 @@ def grayscale_to_color(gray_img: np.ndarray) -> np.ndarray:
 
 
 def form_hstacked_imgs(img_list: List[np.ndarray], hstack_save_fpath: str, save_to_disk: bool = True) -> np.ndarray:
-    """
-    Concatenate images along a horizontal axis and save them.
+    """Concatenate images along a horizontal axis and save them.
+
     Accept RGB images, and convert to BGR for OpenCV to save them.
 
     Args:
         img_list: list of Numpy arrays e.g. representing different RGB visualizations of same image,
             must all be of same height
         hstack_save_fpath: string, representing file path
+        save_to_disk: whether to save concatenated image to disk.
 
     Returns:
         hstack_img: Numpy array representing RGB image, containing horizontally stacked images as tiles.
@@ -101,6 +107,7 @@ def form_vstacked_imgs(img_list: List[np.ndarray], vstack_save_fpath: str, save_
         img_list: list of Numpy arrays representing different RGB visualizations of same image,
             must all be of same shape
         hstack_save_fpath: string, representing file path
+        save_to_disk: whether to save concatenated image to disk.
 
     Returns:
         hstack_img: Numpy array representing RGB image, containing vertically stacked images as tiles.
@@ -134,12 +141,25 @@ def form_vstacked_imgs(img_list: List[np.ndarray], vstack_save_fpath: str, save_
 
 
 def add_text_cv2(
-    img: np.ndarray, text: str, coords_to_plot_at=None, font_color=(0, 0, 0), font_scale=1, thickness=2
+    img: np.ndarray,
+    text: str,
+    coords_to_plot_at=None,
+    font_color: Tuple[int, int, int] = (0, 0, 0),
+    font_scale: int = 1,
+    thickness: int = 2,
 ) -> np.ndarray:
-    """
-    font_color = (0,0,0)
-    x: x-coordinate from image origin to plot text at
-    y: y-coordinate from image origin to plot text at
+    """Render text onto an image via rasterization.
+
+    Args:
+        img: Array of shape (H,W,3), either representing RGB, or BGR image.
+        text
+        coords_to_plot_at: (x,y) coordinate from image origin to plot text at
+        font_color: color 3-tuple, with channel order matching `img` arg above (RGB or BGR).
+        font_scale:
+        thickness: font thickness (in pixels).
+
+    Returns:
+        img: Array of shape (H,W,3), either representing image with rendered text.
     """
     corner_offset = 5
     font = cv2.FONT_HERSHEY_TRIPLEX  # cv2.FONT_HERSHEY_SIMPLEX
