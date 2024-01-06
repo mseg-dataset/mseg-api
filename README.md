@@ -4,7 +4,7 @@
 
 This is the code for the paper:
 
-**MSeg: A Composite Dataset for Multi-domain Semantic Segmentation** (CVPR 2020, Official Repo) [[CVPR PDF]](http://vladlen.info/papers/MSeg.pdf) [[Journal PDF]](https://arxiv.org/abs/2112.13762)
+**MSeg: A Composite Dataset for Multi-domain Semantic Segmentation** (CVPR 2020, Official Repo) [[CVPR PDF]](http://vladlen.info/papers/MSeg.pdf) [[TPAMI Journal PDF]](https://arxiv.org/abs/2112.13762)
 <br>
 [John Lambert*](https://johnwlambert.github.io/),
 [Zhuang Liu*](https://liuzhuang13.github.io/),
@@ -68,6 +68,17 @@ author = {Lambert, John and Liu, Zhuang and Sener, Ozan and Hays, James and Kolt
 title = {{MSeg}: A Composite Dataset for Multi-domain Semantic Segmentation},
 booktitle = {Computer Vision and Pattern Recognition (CVPR)},
 year = {2020}
+}
+
+@article{Lambert23tpami_MSeg,
+  author={Lambert, John and Liu, Zhuang and Sener, Ozan and Hays, James and Koltun, Vladlen},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence}, 
+  title={MSeg: A Composite Dataset for Multi-Domain Semantic Segmentation}, 
+  year={2023},
+  volume={45},
+  number={1},
+  pages={796-810},
+  doi={10.1109/TPAMI.2022.3151200}
 }
 ```
 
